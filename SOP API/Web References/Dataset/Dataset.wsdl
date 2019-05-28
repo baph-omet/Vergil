@@ -1,0 +1,878 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:tns3="http://exceptions.gtdw.pci.com" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:intf="https://energyaccounting.santeecooper.com/axis/services/Dataset" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns4="http://util.gtdw.pci.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns1="http://view.gtdw.pci.com" xmlns:tns2="http://bean.gtdw.pci.com" xmlns:impl="https://energyaccounting.santeecooper.com/axis/services/Dataset" targetNamespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://exceptions.gtdw.pci.com">
+      <xsd:import namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" />
+      <xsd:import namespace="http://util.gtdw.pci.com" />
+      <xsd:import namespace="http://xml.apache.org/xml-soap" />
+      <xsd:import namespace="http://bean.gtdw.pci.com" />
+      <xsd:import namespace="http://view.gtdw.pci.com" />
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <xsd:complexType name="AttributeConstraintViolation">
+        <xsd:sequence>
+          <xsd:element name="attributeName" nillable="true" type="xsd:string" />
+          <xsd:element name="className" nillable="true" type="xsd:string" />
+          <xsd:element name="invalidStringValue" nillable="true" type="xsd:string" />
+          <xsd:element name="invalidValue" type="xsd:double" />
+          <xsd:element name="lower" type="xsd:double" />
+          <xsd:element name="msg" nillable="true" type="xsd:string" />
+          <xsd:element name="upper" type="xsd:double" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="InvalidAssignmentException">
+        <xsd:sequence />
+      </xsd:complexType>
+      <xsd:complexType name="ObjectNotFoundException">
+        <xsd:sequence />
+      </xsd:complexType>
+    </xsd:schema>
+    <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://bean.gtdw.pci.com">
+      <xsd:import namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" />
+      <xsd:import namespace="http://util.gtdw.pci.com" />
+      <xsd:import namespace="http://xml.apache.org/xml-soap" />
+      <xsd:import namespace="http://exceptions.gtdw.pci.com" />
+      <xsd:import namespace="http://view.gtdw.pci.com" />
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <xsd:complexType name="ObjectConstraints">
+        <xsd:sequence>
+          <xsd:element name="violation" nillable="true" type="tns3:AttributeConstraintViolation" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+    <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://util.gtdw.pci.com">
+      <xsd:import namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" />
+      <xsd:import namespace="http://xml.apache.org/xml-soap" />
+      <xsd:import namespace="http://exceptions.gtdw.pci.com" />
+      <xsd:import namespace="http://bean.gtdw.pci.com" />
+      <xsd:import namespace="http://view.gtdw.pci.com" />
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <xsd:complexType name="GTTimestamp">
+        <xsd:sequence>
+          <xsd:element name="calendar" nillable="true" type="xsd:dateTime" />
+          <xsd:element name="displayFormat" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+    <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://view.gtdw.pci.com">
+      <xsd:import namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" />
+      <xsd:import namespace="http://util.gtdw.pci.com" />
+      <xsd:import namespace="http://xml.apache.org/xml-soap" />
+      <xsd:import namespace="http://exceptions.gtdw.pci.com" />
+      <xsd:import namespace="http://bean.gtdw.pci.com" />
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <xsd:complexType name="GtdwListView" abstract="true">
+        <xsd:sequence>
+          <xsd:element name="attributeConstraint" nillable="true" type="tns2:ObjectConstraints" />
+          <xsd:element name="createdBy" nillable="true" type="xsd:string" />
+          <xsd:element name="createdOn" nillable="true" type="tns4:GTTimestamp" />
+          <xsd:element name="modifiedBy" nillable="true" type="xsd:string" />
+          <xsd:element name="modifiedOn" nillable="true" type="tns4:GTTimestamp" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="GtdwView" abstract="true">
+        <xsd:complexContent mixed="false">
+          <xsd:extension base="tns1:GtdwListView">
+            <xsd:sequence>
+              <xsd:element name="parentKey" type="xsd:int" />
+              <xsd:element name="parentType" nillable="true" type="xsd:string" />
+              <xsd:element name="viewKey" type="xsd:int" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="DatasetView">
+        <xsd:complexContent mixed="false">
+          <xsd:extension base="tns1:GtdwView">
+            <xsd:sequence>
+              <xsd:element name="cacheResults" type="xsd:boolean" />
+              <xsd:element name="cached" type="xsd:boolean" />
+              <xsd:element name="cachedEvents" type="xsd:boolean" />
+              <xsd:element name="cachedMinutes" type="xsd:int" />
+              <xsd:element name="cachedToDisk" type="xsd:boolean" />
+              <xsd:element name="datasetKey" type="xsd:int" />
+              <xsd:element name="description" nillable="true" type="xsd:string" />
+              <xsd:element name="name" nillable="true" type="xsd:string" />
+              <xsd:element name="outerJoin" nillable="true" type="xsd:string" />
+              <xsd:element name="pivot" type="xsd:boolean" />
+              <xsd:element name="pivotColumn" nillable="true" type="xsd:string" />
+              <xsd:element name="pivotColumnFormat" nillable="true" type="xsd:string" />
+              <xsd:element name="pivotDataFieldFunctions" nillable="true" type="xsd:string" />
+              <xsd:element name="pivotDataFields" nillable="true" type="xsd:string" />
+              <xsd:element name="pivotRowFields" nillable="true" type="xsd:string" />
+              <xsd:element name="postProcess" nillable="true" type="xsd:string" />
+              <xsd:element name="syncTime" nillable="true" type="xsd:string" />
+              <xsd:element name="timeFormat" nillable="true" type="xsd:string" />
+              <xsd:element name="timeZone" nillable="true" type="xsd:string" />
+              <xsd:element name="unionQuery" type="xsd:boolean" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="DatasetColumnView">
+        <xsd:complexContent mixed="false">
+          <xsd:extension base="tns1:GtdwListView">
+            <xsd:sequence>
+              <xsd:element name="columnOrder" type="xsd:int" />
+              <xsd:element name="datasetName" nillable="true" type="xsd:string" />
+              <xsd:element name="function" nillable="true" type="xsd:string" />
+              <xsd:element name="groupFunction" nillable="true" type="xsd:string" />
+              <xsd:element name="name" nillable="true" type="xsd:string" />
+              <xsd:element name="queryNumber" type="xsd:int" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="DatasetSourceView">
+        <xsd:complexContent mixed="false">
+          <xsd:extension base="tns1:GtdwListView">
+            <xsd:sequence>
+              <xsd:element name="addTypeInfo" nillable="true" type="xsd:string" />
+              <xsd:element name="alias" nillable="true" type="xsd:string" />
+              <xsd:element name="datasetName" nillable="true" type="xsd:string" />
+              <xsd:element name="datasetObjectName" nillable="true" type="xsd:string" />
+              <xsd:element name="eventCondition" nillable="true" type="xsd:string" />
+              <xsd:element name="expand" type="xsd:boolean" />
+              <xsd:element name="expandEnd" nillable="true" type="xsd:string" />
+              <xsd:element name="expandStart" nillable="true" type="xsd:string" />
+              <xsd:element name="functionField" nillable="true" type="xsd:string" />
+              <xsd:element name="groupBy" nillable="true" type="xsd:string" />
+              <xsd:element name="includeHolidays" type="xsd:boolean" />
+              <xsd:element name="interval" nillable="true" type="xsd:string" />
+              <xsd:element name="methodName" nillable="true" type="xsd:string" />
+              <xsd:element name="portfolioName" nillable="true" type="xsd:string" />
+              <xsd:element name="productName" nillable="true" type="xsd:string" />
+              <xsd:element name="queryNumber" type="xsd:int" />
+              <xsd:element name="sourceKey" type="xsd:int" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="DatasetLoadView">
+        <xsd:complexContent mixed="false">
+          <xsd:extension base="tns1:GtdwListView">
+            <xsd:sequence>
+              <xsd:element name="datasetName" nillable="true" type="xsd:string" />
+              <xsd:element name="function" nillable="true" type="xsd:string" />
+              <xsd:element name="parameterNumber" type="xsd:int" />
+              <xsd:element name="parameterType" nillable="true" type="xsd:string" />
+              <xsd:element name="sourceKey" type="xsd:int" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="DatasetWhereView">
+        <xsd:complexContent mixed="false">
+          <xsd:extension base="tns1:GtdwListView">
+            <xsd:sequence>
+              <xsd:element name="comparison" nillable="true" type="xsd:string" />
+              <xsd:element name="datasetName" nillable="true" type="xsd:string" />
+              <xsd:element name="indexNo" type="xsd:int" />
+              <xsd:element name="notExpression" type="xsd:boolean" />
+              <xsd:element name="operand1" nillable="true" type="xsd:string" />
+              <xsd:element name="operand2" nillable="true" type="xsd:string" />
+              <xsd:element name="operator" nillable="true" type="xsd:string" />
+              <xsd:element name="operatorLevel" type="xsd:int" />
+              <xsd:element name="queryNumber" type="xsd:int" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="DatasetGroupView">
+        <xsd:complexContent mixed="false">
+          <xsd:extension base="tns1:GtdwListView">
+            <xsd:sequence>
+              <xsd:element name="datasetName" nillable="true" type="xsd:string" />
+              <xsd:element name="expression" nillable="true" type="xsd:string" />
+              <xsd:element name="queryNumber" type="xsd:int" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="DatasetOrderView">
+        <xsd:complexContent mixed="false">
+          <xsd:extension base="tns1:GtdwListView">
+            <xsd:sequence>
+              <xsd:element name="ascending" type="xsd:boolean" />
+              <xsd:element name="datasetName" nillable="true" type="xsd:string" />
+              <xsd:element name="expression" nillable="true" type="xsd:string" />
+              <xsd:element name="indexNo" type="xsd:int" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="DatasetResultView">
+        <xsd:complexContent mixed="false">
+          <xsd:extension base="tns1:GtdwListView">
+            <xsd:sequence>
+              <xsd:element maxOccurs="unbounded" name="columnValueByIndex" nillable="true" type="xsd:anyType" />
+              <xsd:element name="columns" nillable="true" type="impl:ArrayOf_xsd_string" />
+              <xsd:element name="datasetName" nillable="true" type="xsd:string" />
+              <xsd:element name="values" nillable="true" type="impl:ArrayOf_xsd_anyType" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="DatasetCacheInfoView">
+        <xsd:sequence>
+          <xsd:element name="description" nillable="true" type="xsd:string" />
+          <xsd:element name="eventBased" type="xsd:boolean" />
+          <xsd:element name="eventUpdate" type="xsd:boolean" />
+          <xsd:element name="frequency" type="xsd:int" />
+          <xsd:element name="hostName" nillable="true" type="xsd:string" />
+          <xsd:element name="lastUpdate" nillable="true" type="tns4:GTTimestamp" />
+          <xsd:element name="name" nillable="true" type="xsd:string" />
+          <xsd:element name="nextUpdate" nillable="true" type="tns4:GTTimestamp" />
+          <xsd:element name="status" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="CalculationInfoView">
+        <xsd:sequence>
+          <xsd:element name="description" nillable="true" type="xsd:string" />
+          <xsd:element name="eventBased" type="xsd:boolean" />
+          <xsd:element name="eventUpdate" type="xsd:boolean" />
+          <xsd:element name="frequency" type="xsd:int" />
+          <xsd:element name="hostName" nillable="true" type="xsd:string" />
+          <xsd:element name="lastUpdate" nillable="true" type="tns4:GTTimestamp" />
+          <xsd:element name="name" nillable="true" type="xsd:string" />
+          <xsd:element name="nextUpdate" nillable="true" type="tns4:GTTimestamp" />
+          <xsd:element name="status" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="QueryAttributeView">
+        <xsd:sequence>
+          <xsd:element name="attributeName" nillable="true" type="xsd:string" />
+          <xsd:element name="attributeType" nillable="true" type="xsd:string" />
+          <xsd:element name="canBeNull" type="xsd:boolean" />
+          <xsd:element name="columnName" nillable="true" type="xsd:string" />
+          <xsd:element name="columnPrecision" type="xsd:int" />
+          <xsd:element name="columnSize" type="xsd:int" />
+          <xsd:element name="columnType" nillable="true" type="xsd:string" />
+          <xsd:element name="defaultValue" nillable="true" type="xsd:string" />
+          <xsd:element name="description" nillable="true" type="xsd:string" />
+          <xsd:element name="displayName" nillable="true" type="xsd:string" />
+          <xsd:element name="primaryKey" nillable="true" type="xsd:string" />
+          <xsd:element name="queryObject" nillable="true" type="tns1:QueryObjectView" />
+          <xsd:element name="queryObjectName" nillable="true" type="xsd:string" />
+          <xsd:element name="referenceAttribute" nillable="true" type="xsd:string" />
+          <xsd:element name="referenceObject" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="QueryObjectView">
+        <xsd:sequence>
+          <xsd:element name="attributes" nillable="true" type="impl:ArrayOf_tns1_QueryAttributeView" />
+          <xsd:element name="dataFormat" nillable="true" type="xsd:string" />
+          <xsd:element name="description" nillable="true" type="xsd:string" />
+          <xsd:element name="displayName" nillable="true" type="xsd:string" />
+          <xsd:element name="objectEditor" nillable="true" type="xsd:string" />
+          <xsd:element name="objectHome" nillable="true" type="xsd:string" />
+          <xsd:element name="objectName" nillable="true" type="xsd:string" />
+          <xsd:element name="objectView" nillable="true" type="xsd:string" />
+          <xsd:element name="queryObject" nillable="true" type="xsd:string" />
+          <xsd:element name="tableName" nillable="true" type="xsd:string" />
+          <xsd:element name="tableType" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="QueryResultView">
+        <xsd:complexContent mixed="false">
+          <xsd:extension base="tns1:GtdwListView">
+            <xsd:sequence>
+              <xsd:element maxOccurs="unbounded" name="columnValueByIndex" nillable="true" type="xsd:anyType" />
+              <xsd:element name="columns" nillable="true" type="impl:ArrayOf_xsd_string" />
+              <xsd:element name="queryName" nillable="true" type="xsd:string" />
+              <xsd:element name="values" nillable="true" type="impl:ArrayOf_xsd_anyType" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+    </xsd:schema>
+    <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="https://energyaccounting.santeecooper.com/axis/services/Dataset">
+      <xsd:import namespace="http://util.gtdw.pci.com" />
+      <xsd:import namespace="http://xml.apache.org/xml-soap" />
+      <xsd:import namespace="http://exceptions.gtdw.pci.com" />
+      <xsd:import namespace="http://bean.gtdw.pci.com" />
+      <xsd:import namespace="http://view.gtdw.pci.com" />
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <xsd:complexType name="ArrayOf_tns1_DatasetColumnView">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute wsdl:arrayType="tns1:DatasetColumnView[]" ref="soapenc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOf_xsd_string">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute wsdl:arrayType="xsd:string[]" ref="soapenc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOf_tns1_DatasetSourceView">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute wsdl:arrayType="tns1:DatasetSourceView[]" ref="soapenc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOf_tns1_DatasetLoadView">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute wsdl:arrayType="tns1:DatasetLoadView[]" ref="soapenc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOf_tns1_DatasetWhereView">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute wsdl:arrayType="tns1:DatasetWhereView[]" ref="soapenc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOf_tns1_DatasetGroupView">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute wsdl:arrayType="tns1:DatasetGroupView[]" ref="soapenc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOf_tns1_DatasetOrderView">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute wsdl:arrayType="tns1:DatasetOrderView[]" ref="soapenc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOf_xsd_anyType">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute wsdl:arrayType="xsd:anyType[]" ref="soapenc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOf_tns1_DatasetResultView">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute wsdl:arrayType="tns1:DatasetResultView[]" ref="soapenc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOf_tns1_DatasetCacheInfoView">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute wsdl:arrayType="tns1:DatasetCacheInfoView[]" ref="soapenc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOf_tns1_CalculationInfoView">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute wsdl:arrayType="tns1:CalculationInfoView[]" ref="soapenc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOf_tns1_QueryAttributeView">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute wsdl:arrayType="tns1:QueryAttributeView[]" ref="soapenc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOf_tns1_QueryObjectView">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute wsdl:arrayType="tns1:QueryObjectView[]" ref="soapenc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+    </xsd:schema>
+    <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://xml.apache.org/xml-soap">
+      <xsd:import namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" />
+      <xsd:import namespace="http://util.gtdw.pci.com" />
+      <xsd:import namespace="http://exceptions.gtdw.pci.com" />
+      <xsd:import namespace="http://bean.gtdw.pci.com" />
+      <xsd:import namespace="http://view.gtdw.pci.com" />
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <xsd:complexType name="mapItem">
+        <xsd:sequence>
+          <xsd:element name="key" nillable="true" type="xsd:anyType" />
+          <xsd:element name="value" nillable="true" type="xsd:anyType" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="Map">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="item" type="apachesoap:mapItem" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="getWsPivotedColumnsRequest">
+    <wsdl:part name="in0" type="tns1:DatasetView" />
+    <wsdl:part name="in1" type="impl:ArrayOf_tns1_DatasetColumnView" />
+    <wsdl:part name="in2" type="impl:ArrayOf_xsd_string" />
+  </wsdl:message>
+  <wsdl:message name="getWsPivotedColumnsResponse">
+    <wsdl:part name="getWsPivotedColumnsReturn" type="impl:ArrayOf_tns1_DatasetColumnView" />
+  </wsdl:message>
+  <wsdl:message name="InvalidAssignmentException">
+    <wsdl:part name="fault" type="tns3:InvalidAssignmentException" />
+  </wsdl:message>
+  <wsdl:message name="CacheAndRunRequest">
+    <wsdl:part name="in0" type="tns1:DatasetView" />
+    <wsdl:part name="in1" type="impl:ArrayOf_tns1_DatasetSourceView" />
+    <wsdl:part name="in2" type="impl:ArrayOf_tns1_DatasetLoadView" />
+    <wsdl:part name="in3" type="impl:ArrayOf_tns1_DatasetColumnView" />
+    <wsdl:part name="in4" type="impl:ArrayOf_tns1_DatasetWhereView" />
+    <wsdl:part name="in5" type="impl:ArrayOf_tns1_DatasetGroupView" />
+    <wsdl:part name="in6" type="impl:ArrayOf_tns1_DatasetOrderView" />
+    <wsdl:part name="in7" type="impl:ArrayOf_xsd_anyType" />
+  </wsdl:message>
+  <wsdl:message name="CacheAndRunResponse">
+    <wsdl:part name="CacheAndRunReturn" type="impl:ArrayOf_tns1_DatasetResultView" />
+  </wsdl:message>
+  <wsdl:message name="CacheAndRunRequest1">
+    <wsdl:part name="in0" type="xsd:int" />
+    <wsdl:part name="in1" type="xsd:string" />
+    <wsdl:part name="in2" type="impl:ArrayOf_xsd_anyType" />
+  </wsdl:message>
+  <wsdl:message name="CacheAndRunResponse1">
+    <wsdl:part name="CacheAndRunReturn" type="impl:ArrayOf_tns1_DatasetResultView" />
+  </wsdl:message>
+  <wsdl:message name="cacheStatusRequest" />
+  <wsdl:message name="cacheStatusResponse">
+    <wsdl:part name="cacheStatusReturn" type="impl:ArrayOf_tns1_DatasetCacheInfoView" />
+  </wsdl:message>
+  <wsdl:message name="ObjectNotFoundException">
+    <wsdl:part name="fault" type="tns3:ObjectNotFoundException" />
+  </wsdl:message>
+  <wsdl:message name="CacheDataRequest">
+    <wsdl:part name="in0" type="tns1:DatasetView" />
+    <wsdl:part name="in1" type="impl:ArrayOf_tns1_DatasetSourceView" />
+    <wsdl:part name="in2" type="impl:ArrayOf_tns1_DatasetLoadView" />
+    <wsdl:part name="in3" type="impl:ArrayOf_tns1_DatasetColumnView" />
+    <wsdl:part name="in4" type="impl:ArrayOf_tns1_DatasetWhereView" />
+    <wsdl:part name="in5" type="impl:ArrayOf_tns1_DatasetGroupView" />
+    <wsdl:part name="in6" type="impl:ArrayOf_tns1_DatasetOrderView" />
+    <wsdl:part name="in7" type="impl:ArrayOf_xsd_anyType" />
+  </wsdl:message>
+  <wsdl:message name="CacheDataResponse" />
+  <wsdl:message name="CacheDataRequest1">
+    <wsdl:part name="in0" type="xsd:int" />
+    <wsdl:part name="in1" type="xsd:string" />
+    <wsdl:part name="in2" type="impl:ArrayOf_xsd_anyType" />
+  </wsdl:message>
+  <wsdl:message name="CacheDataResponse1" />
+  <wsdl:message name="getQuerySQLRequest">
+    <wsdl:part name="in0" type="tns1:DatasetView" />
+    <wsdl:part name="in1" type="impl:ArrayOf_tns1_DatasetSourceView" />
+    <wsdl:part name="in2" type="impl:ArrayOf_tns1_DatasetLoadView" />
+    <wsdl:part name="in3" type="impl:ArrayOf_tns1_DatasetColumnView" />
+    <wsdl:part name="in4" type="impl:ArrayOf_tns1_DatasetWhereView" />
+    <wsdl:part name="in5" type="impl:ArrayOf_tns1_DatasetGroupView" />
+    <wsdl:part name="in6" type="impl:ArrayOf_tns1_DatasetOrderView" />
+    <wsdl:part name="in7" type="impl:ArrayOf_xsd_anyType" />
+  </wsdl:message>
+  <wsdl:message name="getQuerySQLResponse">
+    <wsdl:part name="getQuerySQLReturn" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="unCacheDataRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="unCacheDataResponse" />
+  <wsdl:message name="unCacheResultsRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="unCacheResultsResponse" />
+  <wsdl:message name="calcStatusRequest" />
+  <wsdl:message name="calcStatusResponse">
+    <wsdl:part name="calcStatusReturn" type="impl:ArrayOf_tns1_CalculationInfoView" />
+  </wsdl:message>
+  <wsdl:message name="ObjectsRequest" />
+  <wsdl:message name="ObjectsResponse">
+    <wsdl:part name="ObjectsReturn" type="impl:ArrayOf_tns1_QueryObjectView" />
+  </wsdl:message>
+  <wsdl:message name="UserParametersRequest">
+    <wsdl:part name="in0" type="impl:ArrayOf_tns1_DatasetWhereView" />
+    <wsdl:part name="in1" type="impl:ArrayOf_tns1_DatasetLoadView" />
+    <wsdl:part name="in2" type="impl:ArrayOf_tns1_DatasetSourceView" />
+  </wsdl:message>
+  <wsdl:message name="UserParametersResponse">
+    <wsdl:part name="UserParametersReturn" type="tns1:QueryResultView" />
+  </wsdl:message>
+  <wsdl:message name="UserParametersRequest1">
+    <wsdl:part name="in0" type="impl:ArrayOf_tns1_DatasetWhereView" />
+    <wsdl:part name="in1" type="impl:ArrayOf_tns1_DatasetLoadView" />
+    <wsdl:part name="in2" type="impl:ArrayOf_tns1_DatasetSourceView" />
+    <wsdl:part name="in3" type="impl:ArrayOf_tns1_DatasetColumnView" />
+  </wsdl:message>
+  <wsdl:message name="UserParametersResponse1">
+    <wsdl:part name="UserParametersReturn" type="tns1:QueryResultView" />
+  </wsdl:message>
+  <wsdl:message name="getColumnTypesRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="getColumnTypesResponse">
+    <wsdl:part name="getColumnTypesReturn" type="impl:ArrayOf_xsd_string" />
+  </wsdl:message>
+  <wsdl:message name="getColumnTypesRequest1">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getColumnTypesResponse1">
+    <wsdl:part name="getColumnTypesReturn" type="impl:ArrayOf_xsd_string" />
+  </wsdl:message>
+  <wsdl:message name="WhereClauseRequest">
+    <wsdl:part name="in0" type="impl:ArrayOf_tns1_DatasetSourceView" />
+    <wsdl:part name="in1" type="impl:ArrayOf_tns1_DatasetWhereView" />
+  </wsdl:message>
+  <wsdl:message name="WhereClauseResponse">
+    <wsdl:part name="WhereClauseReturn" type="impl:ArrayOf_xsd_string" />
+  </wsdl:message>
+  <wsdl:message name="LastObjectUpdateRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+    <wsdl:part name="in2" type="xsd:string" />
+    <wsdl:part name="in3" type="tns4:GTTimestamp" />
+    <wsdl:part name="in4" type="tns4:GTTimestamp" />
+  </wsdl:message>
+  <wsdl:message name="LastObjectUpdateResponse">
+    <wsdl:part name="LastObjectUpdateReturn" type="tns4:GTTimestamp" />
+  </wsdl:message>
+  <wsdl:message name="RunQueryRequest">
+    <wsdl:part name="in0" type="xsd:int" />
+    <wsdl:part name="in1" type="xsd:string" />
+    <wsdl:part name="in2" type="impl:ArrayOf_xsd_anyType" />
+  </wsdl:message>
+  <wsdl:message name="RunQueryResponse">
+    <wsdl:part name="RunQueryReturn" type="impl:ArrayOf_tns1_DatasetResultView" />
+  </wsdl:message>
+  <wsdl:message name="RunQueryRequest1">
+    <wsdl:part name="in0" type="tns1:DatasetView" />
+    <wsdl:part name="in1" type="impl:ArrayOf_tns1_DatasetSourceView" />
+    <wsdl:part name="in2" type="impl:ArrayOf_tns1_DatasetLoadView" />
+    <wsdl:part name="in3" type="impl:ArrayOf_tns1_DatasetColumnView" />
+    <wsdl:part name="in4" type="impl:ArrayOf_tns1_DatasetWhereView" />
+    <wsdl:part name="in5" type="impl:ArrayOf_tns1_DatasetGroupView" />
+    <wsdl:part name="in6" type="impl:ArrayOf_tns1_DatasetOrderView" />
+    <wsdl:part name="in7" type="impl:ArrayOf_xsd_anyType" />
+  </wsdl:message>
+  <wsdl:message name="RunQueryResponse1">
+    <wsdl:part name="RunQueryReturn" type="impl:ArrayOf_tns1_DatasetResultView" />
+  </wsdl:message>
+  <wsdl:message name="RunQueryRequest2">
+    <wsdl:part name="in0" type="tns1:DatasetView" />
+    <wsdl:part name="in1" type="impl:ArrayOf_tns1_DatasetSourceView" />
+    <wsdl:part name="in2" type="impl:ArrayOf_tns1_DatasetLoadView" />
+    <wsdl:part name="in3" type="impl:ArrayOf_tns1_DatasetColumnView" />
+    <wsdl:part name="in4" type="impl:ArrayOf_tns1_DatasetWhereView" />
+    <wsdl:part name="in5" type="impl:ArrayOf_tns1_DatasetGroupView" />
+    <wsdl:part name="in6" type="impl:ArrayOf_tns1_DatasetOrderView" />
+    <wsdl:part name="in7" type="impl:ArrayOf_xsd_anyType" />
+    <wsdl:part name="in8" type="apachesoap:Map" />
+  </wsdl:message>
+  <wsdl:message name="RunQueryResponse2">
+    <wsdl:part name="RunQueryReturn" type="impl:ArrayOf_tns1_DatasetResultView" />
+  </wsdl:message>
+  <wsdl:message name="RunQueryRequest3">
+    <wsdl:part name="in0" type="xsd:int" />
+    <wsdl:part name="in1" type="xsd:string" />
+    <wsdl:part name="in2" type="impl:ArrayOf_xsd_anyType" />
+    <wsdl:part name="in3" type="apachesoap:Map" />
+  </wsdl:message>
+  <wsdl:message name="RunQueryResponse3">
+    <wsdl:part name="RunQueryReturn" type="impl:ArrayOf_tns1_DatasetResultView" />
+  </wsdl:message>
+  <wsdl:portType name="DatasetQuery">
+    <wsdl:operation name="getWsPivotedColumns" parameterOrder="in0 in1 in2">
+      <wsdl:input name="getWsPivotedColumnsRequest" message="impl:getWsPivotedColumnsRequest" />
+      <wsdl:output name="getWsPivotedColumnsResponse" message="impl:getWsPivotedColumnsResponse" />
+      <wsdl:fault name="InvalidAssignmentException" message="impl:InvalidAssignmentException" />
+    </wsdl:operation>
+    <wsdl:operation name="CacheAndRun" parameterOrder="in0 in1 in2 in3 in4 in5 in6 in7">
+      <wsdl:input name="CacheAndRunRequest" message="impl:CacheAndRunRequest" />
+      <wsdl:output name="CacheAndRunResponse" message="impl:CacheAndRunResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="CacheAndRun" parameterOrder="in0 in1 in2">
+      <wsdl:input name="CacheAndRunRequest1" message="impl:CacheAndRunRequest1" />
+      <wsdl:output name="CacheAndRunResponse1" message="impl:CacheAndRunResponse1" />
+    </wsdl:operation>
+    <wsdl:operation name="cacheStatus">
+      <wsdl:input name="cacheStatusRequest" message="impl:cacheStatusRequest" />
+      <wsdl:output name="cacheStatusResponse" message="impl:cacheStatusResponse" />
+      <wsdl:fault name="ObjectNotFoundException" message="impl:ObjectNotFoundException" />
+    </wsdl:operation>
+    <wsdl:operation name="CacheData" parameterOrder="in0 in1 in2 in3 in4 in5 in6 in7">
+      <wsdl:input name="CacheDataRequest" message="impl:CacheDataRequest" />
+      <wsdl:output name="CacheDataResponse" message="impl:CacheDataResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="CacheData" parameterOrder="in0 in1 in2">
+      <wsdl:input name="CacheDataRequest1" message="impl:CacheDataRequest1" />
+      <wsdl:output name="CacheDataResponse1" message="impl:CacheDataResponse1" />
+    </wsdl:operation>
+    <wsdl:operation name="getQuerySQL" parameterOrder="in0 in1 in2 in3 in4 in5 in6 in7">
+      <wsdl:input name="getQuerySQLRequest" message="impl:getQuerySQLRequest" />
+      <wsdl:output name="getQuerySQLResponse" message="impl:getQuerySQLResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="unCacheData" parameterOrder="in0">
+      <wsdl:input name="unCacheDataRequest" message="impl:unCacheDataRequest" />
+      <wsdl:output name="unCacheDataResponse" message="impl:unCacheDataResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="unCacheResults" parameterOrder="in0">
+      <wsdl:input name="unCacheResultsRequest" message="impl:unCacheResultsRequest" />
+      <wsdl:output name="unCacheResultsResponse" message="impl:unCacheResultsResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="calcStatus">
+      <wsdl:input name="calcStatusRequest" message="impl:calcStatusRequest" />
+      <wsdl:output name="calcStatusResponse" message="impl:calcStatusResponse" />
+      <wsdl:fault name="ObjectNotFoundException" message="impl:ObjectNotFoundException" />
+    </wsdl:operation>
+    <wsdl:operation name="Objects">
+      <wsdl:input name="ObjectsRequest" message="impl:ObjectsRequest" />
+      <wsdl:output name="ObjectsResponse" message="impl:ObjectsResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="UserParameters" parameterOrder="in0 in1 in2">
+      <wsdl:input name="UserParametersRequest" message="impl:UserParametersRequest" />
+      <wsdl:output name="UserParametersResponse" message="impl:UserParametersResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="UserParameters" parameterOrder="in0 in1 in2 in3">
+      <wsdl:input name="UserParametersRequest1" message="impl:UserParametersRequest1" />
+      <wsdl:output name="UserParametersResponse1" message="impl:UserParametersResponse1" />
+    </wsdl:operation>
+    <wsdl:operation name="getColumnTypes" parameterOrder="in0 in1">
+      <wsdl:input name="getColumnTypesRequest" message="impl:getColumnTypesRequest" />
+      <wsdl:output name="getColumnTypesResponse" message="impl:getColumnTypesResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getColumnTypes" parameterOrder="in0">
+      <wsdl:input name="getColumnTypesRequest1" message="impl:getColumnTypesRequest1" />
+      <wsdl:output name="getColumnTypesResponse1" message="impl:getColumnTypesResponse1" />
+    </wsdl:operation>
+    <wsdl:operation name="WhereClause" parameterOrder="in0 in1">
+      <wsdl:input name="WhereClauseRequest" message="impl:WhereClauseRequest" />
+      <wsdl:output name="WhereClauseResponse" message="impl:WhereClauseResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="LastObjectUpdate" parameterOrder="in0 in1 in2 in3 in4">
+      <wsdl:input name="LastObjectUpdateRequest" message="impl:LastObjectUpdateRequest" />
+      <wsdl:output name="LastObjectUpdateResponse" message="impl:LastObjectUpdateResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="RunQuery" parameterOrder="in0 in1 in2">
+      <wsdl:input name="RunQueryRequest" message="impl:RunQueryRequest" />
+      <wsdl:output name="RunQueryResponse" message="impl:RunQueryResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="RunQuery" parameterOrder="in0 in1 in2 in3 in4 in5 in6 in7">
+      <wsdl:input name="RunQueryRequest1" message="impl:RunQueryRequest1" />
+      <wsdl:output name="RunQueryResponse1" message="impl:RunQueryResponse1" />
+    </wsdl:operation>
+    <wsdl:operation name="RunQuery" parameterOrder="in0 in1 in2 in3 in4 in5 in6 in7 in8">
+      <wsdl:input name="RunQueryRequest2" message="impl:RunQueryRequest2" />
+      <wsdl:output name="RunQueryResponse2" message="impl:RunQueryResponse2" />
+    </wsdl:operation>
+    <wsdl:operation name="RunQuery" parameterOrder="in0 in1 in2 in3">
+      <wsdl:input name="RunQueryRequest3" message="impl:RunQueryRequest3" />
+      <wsdl:output name="RunQueryResponse3" message="impl:RunQueryResponse3" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="DatasetSoapBinding" type="impl:DatasetQuery">
+    <wsdlsoap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <wsdl:operation name="getWsPivotedColumns">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getWsPivotedColumnsRequest">
+        <wsdlsoap:body use="encoded" namespace="http://gtdw.pci.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getWsPivotedColumnsResponse">
+        <wsdlsoap:body use="encoded" namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+      <wsdl:fault name="InvalidAssignmentException">
+        <wsdlsoap:fault use="encoded" name="InvalidAssignmentException" namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="CacheAndRun">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="CacheAndRunRequest">
+        <wsdlsoap:body use="encoded" namespace="http://gtdw.pci.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="CacheAndRunResponse">
+        <wsdlsoap:body use="encoded" namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CacheAndRun">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="CacheAndRunRequest1">
+        <wsdlsoap:body use="encoded" namespace="http://gtdw.pci.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="CacheAndRunResponse1">
+        <wsdlsoap:body use="encoded" namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cacheStatus">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="cacheStatusRequest">
+        <wsdlsoap:body use="encoded" namespace="http://gtdw.pci.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="cacheStatusResponse">
+        <wsdlsoap:body use="encoded" namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+      <wsdl:fault name="ObjectNotFoundException">
+        <wsdlsoap:fault use="encoded" name="ObjectNotFoundException" namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="CacheData">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="CacheDataRequest">
+        <wsdlsoap:body use="encoded" namespace="http://gtdw.pci.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="CacheDataResponse">
+        <wsdlsoap:body use="encoded" namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CacheData">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="CacheDataRequest1">
+        <wsdlsoap:body use="encoded" namespace="http://gtdw.pci.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="CacheDataResponse1">
+        <wsdlsoap:body use="encoded" namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getQuerySQL">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getQuerySQLRequest">
+        <wsdlsoap:body use="encoded" namespace="http://gtdw.pci.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getQuerySQLResponse">
+        <wsdlsoap:body use="encoded" namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="unCacheData">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="unCacheDataRequest">
+        <wsdlsoap:body use="encoded" namespace="http://gtdw.pci.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="unCacheDataResponse">
+        <wsdlsoap:body use="encoded" namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="unCacheResults">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="unCacheResultsRequest">
+        <wsdlsoap:body use="encoded" namespace="http://gtdw.pci.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="unCacheResultsResponse">
+        <wsdlsoap:body use="encoded" namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="calcStatus">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="calcStatusRequest">
+        <wsdlsoap:body use="encoded" namespace="http://gtdw.pci.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="calcStatusResponse">
+        <wsdlsoap:body use="encoded" namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+      <wsdl:fault name="ObjectNotFoundException">
+        <wsdlsoap:fault use="encoded" name="ObjectNotFoundException" namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="Objects">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="ObjectsRequest">
+        <wsdlsoap:body use="encoded" namespace="http://gtdw.pci.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="ObjectsResponse">
+        <wsdlsoap:body use="encoded" namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UserParameters">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="UserParametersRequest">
+        <wsdlsoap:body use="encoded" namespace="http://gtdw.pci.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="UserParametersResponse">
+        <wsdlsoap:body use="encoded" namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UserParameters">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="UserParametersRequest1">
+        <wsdlsoap:body use="encoded" namespace="http://gtdw.pci.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="UserParametersResponse1">
+        <wsdlsoap:body use="encoded" namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getColumnTypes">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getColumnTypesRequest">
+        <wsdlsoap:body use="encoded" namespace="http://gtdw.pci.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getColumnTypesResponse">
+        <wsdlsoap:body use="encoded" namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getColumnTypes">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getColumnTypesRequest1">
+        <wsdlsoap:body use="encoded" namespace="http://gtdw.pci.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getColumnTypesResponse1">
+        <wsdlsoap:body use="encoded" namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WhereClause">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="WhereClauseRequest">
+        <wsdlsoap:body use="encoded" namespace="http://gtdw.pci.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="WhereClauseResponse">
+        <wsdlsoap:body use="encoded" namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LastObjectUpdate">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="LastObjectUpdateRequest">
+        <wsdlsoap:body use="encoded" namespace="http://gtdw.pci.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="LastObjectUpdateResponse">
+        <wsdlsoap:body use="encoded" namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RunQuery">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="RunQueryRequest">
+        <wsdlsoap:body use="encoded" namespace="http://gtdw.pci.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="RunQueryResponse">
+        <wsdlsoap:body use="encoded" namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RunQuery">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="RunQueryRequest1">
+        <wsdlsoap:body use="encoded" namespace="http://gtdw.pci.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="RunQueryResponse1">
+        <wsdlsoap:body use="encoded" namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RunQuery">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="RunQueryRequest2">
+        <wsdlsoap:body use="encoded" namespace="http://gtdw.pci.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="RunQueryResponse2">
+        <wsdlsoap:body use="encoded" namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RunQuery">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="RunQueryRequest3">
+        <wsdlsoap:body use="encoded" namespace="http://gtdw.pci.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="RunQueryResponse3">
+        <wsdlsoap:body use="encoded" namespace="https://energyaccounting.santeecooper.com/axis/services/Dataset" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="DatasetQueryService">
+    <wsdl:port name="Dataset" binding="impl:DatasetSoapBinding">
+      <wsdlsoap:address location="https://energyaccounting.santeecooper.com/axis/services/Dataset" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
