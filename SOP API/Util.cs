@@ -14,7 +14,7 @@ namespace SOPAPI {
     /// </summary>
     public static class Util {
         /// <summary>
-        /// Wilcard characters for file names.
+        /// Wildcard characters for file names.
         /// </summary>
         public static char[] FilenameWildcards {
             get {
