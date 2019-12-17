@@ -166,28 +166,6 @@ namespace SOPAPI {
             return true;
         }
 
-        /*/// <summary>
-        /// Extracts a directory name from a filepath. Assumes the last segment of the path is a file name.
-        /// </summary>
-        /// <param name="path">The path to parse. The last part should be a file name.</param>
-        /// <returns>A string containing a directory path that would contain the specified file path.</returns>
-        public static string GetDirectoryFromPath(string path) {
-            path = path.Replace('/', '\\');
-            if (path.Split('\\').Last().Contains('.')) return path.Substring(0, path.Length - path.Split('\\').Last().Length);
-            return path;
-        }
-
-        /// <summary>
-        /// Extracts a file name from a path.
-        /// </summary>
-        /// <param name="path">The path from which to extract a file name</param>
-        /// <returns>The file name found at the end of the path. Returns <code>null</code> if no file name is found.</returns>
-        public static string GetFileNameFromPath(string path) {
-            path = path.Replace('/', '\\');
-            if (path.Split('\\').Last().Contains('.')) return path.Split('\\').Last();
-            return null;
-        }*/
-
         /// <summary>
         /// Copies all files and folders inside SourceDirectory to DestinationDirectory.
         /// </summary>
