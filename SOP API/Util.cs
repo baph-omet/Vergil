@@ -22,12 +22,16 @@ namespace SOPAPI {
             }
         }
 
-        private static char[] commentCharacters = {
-            ' ',
-            '#',
-            '\t',
-            '\n'
-        };
+        private static char[] commentCharacters {
+            get {
+                return new[]{
+                    ' ',
+                    '#',
+                    '\t',
+                    '\n' 
+                };
+            }
+        }
 
         /// <summary>
         /// Gets the first free alternate filename corresponding to the supplied path.
@@ -53,7 +57,7 @@ namespace SOPAPI {
         /// <param name="source">The source string to search</param>
         /// <param name="target">The target character to search for</param>
         /// <returns>The number of times target is found in source. Returns 0 if not found.</returns>
-        public static int CountOf(string source, char target) {
+        public static int CountOf(this string source, char target) {
             int total = 0;
             foreach (char c in source) if (c == target) total++;
             return total;
@@ -64,7 +68,7 @@ namespace SOPAPI {
         /// <param name="source">The source string to search</param>
         /// <param name="target">The target string to search for</param>
         /// <returns>The number of times target is found in source. Returns 0 if not found.</returns>
-        public static int CountOf(string source, string target) {
+        public static int CountOf(this string source, string target) {
             int total = 0;
             int i = 0;
             while (i + target.Length <= source.Length) {
@@ -79,7 +83,7 @@ namespace SOPAPI {
         /// <param name="source">String to check.</param>
         /// <param name="targets">Characters to find.</param>
         /// <returns>True if the source contains any of the targets.</returns>
-        public static bool ContainsAny(string source, char[] targets) {
+        public static bool ContainsAny(this string source, char[] targets) {
             foreach (char target in targets) if (source.Contains(target)) return true;
             return false;
         }
@@ -89,7 +93,7 @@ namespace SOPAPI {
         /// <param name="source">String to check.</param>
         /// <param name="targets">Characters to find.</param>
         /// <returns>True, if the source contains any of the targets.</returns>
-        public static bool ContainsAny(string source, string[] targets) {
+        public static bool ContainsAny(this string source, string[] targets) {
             foreach (string target in targets) if (source.Contains(target)) return true;
             return false;
         }
@@ -99,7 +103,7 @@ namespace SOPAPI {
         /// </summary>
         /// <param name="source">String to check.</param>
         /// <returns>True if the source contains any filename wildcards.</returns>
-        public static bool ContainsWildcards(string source) {
+        public static bool ContainsWildcards(this string source) {
             return ContainsAny(source, FilenameWildcards);
         }
 
@@ -127,7 +131,7 @@ namespace SOPAPI {
         /// </summary>
         /// <param name="str">The string to capitalize.</param>
         /// <returns>A string where each word of str is capitalized.</returns>
-        public static string Capitalize(string str) {
+        public static string Capitalize(this string str) {
             return Capitalize(str, new string[] { });
         }
         /// <summary>
@@ -136,7 +140,7 @@ namespace SOPAPI {
         /// <param name="str">The string to capitalize.</param>
         /// <param name="excluded">Any words in this list will be excluded from capitalization. (case-insensitive).</param>
         /// <returns>A string where each word of str is capitalized.</returns>
-        public static string Capitalize(string str, string[] excluded) {
+        public static string Capitalize(this string str, string[] excluded) {
             for (int i = 0; i < excluded.Length; i++) excluded[i] = excluded[i].ToLower();
             StringBuilder builder = new StringBuilder();
             string[] words = str.Split(' ');
@@ -171,7 +175,7 @@ namespace SOPAPI {
         /// </summary>
         /// <param name="SourceDirectory">The folder whose contents will be copied.</param>
         /// <param name="DestinationDirectory">The folder to which files will be copied.</param>
-        private static void RecursiveCopy(string SourceDirectory, string DestinationDirectory) {
+        public static void RecursiveCopy(string SourceDirectory, string DestinationDirectory) {
             RecursiveCopy(SourceDirectory, DestinationDirectory, true);
         }
         /// <summary>
@@ -180,7 +184,7 @@ namespace SOPAPI {
         /// <param name="SourceDirectory">The folder whose contents will be copied.</param>
         /// <param name="DestinationDirectory">The folder to which files will be copied.</param>
         /// <param name="overwriteFile">If True, any files in the destination folder will be overwritten, otherwise conflicting source files will be ignored.</param>
-        private static void RecursiveCopy(string SourceDirectory, string DestinationDirectory, bool overwriteFile) {
+        public static void RecursiveCopy(string SourceDirectory, string DestinationDirectory, bool overwriteFile) {
             if (!Directory.Exists(DestinationDirectory)) Directory.CreateDirectory(DestinationDirectory);
             foreach (string f in Directory.GetFiles(SourceDirectory)) {
                 if (overwriteFile || !File.Exists(DestinationDirectory + "\\" + f.Split('\\').Last())) {
@@ -226,7 +230,7 @@ namespace SOPAPI {
         /// </summary>
         /// <param name="str">A string to check</param>
         /// <returns>True if the string is at least one character long, does not contain a dash other than at the beginning, and contains only digits and up to one period.</returns>
-        public static bool IsNumber(string str) {
+        public static bool IsNumber(this string str) {
             str = str.Trim();
             try {
                 System.Convert.ToDouble(str);
@@ -247,7 +251,7 @@ namespace SOPAPI {
         /// </summary>
         /// <param name="str">Source string.</param>
         /// <returns>str with all whitespace representations changed to whitespace characters.</returns>
-        public static string ConvertWhitespaceCharacters(string str) {
+        public static string ConvertWhitespaceCharacters(this string str) {
             string[] targets = new[] { @"\a", @"\b", @"\f", @"\n", @"\r", @"\t", @"\v" };
             char[] replacements = new[] { '\a', '\b', '\f', '\n', '\r', '\t', '\v' };
             for (int i = 0; i < targets.Length; i++) str = str.Replace(targets[i], replacements[i].ToString());
@@ -259,7 +263,7 @@ namespace SOPAPI {
         /// </summary>
         /// <param name="str">Source string.</param>
         /// <returns>str with all whitespace characters converted to strings.</returns>
-        public static string ConvertWhitespaceToCharacters(string str) {
+        public static string ConvertWhitespaceToCharacters(this string str) {
             string[] replacements = new[] { @"\a", @"\b", @"\f", @"\n", @"\r", @"\t", @"\v" };
             char[] targets = new[] { '\a', '\b', '\f', '\n', '\r', '\t', '\v' };
             for (int i = 0; i < targets.Length; i++) str = str.Replace(targets[i].ToString(), replacements[i]);
