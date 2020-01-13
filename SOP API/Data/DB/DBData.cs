@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data.Odbc;
 
-namespace SOPAPI.Data.DB {
+namespace Vergil.Data.DB {
     /// <summary>
     /// Wrapper class for a List of DBDataRows.
     /// </summary>

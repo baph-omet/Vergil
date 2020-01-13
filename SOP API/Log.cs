@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using System.Reflection;
 
-namespace SOPAPI {
+namespace Vergil {
     /// <summary>
     /// Variable levels of severity for messages written to the log
     /// </summary>

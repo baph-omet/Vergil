@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SOPAPI {
+namespace Vergil {
     /// <summary>
     /// An exception for when unexpected data is found in a configuration file
     /// </summary>

@@ -5,9 +5,9 @@ using System.Text;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.IO;
-using SOPAPI.XML;
+using Vergil.XML;
 
-namespace SOPAPI.Web {
+namespace Vergil.Web {
     /// <summary>
     /// Wrapper class for HttpWebRequest to make simple GET and POST requests less of a hassle. Seriously, why isn't this in .NET by default already?
     /// </summary>

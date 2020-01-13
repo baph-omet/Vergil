@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace SOPAPI.Configuration {
+namespace Vergil.Configuration {
     /// <summary>
     /// A configuration where properties are stored in the program's internal Properties.
     /// </summary>

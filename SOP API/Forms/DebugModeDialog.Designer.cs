@@ -1,4 +1,4 @@
-﻿namespace SOPAPI.Forms {
+﻿namespace Vergil.Forms {
     /// <summary>
     /// Dialog for determining what to do when a program is started in Debug mode.
     /// </summary>

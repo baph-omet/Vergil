@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace SOPAPI
+namespace Vergil
 {
     /// <summary>
     /// Wrapper for List of type Problem.

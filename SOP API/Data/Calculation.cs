@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SOPAPI.Data {
+namespace Vergil.Data {
     /// <summary>
     /// Specific operation types. Supports basic four functions.
     /// </summary>

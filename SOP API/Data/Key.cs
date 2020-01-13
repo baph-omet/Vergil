@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SOPAPI.Data {
+namespace Vergil.Data {
     /// <summary>
     /// Class that represents a translation between a file's header and its respective database Field.
     /// </summary>

@@ -1,11 +1,11 @@
-﻿using SOPAPI.Configuration;
+﻿using Vergil.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace SOPAPI {
+namespace Vergil {
     /// <summary>
     /// Basic program structure, with a Log, Config, and ProblemList
     /// </summary>

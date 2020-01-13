@@ -5,7 +5,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Threading;
 
-namespace SOPAPI.Timing {
+namespace Vergil.Timing {
     /// <summary>
     /// Wrapper class for a List of TimingAction objects.
     /// </summary>

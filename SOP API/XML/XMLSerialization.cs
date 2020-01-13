@@ -6,7 +6,7 @@ using System.IO;
 using System.Xml.Serialization;
 using System.Xml;
 
-namespace SOPAPI.XML {
+namespace Vergil.XML {
     /// <summary>
     /// Static class containing methods for serializing and deserializing objects to XML.
     /// </summary>

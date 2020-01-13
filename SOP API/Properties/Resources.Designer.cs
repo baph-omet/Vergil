@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SOPAPI.Properties {
+namespace Vergil.Properties {
     using System;
     
     
@@ -19,7 +19,7 @@ namespace SOPAPI.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -39,7 +39,7 @@ namespace SOPAPI.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SOPAPI.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Vergil.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,32 +61,32 @@ namespace SOPAPI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Oh shoot
-        ///Shucks
-        ///Da&apos;gum
-        ///D&apos;oh
-        ///Aww, tartar sauce
-        ///Ouch
-        ///Well that&apos;s not right
-        ///Ya dun goof&apos;d
-        ///It won&apos;t let me
-        ///Houston, we have a problem
-        ///A thing happened
-        ///Oye, tenemos una problema
+        ///   Looks up a localized string similar to Oh shoot.
+        ///Shucks.
+        ///Da&apos;gum.
+        ///D&apos;oh.
+        ///Aww, tartar sauce.
+        ///Ouch.
+        ///Well that&apos;s not right.
+        ///Ya dun goof&apos;d.
+        ///It won&apos;t let me.
+        ///Houston, we have a problem.
+        ///A thing happened.
+        ///Oye, tenemos una problema.
         ///Not again!
-        ///You&apos;ve gotta be kidding me
+        ///You&apos;ve gotta be kidding me.
         ///What&apos;d you do that for?
         ///I trusted you!
         ///Nope.avi
-        ///Well, at least I tried
-        ///Danger, Will Robinson
-        ///I hate it when that happens
+        ///Well, at least I tried.
+        ///Danger, Will Robinson.
+        ///I hate it when that happens.
         ///OHHHHH NOOOOOOO!
         ///Where&apos;s the N-1?
         ///Hey, who turned out the lights?
-        ///Help me, Obi-Wan Kenobi, you&apos;re my only hope
+        ///Help me, Obi-Wan Kenobi, you&apos;re my only hope.
         ///Doctor, we&apos;re losing him!
-        ///*Sigh* I&apos;ll go get [rest of string was truncated]&quot;;.
+        ///* [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Openers {
             get {

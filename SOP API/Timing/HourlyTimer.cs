@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace SOPAPI.Timing {
+namespace Vergil.Timing {
     /// <summary>
     /// Class for creating an unthreaded loop that loops forever and executes an action at a specified minute of the hour.
     /// </summary>

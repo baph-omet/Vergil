@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using SOPAPI.XML;
+using Vergil.XML;
 using System.Globalization;
 
-namespace SOPAPI.Data {
+namespace Vergil.Data {
     /// <summary>
     /// A class for flexibly interpreting files containing rows of data.
     /// </summary>

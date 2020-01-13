@@ -1,4 +1,4 @@
-﻿namespace SOPAPI.Timing {
+﻿namespace Vergil.Timing {
     /// <summary>
     /// Framework for classes that run actions on a timer.
     /// </summary>

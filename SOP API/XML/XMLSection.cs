@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SOPAPI.XML {
+namespace Vergil.XML {
     /// <summary>
     /// Class that represents an XML Node that contains child nodes
     /// </summary>

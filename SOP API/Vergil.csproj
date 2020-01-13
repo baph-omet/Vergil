@@ -8,8 +8,8 @@
     <ProjectGuid>{162BC59F-2853-4320-965F-9244DF5305AF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SOPAPI</RootNamespace>
-    <AssemblyName>SOP API</AssemblyName>
+    <RootNamespace>Vergil</RootNamespace>
+    <AssemblyName>Vergil</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -21,7 +21,7 @@
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\SOP API.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\Vergil.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -52,7 +52,6 @@
     <Compile Include="Configuration\XMLConfig.cs" />
     <Compile Include="Data\Calculation.cs" />
     <Compile Include="Data\DataFile.cs" />
-    <Compile Include="Data\EADataset.cs" />
     <Compile Include="Data\DataFileFormat.cs" />
     <Compile Include="Data\Key.cs" />
     <Compile Include="Data\XmlFormat.cs" />
@@ -83,11 +82,6 @@
     </Compile>
     <Compile Include="Timing\Timeable.cs" />
     <Compile Include="Timing\TimingProgram.cs" />
-    <Compile Include="Web References\Dataset\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
     <Compile Include="Web\FTP.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Problem.cs" />
@@ -106,55 +100,13 @@
     <Compile Include="XML\XMLSerialization.cs" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
-  <ItemGroup>
     <WebReferences Include="Web References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WebReferenceUrl Include="https://energyaccounting.santeecooper.com/axis/services/Dataset%3fwsdl">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\Dataset\</RelPath>
-      <UpdateFromURL>https://energyaccounting.santeecooper.com/axis/services/Dataset%3fwsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>SOP_API_Dataset_DatasetQueryService</CachedSettingsPropName>
-    </WebReferenceUrl>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\Dataset\CalculationInfoView.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Dataset\Dataset.wsdl" />
-    <None Include="Web References\Dataset\DatasetCacheInfoView.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Dataset\DatasetColumnView.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Dataset\DatasetResultView.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Dataset\GTTimestamp.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Dataset\QueryObjectView.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Dataset\QueryResultView.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Dataset\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

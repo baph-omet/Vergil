@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SOPAPI.XML;
+using Vergil.XML;
 
-namespace SOPAPI.Configuration {
+namespace Vergil.Configuration {
     /// <summary>
     /// A configuration in XML format. All properties should be nodes within a specific section.
     /// </summary>

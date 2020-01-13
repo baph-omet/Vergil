@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using System.Threading;
 using System.Text.RegularExpressions;
 using System.Security.AccessControl;
 using System.Security.Principal;
 
-namespace SOPAPI {
+namespace Vergil {
     /// <summary>
     /// Contains static helper methods.
     /// </summary>
@@ -221,7 +219,7 @@ namespace SOPAPI {
         /// <typeparam name="T">The enum type. Can be inferred from value.</typeparam>
         /// <param name="value">The enum value to convert to string.</param>
         /// <returns></returns>
-        public static string EnumName<T>(T value) where T : Enum {
+        public static string EnumName<T>(this T value) where T : Enum {
             return Enum.GetName(typeof(T), value);
         }
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Xml;
 using System.IO;
 
-namespace SOPAPI.XML {
+namespace Vergil.XML {
     /// <summary>
     /// Class for reading XML files into dynamic objects. Can be used to read data or configurations. Best used for shorter files.
     /// </summary>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SOPAPI.Configuration {
+namespace Vergil.Configuration {
     /// <summary>
     /// Interface for different configuration types
     /// </summary>

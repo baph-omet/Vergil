@@ -1,4 +1,4 @@
-﻿namespace SOPAPI.Forms {
+﻿namespace Vergil.Forms {
     partial class EmailPrompt {
         /// <summary>
         /// Required designer variable.

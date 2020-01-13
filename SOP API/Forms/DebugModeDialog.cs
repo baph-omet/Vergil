@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using System.Reflection;
 
-namespace SOPAPI.Forms {
+namespace Vergil.Forms {
     /// <summary>
     /// Enum to encapsulate the result states of this dialog.
     /// </summary>

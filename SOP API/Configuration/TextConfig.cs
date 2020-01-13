@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 
-namespace SOPAPI.Configuration {
+namespace Vergil.Configuration {
     /// <summary>
     /// Type for managing SOP config files. Supports reading and writing config files.
     /// </summary>

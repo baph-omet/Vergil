@@ -5,7 +5,7 @@ using System.Text;
 using System.Data.Odbc;
 using System.Data;
 
-namespace SOPAPI.Data.DB {
+namespace Vergil.Data.DB {
     /// <summary>
     /// Wrapper class for OdbcConnection. Simplifies creating and executing simple queries.
     /// </summary>

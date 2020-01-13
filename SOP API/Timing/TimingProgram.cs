@@ -1,5 +1,5 @@
-﻿using SOPAPI.Forms;
-using SOPAPI.Configuration;
+﻿using Vergil.Forms;
+using Vergil.Configuration;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Collections.Generic;
 
-namespace SOPAPI.Timing {
+namespace Vergil.Timing {
     /// <summary>
     /// Framework for programs that run on a timer.
     /// </summary>

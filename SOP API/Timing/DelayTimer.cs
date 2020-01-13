@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SOPAPI.Timing {
+namespace Vergil.Timing {
     /// <summary>
     /// Class for repeating actions at fixed intervals. Actions are run on their own threads.
     /// </summary>

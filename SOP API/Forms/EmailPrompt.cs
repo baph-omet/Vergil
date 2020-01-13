@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace SOPAPI.Forms {
+namespace Vergil.Forms {
     /// <summary>
     /// Form that prompts the user to enter one or more email addresses for use elsewhere.
     /// </summary>

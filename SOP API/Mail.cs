@@ -4,9 +4,9 @@ using System.Linq;
 using System.Net.Mail;
 using System.IO;
 using System.Reflection;
-using SOPAPI.XML;
+using Vergil.XML;
 
-namespace SOPAPI {
+namespace Vergil {
     /// <summary>
     /// Static class with email sending methods. Use the methods of this class to send quick emails.
     /// </summary>

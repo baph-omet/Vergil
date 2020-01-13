@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace SOPAPI {
+namespace Vergil {
     /// <summary>
     /// Class for automating Windows shell commands
     /// </summary>

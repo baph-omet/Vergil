@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SOPAPI.XML;
+using Vergil.XML;
 using System.IO;
-using SOPAPI.Web;
+using Vergil.Web;
 using System.Net;
-using SOPAPI.Data.DB;
+using Vergil.Data.DB;
 using System.Threading;
 
-namespace SOPAPI.Data {
+namespace Vergil.Data {
     /// <summary>
     /// Intervals for running queries
     /// </summary>

@@ -5,7 +5,7 @@ using System.Text;
 using System.Net;
 using System.IO;
 
-namespace SOPAPI.Web {
+namespace Vergil.Web {
     /// <summary>
     /// Class for transferring files across an FTP connection.
     /// </summary>
