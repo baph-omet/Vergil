@@ -122,7 +122,7 @@ namespace SOPAPI {
         /// </summary>
         /// <param name="line">The string to check</param>
         /// <returns>False if the line is empty, or starts with a whitespace character or comment character. Else true.</returns>
-        public static Boolean IsSignificant(string line) {
+        public static bool IsSignificant(string line) {
             return line.Length > 0 && !commentCharacters.Contains(line[0]);
         }
 
@@ -211,7 +211,7 @@ namespace SOPAPI {
         /// <param name="value">The value to parse.</param>
         /// <param name="ignoreCase">Whether or not to ignore case in the value. Default: false</param>
         /// <returns>An Enum value of type T corresponding to its string representation.</returns>
-        public static T ParseEnum<T>(string value, bool ignoreCase = false) {
+        public static T ParseEnum<T>(string value, bool ignoreCase = false) where T : Enum {
             return (T)Enum.Parse(typeof(T), value, ignoreCase);
         }
 
@@ -221,7 +221,7 @@ namespace SOPAPI {
         /// <typeparam name="T">The enum type. Can be inferred from value.</typeparam>
         /// <param name="value">The enum value to convert to string.</param>
         /// <returns></returns>
-        public static string EnumName<T>(T value) {
+        public static string EnumName<T>(T value) where T : Enum {
             return Enum.GetName(typeof(T), value);
         }
 

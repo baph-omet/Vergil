@@ -11,72 +11,6 @@ namespace SOPAPI {
     /// Static class with email sending methods. Use the methods of this class to send quick emails.
     /// </summary>
     public static class Mail {
-
-        /*private static string[] Openers = {
-            "Oh shoot",
-            "Shucks",
-            "Da'gum",
-            "D'oh",
-            "Aww, tartar sauce",
-            "Ouch",
-            "Well that's not right",
-            "Ya dun goof'd",
-            "It won't let me",
-            "Houston, we have a problem",
-            "A thing happened",
-            "Oye, tenemos una problema",
-            "Not again!",
-            "You've gotta be kidding me",
-            "What'd you do that for?",
-            "I trusted you!",
-            "Nope.avi",
-            "Well, at least I tried",
-            "Danger, Will Robinson",
-            "I hate it when that happens",
-            "OHHHHH NOOOOOOO!",
-            "Where's the N-1?",
-            "Hey, who turned out the lights?",
-            "Help me, Obi-Wan Kenobi, you're my only hope",
-            "Doctor, we're losing him!",
-            "*Sigh* I'll go get the shovel",
-            "Son, I am dissapoint",
-            "Curse your sudden, but inevitable betrayal",
-            "You found paradise in America. You had a good trade, you made a good living. The police protected you and there were courts of law. So you didn't need a friend"
-                + "like me. Now you come and say \"Don Corleone, give me justice.\" But you don't ask with respect. You don't offer friendship. You don't even think to call me "
-                + "\"Godfather.\" You come into my house on the day my daughter is to be married and you ask me to do murder - for money.",
-            "Did you try restarting it?",
-            "Don't try this at home",
-            "I'm gonna need to see some ID",
-            "It's not working and I'd like it to stop doing that",
-            "They say it's the squeaky wheel that gets the grease. Well, squeak squeak.",
-            "This is just between you and me. And everyone else who got this email.",
-            "We need to go deeper.",
-            "Did someone forget the Seven P's?",
-            "Blame Canada!",
-            "'Murica",
-            "What kind of Mickey Mouse operation is this?",
-            "Look Dave, I can see you're really upset about this. I honestly think you ought to sit down calmly, take a stress pill, and think things over.",
-            "Where's my Megawatt?",
-            "Don't blink. Blink, and you're dead.",
-            "My leg!",
-            "UNACCEPTABLE!!!!",
-            "So it's treason, then.",
-            "I tried, and therefore no one can judge me."
-        };*/
-
-        /// <summary>
-        /// Sends an email to a single recipient.
-        /// </summary>
-        /// <returns>Returns void</returns>
-        /// <param name="from">The email address from which to send the email</param>
-        /// <param name="recipient">The email address to which to send the email</param>
-        /// <param name="subject">The text to go in the subject line of the email</param>
-        /// <param name="message">The text to go in the body of the email</param>
-        /// <param name="isHtml">If true, the email will be sent as HTML, else plain text</param>
-        [Obsolete("Use an overload instead")]
-        public static void SendEmail(string from, string recipient, string subject, string message, bool isHtml = false) {
-            SendEmail(from, new string[] { recipient }, subject, message, null, attachmentFilepaths: new string[] { }, isHtml: isHtml);
-        }
         /// <summary>
         /// Send an email to a specified email group.
         /// </summary>
@@ -117,7 +51,7 @@ namespace SOPAPI {
                 attachmentFilepaths = fps.ToArray();
             }
             SmtpClient SMTP = new SmtpClient("smtp.santeecooper.com");
-            recipients = Mail.GetEmailAddresses(recipients);
+            recipients = GetEmailAddresses(recipients);
             foreach (string rec in recipients) {
                 if (!IsValidAddress(rec)) throw new ArgumentException("Recipient \"" + rec + "\" is not a valid email address.");
                 MailMessage email = new MailMessage(from, rec) {
@@ -142,34 +76,6 @@ namespace SOPAPI {
                 email.Dispose();
             }
             if (log != null && File.Exists(log.GetPath() + @"\ProgramLog.txt")) File.Delete(log.GetPath() + @"\ProgramLog.txt");
-        }
-
-        //======================================================================================================
-
-        /// <summary>
-        /// Sends an email to a single recipient. Includes comedic email opening lines.
-        /// </summary>
-        /// <param name="from">The email address from which to send the email</param>
-        /// <param name="recipient">The email address to which to send the email</param>
-        /// <param name="subject">The text to go in the subject line of the email</param>
-        /// <param name="message">The text to go in the body of the email</param>
-        [Obsolete("Functionality has been included in SendMessage().")]
-        public static void SendEmailWithOpeners(string from, string recipient, string subject, string message) {
-            SendEmailWithOpeners(from, new string[] { recipient }, subject, message, null, new string[] { }, false);
-        }
-        /// <summary>
-        /// Sends an email to one or more recipients with a program's Log and specified files attached. Includes comedic email opening lines. Sends each email separately.
-        /// </summary>
-        /// <param name="from">The email address from which the email is sent</param>
-        /// <param name="recipients">A string array containing the email addresses to which to send the emails</param>
-        /// <param name="subject">The text to go in the subject line of the email</param>
-        /// <param name="message">The text to go in the body of the email</param>
-        /// <param name="log">The Log file to send</param>
-        /// <param name="attachmentFilepaths">An array of file paths for attachments</param>
-        /// <param name="isHtml">If true, the email will be sent as HTML, else plain text</param>
-        [Obsolete("Functionality has been included in SendMessage().")]
-        public static void SendEmailWithOpeners(string from, IEnumerable<string> recipients, string subject, string message, Log log = null, IEnumerable<string> attachmentFilepaths = null, bool isHtml = false) {
-            SendEmail(from, recipients, subject, message, log, true, attachmentFilepaths, false);
         }
 
         //======================================================================================================
@@ -202,7 +108,7 @@ namespace SOPAPI {
         /// </summary>
         /// <param name="address">The email address to validate</param>
         /// <returns>True if address contains @ and has a period in the last 4 characters</returns>
-        public static Boolean IsValidAddress(string address) {
+        public static bool IsValidAddress(string address) {
             return Util.CountOf(address, '@') == 1 && address.Split('@')[1].Contains('.');
         }
 

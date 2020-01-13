@@ -92,7 +92,7 @@ namespace SOPAPI {
         /// </summary>
         /// <param name="debug">If true the message will be written</param>
         /// <param name="message">The message to write to the log</param>
-        public void Write(Boolean debug, string message) {
+        public void Write(bool debug, string message) {
             if (debug) writer.WriteLine(DateTime.Now.ToString("(yyyy-MM-dd HH:mm:ss)") + " [DEBUG] " + message);
         }
         /// <summary>
@@ -115,7 +115,7 @@ namespace SOPAPI {
         /// </summary>
         /// <param name="debug">If true, the message will be written</param>
         /// <param name="obj">Arbitrary object</param>
-        public void Write(Boolean debug, Object obj) {
+        public void Write(bool debug, Object obj) {
             if (debug) writer.WriteLine(DateTime.Now.ToString("(yyyy-MM-dd HH:mm:ss)") + " [DEBUG] " + obj.ToString());
         }
         /// <summary>

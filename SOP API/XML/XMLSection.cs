@@ -82,7 +82,7 @@ namespace SOPAPI.XML {
         /// <param name="key">The key whose value will be checked. Throws an <code>ArgumentException</code> if the key does not exist in this section. All conversion exceptions will be thrown.</param>
         /// <param name="ignoreCase">Whether or not to ignore case when attempting to parse to the enum. Default: true</param>
         /// <returns>An <code>object</code> of the enum constant that is represented by the value of the specified key.</returns>
-        public T GetEnum<T>(string key, bool ignoreCase = true) {
+        public T GetEnum<T>(string key, bool ignoreCase = true) where T : Enum {
             if (HasValue(key)) return Util.ParseEnum<T>(Get(key), ignoreCase);
             throw new ArgumentException("Key " + key + " not found.");
         }
@@ -94,7 +94,7 @@ namespace SOPAPI.XML {
         /// <param name="defaultValue">A default value to pass. If the key is not found, this value will be returned instead.</param>
         /// <param name="ignoreCase">Whether or not to ignore case when attempting to parse to the enum. Default: true</param>
         /// <returns>An <code>object</code> of the enum constant that is represented by the value of the specified key, or the default value if the key is not found.</returns>
-        public T GetEnum<T>(string key, T defaultValue, bool ignoreCase = true) {
+        public T GetEnum<T>(string key, T defaultValue, bool ignoreCase = true) where T : Enum {
             if (HasValue(key)) return Util.ParseEnum<T>(Get(key), ignoreCase);
             if (defaultValue != null) return defaultValue;
             throw new ArgumentException("Key " + key + " not found.");
@@ -231,7 +231,7 @@ namespace SOPAPI.XML {
         /// </summary>
         /// <param name="key">The key of the child node to check</param>
         /// <returns>True if the child node exists, is not a section, and has a value, else false.</returns>
-        public Boolean HasValue(string key) {
+        public bool HasValue(string key) {
             return Get(key).Length > 0;
         }
 
@@ -239,7 +239,7 @@ namespace SOPAPI.XML {
         /// Checks to see if this section contains any XMLSections.
         /// </summary>
         /// <returns>True if at least one XMLSection is present.</returns>
-        public Boolean HasSections() {
+        public bool HasSections() {
             return GetSections().Count > 0;
         }
         /// <summary>
@@ -247,7 +247,7 @@ namespace SOPAPI.XML {
         /// </summary>
         /// <param name="key">The key to check.</param>
         /// <returns>True if at least one XMLSection is present with the given key.</returns>
-        public Boolean HasSections(string key) {
+        public bool HasSections(string key) {
             return GetSections(key).Count > 0;
         }
     }

@@ -154,7 +154,7 @@ namespace SOPAPI.Data.DB {
         /// <param name="distinct">If true, only distinct records will be Selected</param>
         /// <param name="parameters">Parameters to pass into this query</param>
         /// <returns>OdbcDataReader containing Selected records</returns>
-        public OdbcDataReader Select(string table, string field = "*", string SelectCondition = "", Boolean distinct = false, Dictionary<string, object> parameters = null) {
+        public OdbcDataReader Select(string table, string field = "*", string SelectCondition = "", bool distinct = false, Dictionary<string, object> parameters = null) {
             return Select(table, new string[] { field }, SelectCondition, distinct, parameters);
         }
         /// <summary>
@@ -166,7 +166,7 @@ namespace SOPAPI.Data.DB {
         /// <param name="distinct">If true, only distinct records will be Selected</param>
         /// <param name="parameters">Parameters to pass into this query</param>
         /// <returns>OdbcDataReader containing Selected records</returns>
-        public OdbcDataReader Select(string table, IEnumerable<string> fields, string SelectCondition = "", Boolean distinct = false, Dictionary<string, object> parameters = null) {
+        public OdbcDataReader Select(string table, IEnumerable<string> fields, string SelectCondition = "", bool distinct = false, Dictionary<string, object> parameters = null) {
             OdbcCommand SelectCommand = GenerateSelectQuery(table, fields, SelectCondition, distinct);
             if (parameters != null) foreach (string param in parameters.Keys) SelectCommand.Parameters.Add(new OdbcParameter(param, parameters[param]));
             return SelectCommand.ExecuteReader();
@@ -256,7 +256,7 @@ namespace SOPAPI.Data.DB {
             return new OdbcCommand(insertQuery.ToString(),connection);
         }
 
-        private OdbcCommand GenerateSelectQuery(string table, IEnumerable<string> fields, string selectCondition, Boolean distinct) {
+        private OdbcCommand GenerateSelectQuery(string table, IEnumerable<string> fields, string selectCondition, bool distinct) {
             string[] f = fields.ToArray();
             if ((table.Contains(' ') || table.Contains('-')) && !table.Contains('[')) table = "[" + table + "]";
             StringBuilder selectQuery = new StringBuilder("SELECT " + (distinct ? "DISTINCT " : ""));

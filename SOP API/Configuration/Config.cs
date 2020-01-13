@@ -53,7 +53,7 @@ namespace SOPAPI.Configuration {
         /// <param name="property">The property whose value will be checked. Throws an <code>ArgumentException</code> if the key does not exist in this section. All conversion exceptions will be thrown.</param>
         /// <param name="ignoreCase">Whether or not to ignore case when attempting to parse to the enum. Default: true</param>
         /// <returns>An <code>object</code> of the enum constant that is represented by the value of the specified key.</returns>
-        public T GetEnum<T>(string property, bool ignoreCase = true) {
+        public T GetEnum<T>(string property, bool ignoreCase = true) where T : Enum {
             string value = Get(property);
             if (value != null) return Util.ParseEnum<T>(value, ignoreCase);
             throw new ArgumentException("Property " + property + " not found.");
@@ -66,7 +66,7 @@ namespace SOPAPI.Configuration {
         /// <param name="defaultValue">A default value to pass. If the key is not found, this value will be returned instead.</param>
         /// <param name="ignoreCase">Whether or not to ignore case when attempting to parse to the enum. Default: true</param>
         /// <returns>An <code>object</code> of the enum constant that is represented by the value of the specified key, or the default value if the key is not found.</returns>
-        public T GetEnum<T>(string property, T defaultValue, bool ignoreCase = true) {
+        public T GetEnum<T>(string property, T defaultValue, bool ignoreCase = true) where T : Enum {
             string value = Get(property);
             if (value != null) return Util.ParseEnum<T>(value, ignoreCase);
             if (defaultValue != null) return defaultValue;

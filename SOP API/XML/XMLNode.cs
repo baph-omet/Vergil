@@ -92,7 +92,7 @@ namespace SOPAPI.XML {
         /// Checks to see if this node has a value
         /// </summary>
         /// <returns>True if the value is not an empty string, else false.</returns>
-        public Boolean HasValue() {
+        public bool HasValue() {
             return Value.Length > 0;
         }
     }
