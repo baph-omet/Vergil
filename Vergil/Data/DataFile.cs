@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using Vergil.XML;
 using System.Globalization;
+using Vergil.Utilities;
 
 namespace Vergil.Data {
     /// <summary>
@@ -202,7 +203,7 @@ namespace Vergil.Data {
                     default:
                         if (value.Length == 0) return 0D;
                         string val = value.Split(':')[0];
-                        if (!Util.IsNumber(val)) return value;
+                        if (!val.IsNumber()) return value;
                         double v = Convert.ToDouble(val);
                         if (key.Calculation != null) return key.Calculation.Calculate(v);
                         return v;

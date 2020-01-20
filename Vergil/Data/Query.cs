@@ -8,6 +8,7 @@ using Vergil.Web;
 using System.Net;
 using Vergil.Data.DB;
 using System.Threading;
+using Vergil.Utilities;
 
 namespace Vergil.Data {
     /// <summary>
@@ -407,7 +408,7 @@ namespace Vergil.Data {
                 }
 
                 if (output == null) continue;
-                Query q = new Query(output, section.GetEnum<QueryInterval>("interval"), section.Get("name"), section.Get("database"), section.Get("dataview",""),section.Get("transpose", false), section.Get("time", -1), Util.ConvertWhitespaceCharacters(section.Get("delimiter", ",")), section.Get("printHeaders", false));
+                Query q = new Query(output, section.GetEnum<QueryInterval>("interval"), section.Get("name"), section.Get("database"), section.Get("dataview",""),section.Get("transpose", false), section.Get("time", -1), section.Get("delimiter", ",").ConvertWhitespaceCharacters(), section.Get("printHeaders", false));
                 if (section.HasValue("queryStatement") && section.Get("queryStatement").Length > 0) q.QueryStatement = section.Get("queryStatement");
                 if (section.HasValue("paused")) q.Paused = section.Get("paused", true);
                 queries.Add(q);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using Vergil.Utilities;
 
 namespace Vergil.Configuration {
     /// <summary>
@@ -38,7 +39,7 @@ namespace Vergil.Configuration {
         /// <returns>The value of the specified property as a string if the property exists. Else, null.</returns>
         public override string Get(string key) {
             string[] config = File.ReadAllLines(Path);
-            foreach (string line in config) if (Util.IsSignificant(line) && line.Split(delimiter)[0].ToUpper().Trim() == key.ToUpper().Trim() && line.Split(delimiter)[1].Length > 0) return line.Split(delimiter)[1].Trim();
+            foreach (string line in config) if (line.IsSignificant() && line.Split(delimiter)[0].ToUpper().Trim() == key.ToUpper().Trim() && line.Split(delimiter)[1].Length > 0) return line.Split(delimiter)[1].Trim();
             return null;
         }
 
@@ -103,7 +104,7 @@ namespace Vergil.Configuration {
         }
 
         private bool IsValidPair(string line) {
-            return Util.IsSignificant(line) && line.Contains(delimiter) && line.Split(delimiter)[1].Length > 0;
+            return line.IsSignificant() && line.Contains(delimiter) && line.Split(delimiter)[1].Length > 0;
         }
 
         /// <summary>

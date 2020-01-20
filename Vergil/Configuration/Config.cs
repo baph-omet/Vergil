@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Vergil.Utilities;
 
 namespace Vergil.Configuration {
     /// <summary>
@@ -55,7 +56,7 @@ namespace Vergil.Configuration {
         /// <returns>An <code>object</code> of the enum constant that is represented by the value of the specified key.</returns>
         public T GetEnum<T>(string property, bool ignoreCase = true) where T : Enum {
             string value = Get(property);
-            if (value != null) return Util.ParseEnum<T>(value, ignoreCase);
+            if (value != null) return EnumUtil.ParseEnum<T>(value, ignoreCase);
             throw new ArgumentException("Property " + property + " not found.");
         }
         /// <summary>
@@ -68,7 +69,7 @@ namespace Vergil.Configuration {
         /// <returns>An <code>object</code> of the enum constant that is represented by the value of the specified key, or the default value if the key is not found.</returns>
         public T GetEnum<T>(string property, T defaultValue, bool ignoreCase = true) where T : Enum {
             string value = Get(property);
-            if (value != null) return Util.ParseEnum<T>(value, ignoreCase);
+            if (value != null) return EnumUtil.ParseEnum<T>(value, ignoreCase);
             if (defaultValue != null) return defaultValue;
             throw new ArgumentException("Property " + property + " not found.");
         }

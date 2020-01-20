@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Vergil.Utilities;
 
 namespace Vergil.XML {
     /// <summary>
@@ -83,7 +84,7 @@ namespace Vergil.XML {
         /// <param name="ignoreCase">Whether or not to ignore case when attempting to parse to the enum. Default: true</param>
         /// <returns>An <code>object</code> of the enum constant that is represented by the value of the specified key.</returns>
         public T GetEnum<T>(string key, bool ignoreCase = true) where T : Enum {
-            if (HasValue(key)) return Util.ParseEnum<T>(Get(key), ignoreCase);
+            if (HasValue(key)) return EnumUtil.ParseEnum<T>(Get(key), ignoreCase);
             throw new ArgumentException("Key " + key + " not found.");
         }
         /// <summary>
@@ -95,7 +96,7 @@ namespace Vergil.XML {
         /// <param name="ignoreCase">Whether or not to ignore case when attempting to parse to the enum. Default: true</param>
         /// <returns>An <code>object</code> of the enum constant that is represented by the value of the specified key, or the default value if the key is not found.</returns>
         public T GetEnum<T>(string key, T defaultValue, bool ignoreCase = true) where T : Enum {
-            if (HasValue(key)) return Util.ParseEnum<T>(Get(key), ignoreCase);
+            if (HasValue(key)) return EnumUtil.ParseEnum<T>(Get(key), ignoreCase);
             if (defaultValue != null) return defaultValue;
             throw new ArgumentException("Key " + key + " not found.");
         }

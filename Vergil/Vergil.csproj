@@ -57,6 +57,7 @@
     <Compile Include="Data\XmlFormat.cs" />
     <Compile Include="Data\DB\DBConnection.cs" />
     <Compile Include="Data\DB\DBData.cs" />
+    <Compile Include="Utilities\EnumUtil.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Forms\DebugModeDialog.cs">
       <SubType>Form</SubType>
@@ -80,6 +81,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\StringUtil.cs" />
     <Compile Include="Timing\Timeable.cs" />
     <Compile Include="Timing\TimingProgram.cs" />
     <Compile Include="Web\FTP.cs" />
@@ -92,7 +94,7 @@
     <Compile Include="Timing\DelayTimer.cs" />
     <Compile Include="Timing\HourlyTimer.cs" />
     <Compile Include="Timing\TimerActions.cs" />
-    <Compile Include="Util.cs" />
+    <Compile Include="Utilities\Util.cs" />
     <Compile Include="Web\HTTPAgent.cs" />
     <Compile Include="XML\XMLFile.cs" />
     <Compile Include="XML\XMLNode.cs" />

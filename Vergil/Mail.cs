@@ -5,6 +5,7 @@ using System.Net.Mail;
 using System.IO;
 using System.Reflection;
 using Vergil.XML;
+using Vergil.Utilities;
 
 namespace Vergil {
     /// <summary>
@@ -90,7 +91,7 @@ namespace Vergil {
             List<string> addresses = new List<string>();
             for (int i = 0; i < names.Count(); i++) {
                 string name = names.ElementAt(i).Trim();
-                if (Util.IsSignificant(name)) {
+                if (name.IsSignificant()) {
                     if (IsValidAddress(name)) addresses.Add(name);
                     else {
                         try {
@@ -109,7 +110,7 @@ namespace Vergil {
         /// <param name="address">The email address to validate</param>
         /// <returns>True if address contains @ and has a period in the last 4 characters</returns>
         public static bool IsValidAddress(string address) {
-            return Util.CountOf(address, '@') == 1 && address.Split('@')[1].Contains('.');
+            return address.CountOf('@') == 1 && address.Split('@')[1].Contains('.');
         }
 
         /// <summary>
