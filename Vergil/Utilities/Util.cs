@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Collections.Generic;
@@ -112,5 +110,15 @@ namespace Vergil.Utilities {
             }
         }
 
+        /// <summary>
+        /// Shortcut for String.Join(...) to make things a little more graceful
+        /// </summary>
+        /// <param name="en">Enumerable to join</param>
+        /// <param name="delimiter">String to insert between items</param>
+        /// <returns>Joined string</returns>
+        public static string Join(this IEnumerable<string> en, string delimiter) {
+
+            return string.Join(delimiter, en);
+        }
     }
 }

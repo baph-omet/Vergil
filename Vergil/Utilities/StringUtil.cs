@@ -180,6 +180,20 @@ namespace Vergil.Utilities {
         }
 
         /// <summary>
+        /// Removes whitespace characters from a string.
+        /// </summary>
+        /// <param name="str">String to parse.</param>
+        /// <returns>Copy of str with whitespace characters removed.</returns>
+        public static string RemoveWhitespace(this string str) {
+            char[] targets = new[] { '\a', '\b', '\f', '\n', '\r', '\t', '\v', ' ' };
+            StringBuilder builder = new StringBuilder();
+            foreach (char c in str) {
+                if (targets.Contains(c)) continue;
+                builder.Append(c);
+            } return builder.ToString();
+        }
+
+        /// <summary>
         /// Extension for string Split method that takes a string as delimiter
         /// </summary>
         /// <param name="str">The source string</param>
@@ -192,6 +206,7 @@ namespace Vergil.Utilities {
                 if (i < str.Length - delimiter.Length && str.Substring(i, delimiter.Length) == delimiter) {
                     splits.Add(buffer.ToString());
                     buffer.Clear();
+                    i += delimiter.Length - 1;
                     continue;
                 }
                 buffer.Append(str[i]);
