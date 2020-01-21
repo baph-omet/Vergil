@@ -424,7 +424,7 @@ namespace Vergil.Data {
         public void Write() {
             List<string> lines = new List<string>();
             DBData data = null;
-            using (DBConnection conn = new DBConnection(Database)) {
+            using (MSAccessConnection conn = new MSAccessConnection(Database)) {
                 try {
                     conn.Open();
                 } catch (ThreadAbortException) {
