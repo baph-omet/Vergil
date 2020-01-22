@@ -116,8 +116,7 @@ namespace Vergil.Utilities {
         /// <param name="en">Enumerable to join</param>
         /// <param name="delimiter">String to insert between items</param>
         /// <returns>Joined string</returns>
-        public static string Join(this IEnumerable<string> en, string delimiter) {
-
+        public static string Join(this IEnumerable<object> en, string delimiter) {
             return string.Join(delimiter, en);
         }
         /// <summary>
@@ -126,7 +125,7 @@ namespace Vergil.Utilities {
         /// <param name="en">Enumerable to join</param>
         /// <param name="delimiter">Character to insert between items</param>
         /// <returns>Joined string</returns>
-        public static string Join(this IEnumerable<string> en, char delimiter) {
+        public static string Join(this IEnumerable<object> en, char delimiter) {
             return string.Join(delimiter.ToString(), en);
         }
     }

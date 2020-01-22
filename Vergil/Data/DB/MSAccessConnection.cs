@@ -8,7 +8,7 @@ using System.Data.Common;
 
 namespace Vergil.Data.DB {
     /// <summary>
-    /// Wrapper class for OdbcConnection. Simplifies creating and executing simple queries.
+    /// Wrapper class for OdbcConnection to MS Access databases. Simplifies creating and executing simple queries.
     /// </summary>
     public class MSAccessConnection : DBConnection {
         /// <summary>

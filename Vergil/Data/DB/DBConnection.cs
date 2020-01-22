@@ -3,6 +3,8 @@ using System.Linq;
 using System.Data.Common;
 using System.Data;
 using System.Collections.Generic;
+using System.Text;
+using Vergil.Utilities;
 
 namespace Vergil.Data.DB {
     /// <summary>
@@ -94,6 +96,47 @@ namespace Vergil.Data.DB {
         }
 
         /// <summary>
+        /// Add a table to the database
+        /// </summary>
+        /// <param name="name">Name of table to add</param>
+        /// <param name="fields">Fields to add to database. Type names vary by database type.</param>
+        /// <param name="overrideExisting">If true, will delete existing object with same name before creating. If false, will stop if existing object is found.</param>
+        public void AddTable(string name, List<DBFieldDefinition> fields, bool overrideExisting = false) {
+            var viewNames = GetDataViewNames();
+            if (viewNames.ContainsKey(name)) {
+                if (overrideExisting) {
+                    using (DbCommand dt = connectionObject.CreateCommand()) {
+                        dt.CommandText = new[] { "DROP", viewNames[name].EnumName().ToUpper(), name }.Join(' ');
+                        dt.ExecuteNonQuery();
+                    }
+                } else return;
+            }
+            StringBuilder cmdText = new StringBuilder("CREATE TABLE ");
+            cmdText.Append(name);
+            cmdText.Append(" (");
+            cmdText.Append(fields.Join(','));
+            List<DBFieldDefinition> primaries = new List<DBFieldDefinition>();
+            foreach (DBFieldDefinition f in fields) if (f.Primary) primaries.Add(f);
+            if (primaries.Count > 0) {
+                cmdText.Append(", PRIMARY KEY ");
+                if (primaries.Count > 0) cmdText.Append("(");
+                for (int i = 0; i < primaries.Count; i++) {
+                    if (i > 0) cmdText.Append(',');
+                    DBFieldDefinition p = primaries[i];
+                    cmdText.Append(p.Name);
+                    if (p.Descending) cmdText.Append(" desc");
+                }
+                if (primaries.Count > 0) cmdText.Append(")");
+            }
+            cmdText.Append(");");
+
+            using (DbCommand command = connectionObject.CreateCommand()) {
+                command.CommandText = cmdText.ToString();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        /// <summary>
         /// Adds data to the database. Attempts to UPDATE records, then if no records are updated, it performs an INSERT query. Assumes all fields will be updated.
         /// </summary>
         /// <param name="dataView">The name of the table that will be affected</param>
@@ -111,14 +154,11 @@ namespace Vergil.Data.DB {
         /// <param name="values">An array of values to add to the specified fields. Indicies must match up with their respective fields.</param>
         /// <param name="updateCondition">A WHERE condition to add to the UPDATE query. Should be formatted before being passed to this method and not include "WHERE" keyword.</param>
         public int AddRecord(string dataView, IEnumerable<string> fields, IEnumerable<string> values, string updateCondition) {
-            DbCommand updateCommand = GenerateUpdateQuery(dataView, fields, values, updateCondition);
-            int recordsAffected = updateCommand.ExecuteNonQuery();
-            updateCommand.Dispose();
-            if (recordsAffected < 1) {
-                DbCommand insertCommand = (DbCommand)GenerateInsertQuery(dataView, fields, values);
-                recordsAffected = insertCommand.ExecuteNonQuery();
-                insertCommand.Dispose();
+            int recordsAffected = 0;
+            using (DbCommand updateCommand = GenerateUpdateQuery(dataView, fields, values, updateCondition)) {
+                recordsAffected = updateCommand.ExecuteNonQuery();
             }
+            if (recordsAffected < 1) using (DbCommand insertCommand = GenerateInsertQuery(dataView, fields, values)) recordsAffected = insertCommand.ExecuteNonQuery();
             return recordsAffected;
         }
 
@@ -131,7 +171,7 @@ namespace Vergil.Data.DB {
         /// <param name="updateCondition">A WHERE condition to add to the UPDATE query. Should be formatted before being passed to this method and not include "WHERE" keyword.</param>
         /// <returns>The number of records affected by this query.</returns>
         public int Update(string table, IEnumerable<string> fields, IEnumerable<string> values, string updateCondition) {
-            return GenerateUpdateQuery(table, fields, values, updateCondition).ExecuteNonQuery();
+            using (DbCommand command = GenerateUpdateQuery(table, fields, values, updateCondition)) return command.ExecuteNonQuery();
         }
 
         /// <summary>
@@ -142,7 +182,7 @@ namespace Vergil.Data.DB {
         /// <param name="values">An array of values to add to the specified fields. Indicies must match up with their respective fields.</param>
         /// <returns>The number of records affected by this query.</returns>
         public int Insert(string table, IEnumerable<string> fields, IEnumerable<string> values) {
-            return GenerateInsertQuery(table, fields, values).ExecuteNonQuery();
+            using (DbCommand command = GenerateInsertQuery(table, fields, values)) return command.ExecuteNonQuery();
         }
 
         /// <summary>
@@ -167,9 +207,10 @@ namespace Vergil.Data.DB {
         /// <param name="parameters">Parameters to pass into this query</param>
         /// <returns>OdbcDataReader containing Selected records</returns>
         public DbDataReader Select(string table, IEnumerable<string> fields, string SelectCondition = "", bool distinct = false, IEnumerable<DbParameter> parameters = null) {
-            DbCommand SelectCommand = GenerateSelectQuery(table, fields, SelectCondition, distinct);
-            if (parameters != null) foreach (DbParameter param in parameters) SelectCommand.Parameters.Add(param);
-            return SelectCommand.ExecuteReader();
+            using (DbCommand SelectCommand = GenerateSelectQuery(table, fields, SelectCondition, distinct)) {
+                if (parameters != null) foreach (DbParameter param in parameters) SelectCommand.Parameters.Add(param);
+                return SelectCommand.ExecuteReader();
+            }
         }
 
         /// <summary>
@@ -180,10 +221,12 @@ namespace Vergil.Data.DB {
         /// <returns>A DbDataReader containing any records returned by this query. Not guaranteed to actually contain records.</returns>
         public DbDataReader Query(string query) {
             if (string.IsNullOrEmpty(query)) throw new ArgumentException("Query string is mandatory");
-            DbCommand command = connectionObject.CreateCommand();
-            command.CommandText = query;
-            return command.ExecuteReader();
+            using (DbCommand command = connectionObject.CreateCommand()) {
+                command.CommandText = query;
+                return command.ExecuteReader();
+            }
         }
+
         /// <summary>
         /// Returns a List of field names for the specified table (or query).
         /// </summary>

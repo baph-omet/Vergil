@@ -19,8 +19,8 @@ namespace Vergil.Data.DB {
         /// </summary>
         /// <param name="location"></param>
         public SQLiteConnection(string location) : base ("Data Source=" + location + "; Version=3; FailIfMissing=True;") {
-            if (!File.Exists(ConnectionString)) throw new ArgumentException("Database must already exist.");
-            connectionObject = new SQLiteDataConnection();
+            if (!File.Exists(location)) throw new ArgumentException("Database must already exist.");
+            connectionObject = new SQLiteDataConnection(ConnectionString);
         }
 
         /// <summary>
@@ -29,6 +29,20 @@ namespace Vergil.Data.DB {
         /// <param name="location">File location to create database</param>
         public static void CreateDatabase(string location) {
             SQLiteDataConnection.CreateFile(location);
+        }
+
+        /// <summary>
+        /// Returns a List of field names for the specified table (or query).
+        /// </summary>
+        /// <param name="table">The name of the table (or query) to check.</param>
+        /// <returns>A List containing the names of each of the specified table's fields.</returns>
+        public new List<string> GetFields(string table) {
+            List<string> fields = new List<string>();
+            using (SQLiteCommand cmd = new SQLiteCommand($"PRAGMA table_info({table})",(SQLiteDataConnection)connectionObject)) {
+                SQLiteDataReader reader = cmd.ExecuteReader();
+                while (reader.Read()) fields.Add(reader.GetString(1));
+                reader.Close();
+            } return fields;
         }
 
         /// <summary>
@@ -42,21 +56,21 @@ namespace Vergil.Data.DB {
             if (GetDataViewNames()[table] == DataViewType.View) throw new ArgumentException("'" + table + "' is a view. SQLite only supports write operations on tables.");
 
             StringBuilder insertQuery = new StringBuilder("INSERT INTO ");
-            insertQuery.Append(table + " ");
+            insertQuery.Append(table);
 
-            if (fields.Count() > 0) insertQuery.Append("(" + fields.Join(',') + ")");
-            insertQuery.Append(" VALUES ");
+            if (fields.Count() > 0 && !fields.ElementAt(0).Contains('*')) insertQuery.Append(" (" + fields.Join(',') + ")");
+            insertQuery.Append(" VALUES (");
             for (int i = 0; i < values.Count(); i++) {
                 if (i > 0) insertQuery.Append(',');
                 string v = values.ElementAt(i);
                 if (!v.IsNumber()) {
                     insertQuery.Append('\'');
-                    insertQuery.Append(v);
+                    insertQuery.Append(v.Replace("'","''"));
                     insertQuery.Append('\'');
                 } else insertQuery.Append(v);
             }
 
-            insertQuery.Append(";");
+            insertQuery.Append(");");
             return new SQLiteCommand(insertQuery.ToString(), (SQLiteDataConnection)connectionObject);
         }
 
@@ -100,6 +114,7 @@ namespace Vergil.Data.DB {
             if (string.IsNullOrEmpty(updateCondition)) throw new ArgumentException("UpdateCondition is mandatory");
             StringBuilder updateQuery = new StringBuilder("UPDATE " + table + " SET ");
             if (fields.Count() == 0) throw new ArgumentException("Must specify at least one field to update");
+            if (fields.Count() == 1 && fields.ElementAt(0).Contains("*")) fields = GetFields(table);
             if (values.Count() != fields.Count()) throw new ArgumentException("Must specify the same number of values as fields");
 
             for (int i = 0; i < fields.Count(); i++) {
@@ -116,7 +131,7 @@ namespace Vergil.Data.DB {
                 string value = values.ElementAt(i);
                 if (!value.IsNumber()) {
                     if (value[0] != '\'') updateQuery.Append('\'');
-                    updateQuery.Append(value);
+                    updateQuery.Append(value.Replace("'", "''"));
                     if (value.Last() != '\'') updateQuery.Append('\'');
                 } else updateQuery.Append(value);
             }

@@ -140,6 +140,7 @@ namespace Vergil.Utilities {
         /// <param name="str">A string to check</param>
         /// <returns>True if the string is at least one character long, does not contain a dash other than at the beginning, and contains only digits and up to one period.</returns>
         public static bool IsNumber(this string str) {
+            if (str == null) return false;
             str = str.Trim();
             try {
                 Convert.ToDouble(str);
