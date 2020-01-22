@@ -120,5 +120,14 @@ namespace Vergil.Utilities {
 
             return string.Join(delimiter, en);
         }
+        /// <summary>
+        /// Shortcut for String.Join(...) to make things a little more graceful
+        /// </summary>
+        /// <param name="en">Enumerable to join</param>
+        /// <param name="delimiter">Character to insert between items</param>
+        /// <returns>Joined string</returns>
+        public static string Join(this IEnumerable<string> en, char delimiter) {
+            return string.Join(delimiter.ToString(), en);
+        }
     }
 }

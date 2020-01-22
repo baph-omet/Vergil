@@ -142,7 +142,7 @@ namespace Vergil.Utilities {
         public static bool IsNumber(this string str) {
             str = str.Trim();
             try {
-                System.Convert.ToDouble(str);
+                Convert.ToDouble(str);
                 return true;
             } catch (Exception) { }
             if (str == null) return false;
@@ -150,7 +150,7 @@ namespace Vergil.Utilities {
             if (str.Split('.').Length > 2) return false;
             for (int i = 0; i < str.Length; i++) {
                 char c = str[i];
-                if (!Char.IsDigit(c) && c != '.' || (c == '-' && i > 0)) return false;
+                if (!char.IsDigit(c) && c != '.' || (c == '-' && i > 0)) return false;
             }
             return true;
         }
@@ -214,5 +214,17 @@ namespace Vergil.Utilities {
             splits.Add(buffer.ToString());
             return splits.ToArray();
         }
+
+        /// <summary>
+        /// Checks string equality, regardless of letter case
+        /// </summary>
+        /// <param name="str">String to check</param>
+        /// <param name="target">String to check against</param>
+        /// <returns>True if strings are the same, barring case</returns>
+        public static bool EqualsIgnoreCase(this string str, string target) {
+            return str.ToLower().Equals(target.ToLower());
+        }
+
+
     }
 }

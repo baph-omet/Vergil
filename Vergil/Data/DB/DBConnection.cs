@@ -5,17 +5,47 @@ using System.Data;
 using System.Collections.Generic;
 
 namespace Vergil.Data.DB {
+    /// <summary>
+    /// Enum for data view types
+    /// </summary>
+    public enum DataViewType {
+        /// <summary>
+        /// Database table
+        /// </summary>
+        Table = 0,
+        /// <summary>
+        /// Non-table dataview type
+        /// </summary>
+        View = 1
+    }
+
+    /// <summary>
+    /// Generic database connection type
+    /// </summary>
     public abstract class DBConnection : IDisposable {
+        /// <summary>
+        /// The actual database connection object
+        /// </summary>
         protected DbConnection connectionObject;
 
         private readonly string connectionString;
+        /// <summary>
+        /// The underlying connection string
+        /// </summary>
         public string ConnectionString => connectionString;
+        /// <summary>
+        /// Internal property to tell if database is open.
+        /// </summary>
         protected bool isOpen;
         /// <summary>
         /// True if the connection has been opened.
         /// </summary>
         public bool IsOpen { get => isOpen; }
 
+        /// <summary>
+        /// Create a new instance with a connection string
+        /// </summary>
+        /// <param name="connString">The connection string for this database type</param>
         public DBConnection(string connString) {
             connectionString = connString;
             isOpen = false;
@@ -53,32 +83,44 @@ namespace Vergil.Data.DB {
         /// Returns a list of names of data sources in this database.
         /// </summary>
         /// <returns>Returns a list of names of data-containing objects in this database. First are the tables, then the queries.</returns>
-        public Dictionary<string, string> GetDataViewNames() {
-            Dictionary<string, string> datasets = new Dictionary<string, string>();
+        public Dictionary<string, DataViewType> GetDataViewNames() {
+            Dictionary<string, DataViewType> datasets = new Dictionary<string, DataViewType>();
             foreach (DataRow row in connectionObject.GetSchema("Tables").Rows) {
                 string name = row.ItemArray[2].ToString();
-                if (!name.Contains("MSys")) datasets.Add(name, "Table");
+                if (!name.Contains("MSys")) datasets.Add(name, DataViewType.Table);
             }
-            foreach (DataRow row in connectionObject.GetSchema("Views").Rows) datasets.Add(row.ItemArray[2].ToString(), "View");
+            foreach (DataRow row in connectionObject.GetSchema("Views").Rows) datasets.Add(row.ItemArray[2].ToString(), DataViewType.View);
             return datasets;
         }
 
         /// <summary>
         /// Adds data to the database. Attempts to UPDATE records, then if no records are updated, it performs an INSERT query. Assumes all fields will be updated.
         /// </summary>
-        /// <param name="table">The name of the table that will be affected</param>
+        /// <param name="dataView">The name of the table that will be affected</param>
         /// <param name="values">An array of values to add to the specified fields. Indicies must match up with their respective fields.</param>
         /// <param name="updateCondition">A WHERE condition to add to the UPDATE query. Should be formatted before being passed to this method and not include "WHERE" keyword.</param>
         /// <returns></returns>
-        public abstract int AddRecord(string dataView, IEnumerable<string> values, string updateCondition);
+        public int AddRecord(string dataView, IEnumerable<string> values, string updateCondition) {
+            return AddRecord(dataView, GetFields(dataView), values, updateCondition);
+        }
         /// <summary>
         /// Adds data to the database. Attempts to UPDATE records, then if no records are updated, it performs an INSERT query.
         /// </summary>
-        /// <param name="table">The name of the table that will be affected</param>
+        /// <param name="dataView">The name of the table that will be affected</param>
         /// <param name="fields">An array of field names in the database</param>
         /// <param name="values">An array of values to add to the specified fields. Indicies must match up with their respective fields.</param>
         /// <param name="updateCondition">A WHERE condition to add to the UPDATE query. Should be formatted before being passed to this method and not include "WHERE" keyword.</param>
-        public abstract int AddRecord(string table, IEnumerable<string> fields, IEnumerable<string> values, string updateCondition);
+        public int AddRecord(string dataView, IEnumerable<string> fields, IEnumerable<string> values, string updateCondition) {
+            DbCommand updateCommand = GenerateUpdateQuery(dataView, fields, values, updateCondition);
+            int recordsAffected = updateCommand.ExecuteNonQuery();
+            updateCommand.Dispose();
+            if (recordsAffected < 1) {
+                DbCommand insertCommand = (DbCommand)GenerateInsertQuery(dataView, fields, values);
+                recordsAffected = insertCommand.ExecuteNonQuery();
+                insertCommand.Dispose();
+            }
+            return recordsAffected;
+        }
 
         /// <summary>
         /// Executes an UPDATE query on the database.
@@ -88,7 +130,9 @@ namespace Vergil.Data.DB {
         /// <param name="values">An array of values to add to the specified fields. Indicies must match up with their respective fields.</param>
         /// <param name="updateCondition">A WHERE condition to add to the UPDATE query. Should be formatted before being passed to this method and not include "WHERE" keyword.</param>
         /// <returns>The number of records affected by this query.</returns>
-        public abstract int Update(string table, IEnumerable<string> fields, IEnumerable<string> values, string updateCondition);
+        public int Update(string table, IEnumerable<string> fields, IEnumerable<string> values, string updateCondition) {
+            return GenerateUpdateQuery(table, fields, values, updateCondition).ExecuteNonQuery();
+        }
 
         /// <summary>
         /// Executes an INSERT query on the database
@@ -97,7 +141,9 @@ namespace Vergil.Data.DB {
         /// <param name="fields">An array of field names in the database</param>
         /// <param name="values">An array of values to add to the specified fields. Indicies must match up with their respective fields.</param>
         /// <returns>The number of records affected by this query.</returns>
-        public abstract int Insert(string table, IEnumerable<string> fields, IEnumerable<string> values);
+        public int Insert(string table, IEnumerable<string> fields, IEnumerable<string> values) {
+            return GenerateInsertQuery(table, fields, values).ExecuteNonQuery();
+        }
 
         /// <summary>
         /// Execute a SELECT query on the database. Selects data from the specified field that meets the specified condition. Will only Select DISTINCT records if distinct is true.
@@ -108,7 +154,9 @@ namespace Vergil.Data.DB {
         /// <param name="distinct">If true, only distinct records will be Selected</param>
         /// <param name="parameters">Parameters to pass into this query</param>
         /// <returns>OdbcDataReader containing Selected records</returns>
-        public abstract DbDataReader Select(string table, string field = "*", string SelectCondition = "", bool distinct = false, Dictionary<string, object> parameters = null);
+        public DbDataReader Select(string table, string field = "*", string SelectCondition = "", bool distinct = false, IEnumerable<DbParameter> parameters = null) {
+            return Select(table, new string[] { field }, SelectCondition, distinct, parameters);
+        }
         /// <summary>
         /// Execute a SELECT query on the database. Selects data from the specified fields that meets the specified condition. Will only Select DISTINCT records if distinct is true.
         /// </summary>
@@ -118,16 +166,24 @@ namespace Vergil.Data.DB {
         /// <param name="distinct">If true, only distinct records will be Selected</param>
         /// <param name="parameters">Parameters to pass into this query</param>
         /// <returns>OdbcDataReader containing Selected records</returns>
-        public abstract DbDataReader Select(string table, IEnumerable<string> fields, string SelectCondition = "", bool distinct = false, Dictionary<string, object> parameters = null);
+        public DbDataReader Select(string table, IEnumerable<string> fields, string SelectCondition = "", bool distinct = false, IEnumerable<DbParameter> parameters = null) {
+            DbCommand SelectCommand = GenerateSelectQuery(table, fields, SelectCondition, distinct);
+            if (parameters != null) foreach (DbParameter param in parameters) SelectCommand.Parameters.Add(param);
+            return SelectCommand.ExecuteReader();
+        }
 
         /// <summary>
         /// Execute an arbitrary query on the database.
         /// Useful for more obscure query types.
         /// </summary>
         /// <param name="query">A string containing the query definition</param>
-        /// <returns>An OdbcDataReader containing any records returned by this query. Not guaranteed to actually contain records.</returns>
-        public abstract DbDataReader Query(string query);
-
+        /// <returns>A DbDataReader containing any records returned by this query. Not guaranteed to actually contain records.</returns>
+        public DbDataReader Query(string query) {
+            if (string.IsNullOrEmpty(query)) throw new ArgumentException("Query string is mandatory");
+            DbCommand command = connectionObject.CreateCommand();
+            command.CommandText = query;
+            return command.ExecuteReader();
+        }
         /// <summary>
         /// Returns a List of field names for the specified table (or query).
         /// </summary>
@@ -168,14 +224,41 @@ namespace Vergil.Data.DB {
             return rows;
         }
 
-        protected abstract DbCommand GenerateUpdateQuery(string table, IEnumerable<string> fields, IEnumerable<string> values, string updateCondition);
+        /// <summary>
+        /// Implementation for generating a query command for the database type to update records.
+        /// </summary>
+        /// <param name="dataView">The table, view, etc. to update</param>
+        /// <param name="fields">The fields to update</param>
+        /// <param name="values">The values to update in above fields</param>
+        /// <param name="updateCondition">The condition, as a string of SQL, that determines if a row is updated</param>
+        /// <returns>Created query command</returns>
+        protected abstract DbCommand GenerateUpdateQuery(string dataView, IEnumerable<string> fields, IEnumerable<string> values, string updateCondition);
 
-        protected abstract DbCommand GenerateInsertQuery(string table, IEnumerable<string> fields, IEnumerable<string> values);
+        /// <summary>
+        /// Implementation for generating a query command for the database type to insert records.
+        /// </summary>
+        /// <param name="dataView">The table, view, etc. to update</param>
+        /// <param name="fields">The fields to insert into</param>
+        /// <param name="values">The values to insert into above fields</param>
+        /// <returns>Created query command</returns>
+        protected abstract DbCommand GenerateInsertQuery(string dataView, IEnumerable<string> fields, IEnumerable<string> values);
 
-        protected abstract DbCommand GenerateSelectQuery(string table, IEnumerable<string> fields, string selectCondition, bool distinct);
+        /// <summary>
+        /// Implementation for generating a query command for the database type to select records.
+        /// </summary>
+        /// <param name="dataView">The table, view, etc. to update</param>
+        /// <param name="fields">The fields to select</param>
+        /// <param name="selectCondition">The condition, as a string of SQL, that determines if a row is selected</param>
+        /// <param name="distinct">If true, only returns distinct results</param>
+        /// <returns>Created query command</returns>
+        protected abstract DbCommand GenerateSelectQuery(string dataView, IEnumerable<string> fields, string selectCondition, bool distinct);
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
+        /// <summary>
+        /// Dispose of this object
+        /// </summary>
+        /// <param name="disposing">true if disposing</param>
         protected virtual void Dispose(bool disposing) {
             if (!disposedValue) {
                 if (disposing) {
@@ -185,6 +268,9 @@ namespace Vergil.Data.DB {
             }
         }
         // This code added to correctly implement the disposable pattern.
+        /// <summary>
+        /// Dispose of this object
+        /// </summary>
         public void Dispose() {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             Dispose(true);

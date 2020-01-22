@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Data.Odbc;
+using System.Data.Common;
 
 namespace Vergil.Data.DB {
     /// <summary>
@@ -34,7 +34,7 @@ namespace Vergil.Data.DB {
         /// Initialize a new DBData object using the data from the specified OdbcDataReader
         /// </summary>
         /// <param name="reader">An OdbcDataReader containing the data to store in this object</param>
-        public DBData(OdbcDataReader reader) {
+        public DBData(DbDataReader reader) {
             List<string> h = new List<string>();
             for (int i = 0; i < reader.FieldCount; i++) h.Add(reader.GetName(i));
             headers = h.ToArray();
@@ -49,7 +49,7 @@ namespace Vergil.Data.DB {
                             value = Convert.ToDateTime(value);
                         } catch (FormatException) { } catch (InvalidCastException) { }
                         row.Add(headers[i],value is DateTime ? ((DateTime)value).ToString("MM/dd/yyyy") : value.ToString().ToString());
-                    } catch (OdbcException) {
+                    } catch (DbException) {
                         row.Add(headers[i],"#####");
                     }
                 }

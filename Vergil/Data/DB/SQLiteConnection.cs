@@ -5,52 +5,124 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
 using System.Data.Common;
+using Vergil.Utilities;
+using SQLiteDataConnection = System.Data.SQLite.SQLiteConnection;
+using System.IO;
 
 namespace Vergil.Data.DB {
+    /// <summary>
+    /// Wrapper class for SQLite connections
+    /// </summary>
     public class SQLiteConnection : DBConnection {
-
-        public SQLiteConnection(string connString) : base (connString) {
-
+        /// <summary>
+        /// Create a new connection to a SQLite database. Will fail if database does not exist.
+        /// </summary>
+        /// <param name="location"></param>
+        public SQLiteConnection(string location) : base ("Data Source=" + location + "; Version=3; FailIfMissing=True;") {
+            if (!File.Exists(ConnectionString)) throw new ArgumentException("Database must already exist.");
+            connectionObject = new SQLiteDataConnection();
         }
 
-        public override int AddRecord(string dataView, IEnumerable<string> values, string updateCondition) {
-            throw new NotImplementedException();
+        /// <summary>
+        /// Create a new SQLite database.
+        /// </summary>
+        /// <param name="location">File location to create database</param>
+        public static void CreateDatabase(string location) {
+            SQLiteDataConnection.CreateFile(location);
         }
 
-        public override int AddRecord(string table, IEnumerable<string> fields, IEnumerable<string> values, string updateCondition) {
-            throw new NotImplementedException();
-        }
-
-        public override int Insert(string table, IEnumerable<string> fields, IEnumerable<string> values) {
-            throw new NotImplementedException();
-        }
-
-        public override DbDataReader Query(string query) {
-            throw new NotImplementedException();
-        }
-
-        public override DbDataReader Select(string table, string field = "*", string SelectCondition = "", bool distinct = false, Dictionary<string, object> parameters = null) {
-            throw new NotImplementedException();
-        }
-
-        public override DbDataReader Select(string table, IEnumerable<string> fields, string SelectCondition = "", bool distinct = false, Dictionary<string, object> parameters = null) {
-            throw new NotImplementedException();
-        }
-
-        public override int Update(string table, IEnumerable<string> fields, IEnumerable<string> values, string updateCondition) {
-            throw new NotImplementedException();
-        }
-
+        /// <summary>
+        /// Implementation for generating a query command for the database type to insert records.
+        /// </summary>
+        /// <param name="table">The table to update</param>
+        /// <param name="fields">The fields to update</param>
+        /// <param name="values">The values to update in above fields</param>
+        /// <returns>Created query command</returns>
         protected override DbCommand GenerateInsertQuery(string table, IEnumerable<string> fields, IEnumerable<string> values) {
-            throw new NotImplementedException();
+            if (GetDataViewNames()[table] == DataViewType.View) throw new ArgumentException("'" + table + "' is a view. SQLite only supports write operations on tables.");
+
+            StringBuilder insertQuery = new StringBuilder("INSERT INTO ");
+            insertQuery.Append(table + " ");
+
+            if (fields.Count() > 0) insertQuery.Append("(" + fields.Join(',') + ")");
+            insertQuery.Append(" VALUES ");
+            for (int i = 0; i < values.Count(); i++) {
+                if (i > 0) insertQuery.Append(',');
+                string v = values.ElementAt(i);
+                if (!v.IsNumber()) {
+                    insertQuery.Append('\'');
+                    insertQuery.Append(v);
+                    insertQuery.Append('\'');
+                } else insertQuery.Append(v);
+            }
+
+            insertQuery.Append(";");
+            return new SQLiteCommand(insertQuery.ToString(), (SQLiteDataConnection)connectionObject);
         }
 
+        /// <summary>
+        /// Implementation for generating a query command for the database type to select records.
+        /// </summary>
+        /// <param name="table">The table to update</param>
+        /// <param name="fields">The fields to update</param>
+        /// <param name="selectCondition">The condition, as a string of SQL, that determines if a row is selected</param>
+        /// <param name="distinct">If true, only returns distinct results</param>
+        /// <returns>Created query command</returns>
         protected override DbCommand GenerateSelectQuery(string table, IEnumerable<string> fields, string selectCondition, bool distinct) {
-            throw new NotImplementedException();
+            StringBuilder selectQuery = new StringBuilder("SELECT ");
+            if (distinct) selectQuery.Append("DISTINCT ");
+            for (int i = 0; i < fields.Count(); i++) {
+                string field = fields.ElementAt(i);
+                if (i > 0) selectQuery.Append(',');
+                if (!field.IsNumber()) {
+                    if (field[0] != '\'') selectQuery.Append('\'');
+                    selectQuery.Append(field);
+                    if (field.Last() != '\'') selectQuery.Append('\'');
+                } else selectQuery.Append(field);
+            }
+            selectQuery.Append(" FROM " + table);
+            if (!string.IsNullOrEmpty(selectCondition)) selectQuery.Append(" WHERE " + selectCondition);
+            selectQuery.Append(";");
+
+            return new SQLiteCommand(selectQuery.ToString(), (SQLiteDataConnection)connectionObject);
         }
 
+        /// <summary>
+        /// Implementation for generating a query command for the database type to update records.
+        /// </summary>
+        /// <param name="table">The table to update</param>
+        /// <param name="fields">The field to update</param>
+        /// <param name="values">The values to update in above fields</param>
+        /// <param name="updateCondition">The condition, as a string of SQL, that determines if a row is updated</param>
+        /// <returns>Created query command</returns>
         protected override DbCommand GenerateUpdateQuery(string table, IEnumerable<string> fields, IEnumerable<string> values, string updateCondition) {
-            throw new NotImplementedException();
+            if (GetDataViewNames()[table] == DataViewType.View) throw new ArgumentException("'" + table + "' is a view. SQLite only supports write operations on tables.");
+            if (string.IsNullOrEmpty(updateCondition)) throw new ArgumentException("UpdateCondition is mandatory");
+            StringBuilder updateQuery = new StringBuilder("UPDATE " + table + " SET ");
+            if (fields.Count() == 0) throw new ArgumentException("Must specify at least one field to update");
+            if (values.Count() != fields.Count()) throw new ArgumentException("Must specify the same number of values as fields");
+
+            for (int i = 0; i < fields.Count(); i++) {
+                string field = fields.ElementAt(i);
+                if (i > 0) updateQuery.Append(',');
+                if (!field.IsNumber()) {
+                    if (field[0] != '\'') updateQuery.Append('\'');
+                    updateQuery.Append(field);
+                    if (field.Last() != '\'') updateQuery.Append('\'');
+                } else updateQuery.Append(field);
+
+                updateQuery.Append("=");
+
+                string value = values.ElementAt(i);
+                if (!value.IsNumber()) {
+                    if (value[0] != '\'') updateQuery.Append('\'');
+                    updateQuery.Append(value);
+                    if (value.Last() != '\'') updateQuery.Append('\'');
+                } else updateQuery.Append(value);
+            }
+
+            updateQuery.Append(" WHERE " + updateCondition + ";");
+            return new SQLiteCommand(updateQuery.ToString(), (SQLiteDataConnection)connectionObject);
         }
     }
 }
