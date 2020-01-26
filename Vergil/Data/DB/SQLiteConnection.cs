@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Data.SQLite;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Data.SQLite;
-using System.Data.Common;
 using Vergil.Utilities;
 using SQLiteDataConnection = System.Data.SQLite.SQLiteConnection;
-using System.IO;
 
 namespace Vergil.Data.DB {
     /// <summary>
@@ -18,7 +17,7 @@ namespace Vergil.Data.DB {
         /// Create a new connection to a SQLite database. Will fail if database does not exist.
         /// </summary>
         /// <param name="location"></param>
-        public SQLiteConnection(string location) : base ("Data Source=" + location + "; Version=3; FailIfMissing=True;") {
+        public SQLiteConnection(string location) : base("Data Source=" + location + "; Version=3; FailIfMissing=True;") {
             if (!File.Exists(location)) throw new ArgumentException("Database must already exist.");
             connectionObject = new SQLiteDataConnection(ConnectionString);
         }
@@ -38,11 +37,12 @@ namespace Vergil.Data.DB {
         /// <returns>A List containing the names of each of the specified table's fields.</returns>
         public new List<string> GetFields(string table) {
             List<string> fields = new List<string>();
-            using (SQLiteCommand cmd = new SQLiteCommand($"PRAGMA table_info({table})",(SQLiteDataConnection)connectionObject)) {
+            using (SQLiteCommand cmd = new SQLiteCommand($"PRAGMA table_info({table})", (SQLiteDataConnection)connectionObject)) {
                 SQLiteDataReader reader = cmd.ExecuteReader();
                 while (reader.Read()) fields.Add(reader.GetString(1));
                 reader.Close();
-            } return fields;
+            }
+            return fields;
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Vergil.Data.DB {
                 string v = values.ElementAt(i);
                 if (!v.IsNumber()) {
                     insertQuery.Append('\'');
-                    insertQuery.Append(v.Replace("'","''"));
+                    insertQuery.Append(v.Replace("'", "''"));
                     insertQuery.Append('\'');
                 } else insertQuery.Append(v);
             }
@@ -130,9 +130,7 @@ namespace Vergil.Data.DB {
 
                 string value = values.ElementAt(i);
                 if (!value.IsNumber()) {
-                    if (value[0] != '\'') updateQuery.Append('\'');
-                    updateQuery.Append(value.Replace("'", "''"));
-                    if (value.Last() != '\'') updateQuery.Append('\'');
+                    updateQuery.Append(string.Format("'{0}'", value.Replace("'", "''")));
                 } else updateQuery.Append(value);
             }
 
