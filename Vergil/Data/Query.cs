@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Vergil.XML;
 using System.IO;
-using Vergil.Web;
+using System.Linq;
 using System.Net;
-using Vergil.Data.DB;
+using System.Text;
 using System.Threading;
+using Vergil.Data.DB;
 using Vergil.Utilities;
+using Vergil.Web;
+using Vergil.XML;
 
 namespace Vergil.Data {
     /// <summary>
@@ -505,11 +505,10 @@ namespace Vergil.Data {
     /// Encapsulation for Lists of type Query.
     /// </summary>
     public class QueryList : List<Query> {
-        private readonly string path = "Queries.xml";
         /// <summary>
         /// The path to which this list's file is saved. Optional.
         /// </summary>
-        public string FilePath => path;
+        public string FilePath { get; } = "Queries.xml";
 
         /// <summary>
         /// Create an empty QueryList.
@@ -520,7 +519,7 @@ namespace Vergil.Data {
         /// </summary>
         /// <param name="path">A file path where this list can be saved.</param>
         public QueryList(string path) : base() {
-            this.path = path;
+            this.FilePath = path;
         }
 
         /// <summary>

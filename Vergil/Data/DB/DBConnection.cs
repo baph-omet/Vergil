@@ -30,11 +30,10 @@ namespace Vergil.Data.DB {
         /// </summary>
         protected DbConnection connectionObject;
 
-        private readonly string connectionString;
         /// <summary>
         /// The underlying connection string
         /// </summary>
-        public string ConnectionString => connectionString;
+        public string ConnectionString { get; }
         /// <summary>
         /// Internal property to tell if database is open.
         /// </summary>
@@ -49,7 +48,7 @@ namespace Vergil.Data.DB {
         /// </summary>
         /// <param name="connString">The connection string for this database type</param>
         public DBConnection(string connString) {
-            connectionString = connString;
+            ConnectionString = connString;
             isOpen = false;
         }
 

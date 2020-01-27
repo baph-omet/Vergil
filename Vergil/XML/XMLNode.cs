@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Vergil.Utilities;
 
 namespace Vergil.XML {
@@ -60,14 +57,6 @@ namespace Vergil.XML {
         /// <returns>The value stored in the specified key, if it exists.</returns>
         public T Get<T>() {
             return Util.Convert<T>(Value);
-        }
-
-        /// <summary>
-        /// Gets this node's name
-        /// </summary>
-        /// <returns>This node's name</returns>
-        public string GetKey() {
-            return Key;
         }
 
         /// <summary>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Xml;
 using System.IO;
@@ -74,28 +73,12 @@ namespace Vergil.XML {
         }
 
         /// <summary>
-        /// Gets the path where this file is located.
-        /// </summary>
-        /// <returns>This file's location on disk.</returns>
-        public string GetLocation() {
-            return Location;
-        }
-
-        /// <summary>
-        /// Gets all the children of this file as a hirearchical list.
-        /// </summary>
-        /// <returns>A List of XMLNodes that contains all the children of this file</returns>
-        public List<XMLNode> GetChildren() {
-            return Children;
-        }
-
-        /// <summary>
         /// Gets all children of this node that are XML sections
         /// </summary>
         /// <returns>A List containing all XML sections nested inside this section</returns>
         public List<XMLSection> GetSections() {
             List<XMLSection> sections = new List<XMLSection>();
-            foreach (XMLNode child in GetChildren()) {
+            foreach (XMLNode child in Children) {
                 if (child is XMLSection) sections.Add((XMLSection) child);
             } return sections;
         }
@@ -107,8 +90,8 @@ namespace Vergil.XML {
         /// <returns>A List containing all XML sections nested inside this section that match the specified key</returns>
         public List<XMLSection> GetSections(string key) {
             List<XMLSection> sections = new List<XMLSection>();
-            foreach (XMLNode child in GetChildren()) {
-                if (child is XMLSection && child.GetKey().ToUpper().Equals(key.ToUpper())) sections.Add((XMLSection) child);
+            foreach (XMLNode child in Children) {
+                if (child is XMLSection && child.Key.ToUpper().Equals(key.ToUpper())) sections.Add((XMLSection) child);
             } return sections;
         }
 
@@ -120,7 +103,7 @@ namespace Vergil.XML {
         /// <returns>A List containing all XML sections nested inside this section that contain a node with the specified key and value</returns>
         public List<XMLSection> GetSections(string nodeKey, string value) {
             List<XMLSection> sections = new List<XMLSection>();
-            foreach (XMLNode child in GetChildren()) {
+            foreach (XMLNode child in Children) {
                 if (child is XMLSection && ((XMLSection) child).Get(nodeKey).ToUpper().Equals(value.ToUpper())) sections.Add((XMLSection) child);
             } return sections;
         }
@@ -144,8 +127,8 @@ namespace Vergil.XML {
         /// <param name="key">The name of the node to find</param>
         /// <returns>An XMLNode representing the node if found, else null</returns>
         public XMLNode FindNode(string key) {
-            foreach (XMLNode node in GetChildren()) {
-                if (node.GetKey().ToLower().Equals(key.ToLower())) return node;
+            foreach (XMLNode node in Children) {
+                if (node.Key.ToLower().Equals(key.ToLower())) return node;
                 else {
                     if (node is XMLSection) {
                         XMLNode found = ((XMLSection) node).FindNode(key);
@@ -228,7 +211,7 @@ namespace Vergil.XML {
         /// <returns>The text in this document.</returns>
         public string ToString(bool whitespace) {
             StringBuilder lines = new StringBuilder("<?xml version=\"1.0\" encoding=\"utf-8\" ?>");
-            foreach (XMLNode child in GetChildren()) lines.Append(WriteNode(child, 0,whitespace));
+            foreach (XMLNode child in Children) lines.Append(WriteNode(child, 0,whitespace));
             return lines.ToString();
         }
 
@@ -238,15 +221,15 @@ namespace Vergil.XML {
                 text.Append(Environment.NewLine);
                 for (int i = 0; i < indent; i++) text.Append("\t");
             }
-            text.Append("<" + node.GetKey());
+            text.Append("<" + node.Key);
             foreach (string attribute in node.GetAttributes().Keys) text.Append(" " + attribute + "=\"" + node.GetAttributes()[attribute] + "\"");
             text.Append(">");
             if (node.HasValue()) text.Append(node.Get().Replace("&","&amp;"));
-            else if (node is XMLSection) foreach (XMLNode n in ((XMLSection) node).GetChildren()) text.Append(WriteNode(n, indent + 1,whitespace));
+            else if (node is XMLSection) foreach (XMLNode n in ((XMLSection) node).Children) text.Append(WriteNode(n, indent + 1,whitespace));
             if (whitespace && node is XMLSection) {
                 text.Append(Environment.NewLine);
                 for (int i = 0; i < indent; i++) text.Append("\t");
-            } text.Append("</" + node.GetKey() + ">");
+            } text.Append("</" + node.Key + ">");
             return text.ToString();
         }
 

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Data.Common;
 
 namespace Vergil.Data.DB {
@@ -18,17 +16,15 @@ namespace Vergil.Data.DB {
     /// Class for containing recordset data from DBConnections.
     /// </summary>
     public class DBData {
-        private string[] headers;
         /// <summary>
         /// The names of each of this recordset's fields.
         /// </summary>
-        public string[] Headers { get { return headers; } }
+        public string[] Headers { get; }
 
-        private DBDataSet data;
         /// <summary>
         /// The raw data from the recordset. Each Dictionary in the array represents a row of data, where the name of the field is the key.
         /// </summary>
-        public DBDataSet Data { get { return data; } }
+        public DBDataSet Data { get; private set; }
 
         /// <summary>
         /// Initialize a new DBData object using the data from the specified OdbcDataReader
@@ -37,7 +33,7 @@ namespace Vergil.Data.DB {
         public DBData(DbDataReader reader) {
             List<string> h = new List<string>();
             for (int i = 0; i < reader.FieldCount; i++) h.Add(reader.GetName(i));
-            headers = h.ToArray();
+            Headers = h.ToArray();
 
             DBDataSet d = new DBDataSet();
             while (reader.Read()) {
@@ -48,15 +44,15 @@ namespace Vergil.Data.DB {
                         try {
                             value = Convert.ToDateTime(value);
                         } catch (FormatException) { } catch (InvalidCastException) { }
-                        row.Add(headers[i],value is DateTime ? ((DateTime)value).ToString("MM/dd/yyyy") : value.ToString().ToString());
+                        row.Add(Headers[i],value is DateTime ? ((DateTime)value).ToString("MM/dd/yyyy") : value.ToString().ToString());
                     } catch (DbException) {
-                        row.Add(headers[i],"#####");
+                        row.Add(Headers[i],"#####");
                     }
                 }
                 d.Add(row);
             }
 
-            data = d;
+            Data = d;
         }
 
         /// <summary>
@@ -64,9 +60,9 @@ namespace Vergil.Data.DB {
         /// </summary>
         /// <param name="dataSet">A DBData object whose data will be merged into this one.</param>
         public void Merge(DBData dataSet) {
-            DBDataSet d = data;
+            DBDataSet d = Data;
             d.AddRange(dataSet.Data);
-            data = d;
+            Data = d;
         }
     }
 }

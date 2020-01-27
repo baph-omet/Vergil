@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
 using System.IO;
-using System.Reflection;
 using Vergil.XML;
 using Vergil.Utilities;
 
@@ -51,7 +50,9 @@ namespace Vergil {
                 fps.Insert(0, log.GetPath() + @"\ProgramLog.txt");
                 attachmentFilepaths = fps.ToArray();
             }
-            SmtpClient SMTP = new SmtpClient("smtp.santeecooper.com");
+
+            //TODO: Add support for adding SMTP address
+            SmtpClient SMTP = new SmtpClient("...");
             recipients = GetEmailAddresses(recipients);
             foreach (string rec in recipients) {
                 if (!IsValidAddress(rec)) throw new ArgumentException("Recipient \"" + rec + "\" is not a valid email address.");
@@ -164,7 +165,7 @@ namespace Vergil {
             XMLFile file = new XMLFile(filepath ?? Directory.GetCurrentDirectory() + "\\Recipients.xml");
             foreach (XMLSection section in file.FindSection("groups").GetSections()) {
                 RecipientList recipients = new RecipientList(section.Get("name"));
-                foreach (XMLNode node in section.FindSection("recipients").GetChildren()) recipients.Add(node.Get());
+                foreach (XMLNode node in section.FindSection("recipients").Children) recipients.Add(node.Get());
                 groups.Add(recipients);
             }
             return groups;

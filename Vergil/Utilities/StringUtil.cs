@@ -9,7 +9,7 @@ namespace Vergil.Utilities {
     /// Class containing string extension methods
     /// </summary>
     public static class StringUtil {
-        private static char[] commentCharacters {
+        private static char[] CommentCharacters {
             get {
                 return new[]{
                     ' ',
@@ -89,7 +89,7 @@ namespace Vergil.Utilities {
         /// <param name="line">The string to check</param>
         /// <returns>False if the line is empty, or starts with a whitespace character or comment character. Else true.</returns>
         public static bool IsSignificant(this string line) {
-            return line.Length > 0 && !commentCharacters.Contains(line[0]);
+            return line.Length > 0 && !CommentCharacters.Contains(line[0]);
         }
 
         /// <summary>

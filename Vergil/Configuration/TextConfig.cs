@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Vergil.Utilities;
 
 namespace Vergil.Configuration {
@@ -10,11 +9,11 @@ namespace Vergil.Configuration {
     /// </summary>
     public class TextConfig : Config {
         private readonly string Path;
-        private readonly char delimiter;
+
         /// <summary>
         /// The delimiting character used in this config. Uses "=" by default.
         /// </summary>
-        public char Delimiter { get { return delimiter; } }
+        public char Delimiter { get; }
 
         /// <summary>
         /// Initializes a new config file called "config.txt" in the current directory. File will be created if it does not exist.
@@ -26,8 +25,8 @@ namespace Vergil.Configuration {
         /// <param name="path">The file path for the config file</param>
         /// <param name="delimiter">The desired delimiting character. Defaults to '='</param>
         public TextConfig(string path,char delimiter = '=') {
-            this.delimiter = delimiter;
-            this.Path = path;
+            Delimiter = delimiter;
+            Path = path;
             Debug = Get("debug", false);
             Validate();
         }
@@ -39,7 +38,7 @@ namespace Vergil.Configuration {
         /// <returns>The value of the specified property as a string if the property exists. Else, null.</returns>
         public override string Get(string key) {
             string[] config = File.ReadAllLines(Path);
-            foreach (string line in config) if (line.IsSignificant() && line.Split(delimiter)[0].ToUpper().Trim() == key.ToUpper().Trim() && line.Split(delimiter)[1].Length > 0) return line.Split(delimiter)[1].Trim();
+            foreach (string line in config) if (line.IsSignificant() && line.Split(Delimiter)[0].ToUpper().Trim() == key.ToUpper().Trim() && line.Split(Delimiter)[1].Length > 0) return line.Split(Delimiter)[1].Trim();
             return null;
         }
 
@@ -51,7 +50,7 @@ namespace Vergil.Configuration {
             Dictionary<string,string> props = new Dictionary<string,string>();
             foreach (string line in File.ReadAllLines(Path)) {
                 if (IsValidPair(line)) {
-                    string[] pair = line.Split(delimiter);
+                    string[] pair = line.Split(Delimiter);
                     props.Add(pair[0], pair[1]);
                 }
             }
@@ -69,9 +68,9 @@ namespace Vergil.Configuration {
             string[] config = File.ReadAllLines(Path);
             for (int i = 0; i < config.GetLength(0); i++) {
                 string line = config[i];
-                string k = line.Split(delimiter)[0].ToUpper().Trim();
+                string k = line.Split(Delimiter)[0].ToUpper().Trim();
                 if (k == key.ToUpper()) {
-                    config[i] = key + delimiter + value;
+                    config[i] = key + Delimiter + value;
                     ovr = true;
                     break;
                 }
@@ -79,7 +78,7 @@ namespace Vergil.Configuration {
             if (!ovr) {
                 string[] newconfig = new string[config.GetLength(0) + 1];
                 for (int i = 0; i < config.GetLength(0); i++) newconfig[i] = config[i];
-                newconfig[config.GetLength(0)] = key + delimiter + value;
+                newconfig[config.GetLength(0)] = key + Delimiter + value;
                 config = newconfig;
             }
             File.WriteAllLines(Path, config);
@@ -90,10 +89,10 @@ namespace Vergil.Configuration {
             string[] config = File.ReadAllLines(Path);
             for (int i = 0; i < config.GetLength(0); i++) {
                 if (config[i].Length > 0 && !(new char[] { ' ', '\t', '\n', '#' }).Contains(config[i][0])) {
-                    if (config[i].Contains(delimiter)) {
-                        string[] line = config[i].Split(delimiter);
+                    if (config[i].Contains(Delimiter)) {
+                        string[] line = config[i].Split(Delimiter);
                         if (line.Length != 2) problem = "Config files should be written with key/value pairs.";
-                    } else problem = "Key/value pairs should be delimited with '" + delimiter + "'.";
+                    } else problem = "Key/value pairs should be delimited with '" + Delimiter + "'.";
                 }
                 if (problem.Length > 0) {
                     problem = "Incorrect format at line " + i + " in " + Path + ": " + problem;
@@ -104,7 +103,7 @@ namespace Vergil.Configuration {
         }
 
         private bool IsValidPair(string line) {
-            return line.IsSignificant() && line.Contains(delimiter) && line.Split(delimiter)[1].Length > 0;
+            return line.IsSignificant() && line.Contains(Delimiter) && line.Split(Delimiter)[1].Length > 0;
         }
 
         /// <summary>
@@ -115,7 +114,7 @@ namespace Vergil.Configuration {
             if (Get(property) != null) {
                 List<string> lines = File.ReadAllLines(Path).ToList();
                 foreach (string line in lines) {
-                    if (line.Split(delimiter)[0].ToLower().Equals(property)) {
+                    if (line.Split(Delimiter)[0].ToLower().Equals(property)) {
                         lines.Remove(line);
                         File.WriteAllLines(Path, lines.ToArray());
                         return;

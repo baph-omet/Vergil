@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Net;
 using System.IO;
 using Vergil.Utilities;
@@ -11,12 +9,11 @@ namespace Vergil.Web {
     /// Class for transferring files across an FTP connection.
     /// </summary>
     public class FTP {
-        private readonly string address;
         /// <summary>
         /// The URL for this remote server
         /// </summary>
-        public string Address { get { return address; } }
-        private NetworkCredential credentials;
+        public string Address { get; private set; }
+        private readonly NetworkCredential credentials;
 
         /// <summary>
         /// Creates a new FTP connection object that can upload or download files from a server. No actual connection is established until a transfer is requested.
@@ -26,7 +23,7 @@ namespace Vergil.Web {
         /// <param name="password">The authentication password for this server</param>
         public FTP(string address, string username = "", string password = "") {
             if (!address.Contains("://")) address = "ftp://" + address;
-            this.address = address;
+            Address = address;
             credentials = new NetworkCredential(username, password);
         }
 
@@ -37,7 +34,7 @@ namespace Vergil.Web {
         /// <param name="remoteFilePath">The path of the desired location of this file on the FTP server</param>
         /// <returns>A description of the response obtained from this transfer request</returns>
         public string Upload(string filepath, string remoteFilePath) {
-            FtpWebRequest request = (FtpWebRequest) WebRequest.Create(address + remoteFilePath);
+            FtpWebRequest request = (FtpWebRequest) WebRequest.Create(Address + remoteFilePath);
             request.Method = WebRequestMethods.Ftp.UploadFile;
             if (credentials.UserName.Length > 0 || credentials.Password.Length > 0) request.Credentials = credentials;
 
@@ -58,7 +55,7 @@ namespace Vergil.Web {
         /// <param name="localFilePath">The path of the desired location of this file locally</param>
         /// <returns>A description of the response obtained from this transfer request</returns>
         public string Download(string filepath, string localFilePath) {
-            FtpWebRequest request = (FtpWebRequest) WebRequest.Create(address + filepath);
+            FtpWebRequest request = (FtpWebRequest) WebRequest.Create(Address + filepath);
             request.Method = WebRequestMethods.Ftp.DownloadFile;
             if (credentials.UserName.Length > 0 || credentials.Password.Length > 0) request.Credentials = credentials;
             FtpWebResponse response = (FtpWebResponse) request.GetResponse();
@@ -78,7 +75,7 @@ namespace Vergil.Web {
         /// <param name="passiveMode">Whether or not to use passive mode in this request. Default: false.</param>
         /// <returns>A list of filenames found in the specified directory</returns>
         public List<string> List(string path = "/", bool passiveMode = false) {
-            FtpWebRequest request = (FtpWebRequest) WebRequest.Create(address + path);
+            FtpWebRequest request = (FtpWebRequest) WebRequest.Create(Address + path);
             request.Method = WebRequestMethods.Ftp.ListDirectory;
             request.Credentials = credentials;
             request.UsePassive = passiveMode;

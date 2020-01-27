@@ -32,11 +32,10 @@ namespace Vergil.Forms {
             "Continue in Debug mode, then disable Debug mode and continue."
         };
 
-        private DebugModeDialogResult result = DebugModeDialogResult.Quit;
         /// <summary>
         /// The result state of this dialog.
         /// </summary>
-        public DebugModeDialogResult Result { get { return result; } }
+        public DebugModeDialogResult Result { get; private set; } = DebugModeDialogResult.Quit;
 
         private bool ignoreClosing = false;
 
@@ -55,17 +54,17 @@ namespace Vergil.Forms {
         private void DebugModeDialog_FormClosing(object sender, FormClosingEventArgs e) {
             if (ignoreClosing) return;
             if (MessageBox.Show(Assembly.GetEntryAssembly().GetName().Name + " will now quit.", "Warning", MessageBoxButtons.OKCancel) == DialogResult.Cancel) e.Cancel = true;
-            result = DebugModeDialogResult.Quit;
+            Result = DebugModeDialogResult.Quit;
         }
 
         private void QuitButton_Click(object sender, EventArgs e) {
-            result = DebugModeDialogResult.Quit;
+            Result = DebugModeDialogResult.Quit;
             ignoreClosing = false;
             Close();
         }
 
         private void ConfirmButton_Click(object sender, EventArgs e) {
-            result = (DebugModeDialogResult)(ActionComboBox.SelectedIndex+1);
+            Result = (DebugModeDialogResult)(ActionComboBox.SelectedIndex+1);
             ignoreClosing = true;
             Close();
         }

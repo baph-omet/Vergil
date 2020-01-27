@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Vergil.Utilities;
 
 namespace Vergil.XML {
@@ -46,7 +44,7 @@ namespace Vergil.XML {
         /// <returns>The value of the requested child, or the default value if not found.</returns>
         public string Get(string key, string defaultValue = "") {
             foreach (XMLNode child in Children) {
-                if (child.GetKey().ToUpper().Equals(key.ToUpper())) {
+                if (child.Key.ToUpper().Equals(key.ToUpper())) {
                     return child.Get();
                 }
             }
@@ -102,13 +100,6 @@ namespace Vergil.XML {
         }
 
         /// <summary>
-        /// Get all children of this node
-        /// </summary>
-        /// <returns>A List of XMLNodes that are children of this node</returns>
-        public List<XMLNode> GetChildren() {
-            return Children;
-        }
-        /// <summary>
         /// Get all children of this node that match the given key.
         /// </summary>
         /// <param name="key">A key to filter this node's children</param>
@@ -116,7 +107,7 @@ namespace Vergil.XML {
         public List<XMLNode> GetChildren(string key) {
             List<XMLNode> chld = new List<XMLNode>();
             foreach (XMLNode child in Children) {
-                if (child.GetKey().ToUpper().Equals(key.ToUpper())) chld.Add(child);
+                if (child.Key.ToUpper().Equals(key.ToUpper())) chld.Add(child);
             } return chld;
         }
 
@@ -166,7 +157,7 @@ namespace Vergil.XML {
         /// <returns>A List containing all XML sections nested inside this section</returns>
         public List<XMLSection> GetSections() {
             List<XMLSection> sections = new List<XMLSection>();
-            foreach (XMLNode child in GetChildren()) {
+            foreach (XMLNode child in Children) {
                 if (child is XMLSection) sections.Add((XMLSection) child);
             } return sections;
         }
@@ -178,8 +169,8 @@ namespace Vergil.XML {
         /// <returns>A List containing all XML sections nested inside this section that match the specified key</returns>
         public List<XMLSection> GetSections(string key) {
             List<XMLSection> sections = new List<XMLSection>();
-            foreach (XMLNode child in GetChildren()) {
-                if (child is XMLSection && child.GetKey().ToUpper().Equals(key.ToUpper())) sections.Add((XMLSection) child);
+            foreach (XMLNode child in Children) {
+                if (child is XMLSection && child.Key.ToUpper().Equals(key.ToUpper())) sections.Add((XMLSection) child);
             } return sections;
         }
 
@@ -191,7 +182,7 @@ namespace Vergil.XML {
         /// <returns>A List containing all XML sections nested inside this section that contain a node with the specified key and value</returns>
         public List<XMLSection> GetSections(string nodeKey, string value) {
             List<XMLSection> sections = new List<XMLSection>();
-            foreach (XMLNode child in GetChildren()) {
+            foreach (XMLNode child in Children) {
                 if (child is XMLSection && ((XMLSection) child).Get(nodeKey).ToUpper().Equals(value.ToUpper())) sections.Add((XMLSection) child);
             } return sections;
         }
@@ -202,8 +193,8 @@ namespace Vergil.XML {
         /// <param name="key">The name of the node to find</param>
         /// <returns>An XMLNode representing the node if found, else null</returns>
         public XMLNode FindNode(string key) {
-            foreach (XMLNode node in GetChildren()) {
-                if (node.GetKey().ToLower().Equals(key.ToLower())) return node;
+            foreach (XMLNode node in Children) {
+                if (node.Key.ToLower().Equals(key.ToLower())) return node;
                 else {
                     if (node is XMLSection) {
                         XMLNode found = ((XMLSection) node).FindNode(key);

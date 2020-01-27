@@ -22,25 +22,6 @@ namespace Vergil
         /// Add a problem to this list and write it to the Log.
         /// </summary>
         /// <param name="p">The Problem to add.</param>
-        [Obsolete("Use Add(Problem) instead.")]
-        public void AddAndLog(Problem p) {
-            Add(p);
-        }
-        /// <summary>
-        /// Add a problem to this list and write it to the Log.
-        /// </summary>
-        /// <param name="severity">The Severity level of this Problem</param>
-        /// <param name="message">The message that will be shown for this Problem</param>
-        /// <param name="exception">An exception to attach to this Problem</param>
-        [Obsolete("Use Add(Severity, string, Exception) instead.")]
-        public void AddAndLog(Severity severity, string message, Exception exception = null) {
-            Add(severity, message, exception);
-        }
-
-        /// <summary>
-        /// Add a problem to this list and write it to the Log.
-        /// </summary>
-        /// <param name="p">The Problem to add.</param>
         public new void Add(Problem p) {
             base.Add(p);
             if (Log != null) Log.Write(p);
@@ -114,7 +95,7 @@ namespace Vergil
     /// <summary>
     /// A class for encapsulating details of runtime issues.
     /// </summary>
-    public class Problem {
+    public struct Problem {
         /// <summary>
         /// The severity level of this problem.
         /// </summary>

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Vergil.XML;
 
 namespace Vergil.Configuration {
@@ -21,7 +18,7 @@ namespace Vergil.Configuration {
         public XMLConfig(string path="Config.xml",string parentNode = "") {
             this.path = path;
             file = new XMLFile(path);
-            if (parentNode.Length == 0) parentNode = file.Children[0].Key;
+            if (parentNode.Length == 0) this.parentNode = file.Children[0].Key;
             else this.parentNode = parentNode;
         }
 
