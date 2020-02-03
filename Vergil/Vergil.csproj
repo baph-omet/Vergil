@@ -95,6 +95,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\FileSystemUtil.cs" />
     <Compile Include="Utilities\StringUtil.cs" />
     <Compile Include="Timing\Timeable.cs" />
     <Compile Include="Timing\TimingProgram.cs" />
