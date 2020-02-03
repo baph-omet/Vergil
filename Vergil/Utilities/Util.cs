@@ -128,5 +128,19 @@ namespace Vergil.Utilities {
         public static string Join(this IEnumerable<object> en, char delimiter) {
             return string.Join(delimiter.ToString(), en);
         }
+
+        /// <summary>
+        /// Checks a value to see if it is within a given range.
+        /// </summary>
+        /// <typeparam name="T">A type that can be compared to itself.</typeparam>
+        /// <param name="number">The number to check</param>
+        /// <param name="min">The minimum value for checking range</param>
+        /// <param name="max">The maximum value for checking range</param>
+        /// <param name="inclusive">If true, endpoints will be considered part of the range. Default: false</param>
+        /// <returns></returns>
+        public static bool IsInRange<T>(this T number, T min, T max, bool inclusive = false) where T : IComparable<T> {
+            if (inclusive) return number.CompareTo(min) >= 0 && number.CompareTo(max) <= 0;
+            return number.CompareTo(min) > 0 && number.CompareTo(max) < 0;
+        }
     }
 }
