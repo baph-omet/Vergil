@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Vergil.Utilities {
@@ -23,7 +24,7 @@ namespace Vergil.Utilities {
         /// <param name="en">Enumerable to join</param>
         /// <param name="delimiter">String to insert between items</param>
         /// <returns>Joined string</returns>
-        public static string Join(this IEnumerable<object> en, string delimiter) {
+        public static string Join<T>(this T en, string delimiter) where T : IEnumerable {
             return string.Join(delimiter, en);
         }
         /// <summary>
@@ -32,7 +33,7 @@ namespace Vergil.Utilities {
         /// <param name="en">Enumerable to join</param>
         /// <param name="delimiter">Character to insert between items</param>
         /// <returns>Joined string</returns>
-        public static string Join(this IEnumerable<object> en, char delimiter) {
+        public static string Join<T>(this T en, char delimiter) where T : IEnumerable {
             return string.Join(delimiter.ToString(), en);
         }
 

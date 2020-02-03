@@ -60,7 +60,7 @@ namespace Vergil.Web {
             if (credentials.UserName.Length > 0 || credentials.Password.Length > 0) request.Credentials = credentials;
             FtpWebResponse response = (FtpWebResponse) request.GetResponse();
             using (Stream responseStream = response.GetResponseStream()) {
-                Util.CreateDirectories(localFilePath);
+                FileSystemUtil.CreateDirectories(localFilePath);
                 if (File.Exists(localFilePath)) File.Delete(localFilePath);
                 using (FileStream localstream = new FileStream(localFilePath, FileMode.OpenOrCreate)) responseStream.CopyTo(localstream);
             }

@@ -2,7 +2,7 @@
     /// <summary>
     /// Class for a field definition in a database.
     /// </summary>
-    public class DBFieldDefinition {
+    public struct DBFieldDefinition {
         /// <summary>
         /// The SQL-safe name of this field
         /// </summary>

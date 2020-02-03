@@ -57,7 +57,7 @@ namespace Vergil {
             fullpath = filepath + logName;
             if (File.Exists(fullpath)) {
                 if (!Directory.Exists(Directory.GetCurrentDirectory() + "\\Logs")) Directory.CreateDirectory(Directory.GetCurrentDirectory() + "\\Logs");
-                string archivepath = Util.GetFirstFreePath(Directory.GetCurrentDirectory() + "\\Logs\\" + File.GetLastWriteTime(fullpath).ToString("yyyy-MM-dd") + ".txt");
+                string archivepath = FileSystemUtil.GetFirstFreePath(Directory.GetCurrentDirectory() + "\\Logs\\" + File.GetLastWriteTime(fullpath).ToString("yyyy-MM-dd") + ".txt");
                 File.WriteAllLines(archivepath,File.ReadAllLines(fullpath));
             } else File.Create(fullpath);
             writer = new StreamWriter(fullpath);
@@ -155,7 +155,7 @@ namespace Vergil {
         /// <param name="archiveDirectory">The directory in which to save a copy of this Log.</param>
         public void Archive(string archiveDirectory) {
             if (!Directory.Exists(archiveDirectory)) Directory.CreateDirectory(archiveDirectory);
-            File.WriteAllLines(Util.GetFirstFreePath(archiveDirectory + DateTime.Now.ToString("yyyy-MM-dd") + ".txt"), GetLines());
+            File.WriteAllLines(FileSystemUtil.GetFirstFreePath(archiveDirectory + DateTime.Now.ToString("yyyy-MM-dd") + ".txt"), GetLines());
         }
 
         /// <summary>
