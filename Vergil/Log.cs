@@ -32,10 +32,10 @@ namespace Vergil {
     /// Class used for managing information logging for programs. Auto-formats log messages and supports writing information at different serverity levels.
     /// </summary>
     public class Log : IDisposable {
-        private string logName;
-        private string filepath;
-        private string fullpath;
-        private StreamWriter writer;
+        private readonly string logName;
+        private readonly string filepath;
+        private readonly string fullpath;
+        private readonly StreamWriter writer;
 
         /// <summary>
         /// Creates a log file with the name "log.txt" in the current directory.
@@ -58,7 +58,7 @@ namespace Vergil {
             if (File.Exists(fullpath)) {
                 if (!Directory.Exists(Directory.GetCurrentDirectory() + "\\Logs")) Directory.CreateDirectory(Directory.GetCurrentDirectory() + "\\Logs");
                 string archivepath = FileSystemUtil.GetFirstFreePath(Directory.GetCurrentDirectory() + "\\Logs\\" + File.GetLastWriteTime(fullpath).ToString("yyyy-MM-dd") + ".txt");
-                File.WriteAllLines(archivepath,File.ReadAllLines(fullpath));
+                File.WriteAllLines(archivepath, File.ReadAllLines(fullpath));
             } else File.Create(fullpath);
             writer = new StreamWriter(fullpath);
             writer.AutoFlush = true;
@@ -77,7 +77,7 @@ namespace Vergil {
         /// </summary>
         /// <param name="message">The message to write to the log</param>
         public void Write(string message) {
-            writer.WriteLine(DateTime.Now.ToString("(yyyy-MM-dd HH:mm:ss)") + " [INFO] " + message); 
+            writer.WriteLine(DateTime.Now.ToString("(yyyy-MM-dd HH:mm:ss)") + " [INFO] " + message);
         }
         /// <summary>
         /// Writes a single line to the log file at the specified level of severity.
@@ -85,7 +85,7 @@ namespace Vergil {
         /// <param name="level">The level of severity of the message (INFO, WARNING, SEVERE)</param>
         /// <param name="message">The message to write to the log</param>
         public void Write(Severity level, string message) {
-            writer.WriteLine(DateTime.Now.ToString("(yyyy-MM-dd HH:mm:ss)") + " [" + level.ToString() + "] " + message); 
+            writer.WriteLine(DateTime.Now.ToString("(yyyy-MM-dd HH:mm:ss)") + " [" + level.ToString() + "] " + message);
         }
         /// <summary>
         /// Writes a single line to the log file at DEBUG-level severity if debug is true.
@@ -107,7 +107,7 @@ namespace Vergil {
         /// </summary>
         /// <param name="level">Severity level</param>
         /// <param name="obj">Arbitrary object</param>
-        public void Write(Severity level,Object obj) {
+        public void Write(Severity level, Object obj) {
             writer.WriteLine(DateTime.Now.ToString("(yyyy-MM-dd HH:mm:ss)") + " [" + level.ToString() + "] " + obj.ToString());
         }
         /// <summary>
@@ -148,7 +148,7 @@ namespace Vergil {
         /// <summary>
         /// Saves a copy of this Log to \Logs\YYYY-MM-DD.txt.
         /// </summary>
-        public void Archive() {Archive(Directory.GetCurrentDirectory() + "\\Logs");}
+        public void Archive() { Archive(Directory.GetCurrentDirectory() + "\\Logs"); }
         /// <summary>
         /// Saves a copy of this Log as YYYY-MM-DD.txt in the specified directory.
         /// </summary>
@@ -168,7 +168,8 @@ namespace Vergil {
                 while (!reader.EndOfStream) {
                     lines.Add(reader.ReadLine());
                 }
-            } return lines.ToArray();
+            }
+            return lines.ToArray();
         }
 
         /// <summary>

@@ -52,7 +52,7 @@ namespace Vergil.Data.DB {
                 }
             }
             updateQuery.Append(" WHERE " + updateCondition + ";");
-            return new OdbcCommand(updateQuery.ToString(),(OdbcConnection)connectionObject);
+            return new OdbcCommand(updateQuery.ToString(), (OdbcConnection)connectionObject);
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace Vergil.Data.DB {
                 }
             }
             insertQuery.Append(") VALUES (" + string.Join(",", values) + ");");
-            return new OdbcCommand(insertQuery.ToString(),(OdbcConnection)connectionObject);
+            return new OdbcCommand(insertQuery.ToString(), (OdbcConnection)connectionObject);
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace Vergil.Data.DB {
             if (selectCondition != null && selectCondition.Length > 0) selectQuery.Append(" WHERE " + selectCondition);
             selectQuery.Append(";");
 
-            return new OdbcCommand(selectQuery.ToString(),(OdbcConnection)connectionObject);
+            return new OdbcCommand(selectQuery.ToString(), (OdbcConnection)connectionObject);
         }
 
     }

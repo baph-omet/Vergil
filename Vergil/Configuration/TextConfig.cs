@@ -18,13 +18,13 @@ namespace Vergil.Configuration {
         /// <summary>
         /// Initializes a new config file called "config.txt" in the current directory. File will be created if it does not exist.
         /// </summary>
-        public TextConfig() : this(Directory.GetCurrentDirectory() + "\\Config.txt",'=') { }
+        public TextConfig() : this(Directory.GetCurrentDirectory() + "\\Config.txt", '=') { }
         /// <summary>
         /// Initializes a new config file. If the file does not exist on disk, it will be created.
         /// </summary>
         /// <param name="path">The file path for the config file</param>
         /// <param name="delimiter">The desired delimiting character. Defaults to '='</param>
-        public TextConfig(string path,char delimiter = '=') {
+        public TextConfig(string path, char delimiter = '=') {
             Delimiter = delimiter;
             Path = path;
             Debug = Get("debug", false);
@@ -46,8 +46,8 @@ namespace Vergil.Configuration {
         /// Gets all properties contained in this Config
         /// </summary>
         /// <returns>A Dictionary containing the key/value pairs contained in this Config</returns>
-        public Dictionary<string,string> GetProperties() {
-            Dictionary<string,string> props = new Dictionary<string,string>();
+        public Dictionary<string, string> GetProperties() {
+            Dictionary<string, string> props = new Dictionary<string, string>();
             foreach (string line in File.ReadAllLines(Path)) {
                 if (IsValidPair(line)) {
                     string[] pair = line.Split(Delimiter);

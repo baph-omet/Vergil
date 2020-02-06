@@ -89,7 +89,7 @@ namespace Vergil.Utilities {
         /// <param name="line">The string to check</param>
         /// <returns>False if the line is empty, or starts with a whitespace character or comment character. Else true.</returns>
         public static bool IsSignificant(this string line) {
-            return line.Length > 0 && !CommentCharacters.Contains(line[0]);
+            return !string.IsNullOrEmpty(line) && !CommentCharacters.Contains(line[0]);
         }
 
         /// <summary>
@@ -191,7 +191,8 @@ namespace Vergil.Utilities {
             foreach (char c in str) {
                 if (targets.Contains(c)) continue;
                 builder.Append(c);
-            } return builder.ToString();
+            }
+            return builder.ToString();
         }
 
         /// <summary>

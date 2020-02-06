@@ -37,11 +37,11 @@ namespace Vergil.XML {
         /// <param name="value">The value to assign to this node</param>
         /// <param name="attributes">A Dictionary containing this node's attributes</param>
         public XMLNode(string key, object value, Dictionary<string, string> attributes) {
-            this.Key = key;
-            this.Value = value.ToString();
-            this.Attributes = attributes;
+            Key = key;
+            Value = value.ToString();
+            Attributes = attributes;
         }
-        
+
         /// <summary>
         /// Get the value of this node. 
         /// </summary>
@@ -75,7 +75,8 @@ namespace Vergil.XML {
         public string GetAttribute(string attribute) {
             foreach (string attr in Attributes.Keys) {
                 if (attr.ToUpper().Equals(attribute.ToUpper())) return Attributes[attribute.ToLower()];
-            } return null;
+            }
+            return null;
         }
 
         /// <summary>

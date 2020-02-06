@@ -30,8 +30,8 @@ namespace Vergil.Web {
         /// <param name="certificate">Certificate information.</param>
         /// <returns>The response from the internal request.</returns>
         public static string Post(string url, string data, string contentType = "text/xml", NetworkCredential credentials = null, X509Certificate2 certificate = null) {
-            byte[] bytes = ASCIIEncoding.ASCII.GetBytes(data);
-            HttpWebRequest req = (HttpWebRequest) WebRequest.Create(url);
+            byte[] bytes = Encoding.ASCII.GetBytes(data);
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
             req.ContentType = contentType;
             req.ContentLength = bytes.Length;
             req.Method = "POST";
@@ -39,7 +39,7 @@ namespace Vergil.Web {
             if (certificate != null) req.ClientCertificates.Add(certificate);
 
             using (Stream rs = req.GetRequestStream()) rs.Write(bytes, 0, bytes.Length);
-            HttpWebResponse resp = (HttpWebResponse) req.GetResponse();
+            HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
             using (Stream rs = resp.GetResponseStream()) return new StreamReader(rs).ReadToEnd();
         }
 
@@ -51,7 +51,7 @@ namespace Vergil.Web {
         /// <param name="certificate">Certificate information.</param>
         /// <returns>The response from the internal request.</returns>
         public static string Get(string url, NetworkCredential credentials = null, X509Certificate2 certificate = null) {
-            HttpWebRequest req = (HttpWebRequest) WebRequest.Create(url);
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
             req.Method = "GET";
             if (credentials != null) req.Credentials = credentials;
             if (certificate != null) req.ClientCertificates.Add(certificate);

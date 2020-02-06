@@ -34,17 +34,17 @@ namespace Vergil.Web {
         /// <param name="remoteFilePath">The path of the desired location of this file on the FTP server</param>
         /// <returns>A description of the response obtained from this transfer request</returns>
         public string Upload(string filepath, string remoteFilePath) {
-            FtpWebRequest request = (FtpWebRequest) WebRequest.Create(Address + remoteFilePath);
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(Address + remoteFilePath);
             request.Method = WebRequestMethods.Ftp.UploadFile;
             if (credentials.UserName.Length > 0 || credentials.Password.Length > 0) request.Credentials = credentials;
 
             if (!File.Exists(filepath)) throw new ArgumentException(filepath + " does not exist.");
             byte[] fileContents = File.ReadAllBytes(filepath);
-            
+
             request.ContentLength = fileContents.Length;
-            using(Stream requestStream = request.GetRequestStream()) requestStream.Write(fileContents, 0, fileContents.Length);
-            
-            FtpWebResponse response = (FtpWebResponse) request.GetResponse();
+            using (Stream requestStream = request.GetRequestStream()) requestStream.Write(fileContents, 0, fileContents.Length);
+
+            FtpWebResponse response = (FtpWebResponse)request.GetResponse();
             return response.StatusDescription;
         }
 
@@ -55,10 +55,10 @@ namespace Vergil.Web {
         /// <param name="localFilePath">The path of the desired location of this file locally</param>
         /// <returns>A description of the response obtained from this transfer request</returns>
         public string Download(string filepath, string localFilePath) {
-            FtpWebRequest request = (FtpWebRequest) WebRequest.Create(Address + filepath);
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(Address + filepath);
             request.Method = WebRequestMethods.Ftp.DownloadFile;
             if (credentials.UserName.Length > 0 || credentials.Password.Length > 0) request.Credentials = credentials;
-            FtpWebResponse response = (FtpWebResponse) request.GetResponse();
+            FtpWebResponse response = (FtpWebResponse)request.GetResponse();
             using (Stream responseStream = response.GetResponseStream()) {
                 FileSystemUtil.CreateDirectories(localFilePath);
                 if (File.Exists(localFilePath)) File.Delete(localFilePath);
@@ -75,7 +75,7 @@ namespace Vergil.Web {
         /// <param name="passiveMode">Whether or not to use passive mode in this request. Default: false.</param>
         /// <returns>A list of filenames found in the specified directory</returns>
         public List<string> List(string path = "/", bool passiveMode = false) {
-            FtpWebRequest request = (FtpWebRequest) WebRequest.Create(Address + path);
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(Address + path);
             request.Method = WebRequestMethods.Ftp.ListDirectory;
             request.Credentials = credentials;
             request.UsePassive = passiveMode;
@@ -83,7 +83,7 @@ namespace Vergil.Web {
             request.Timeout = 10000;
 
             List<string> result = new List<string>();
-            using (FtpWebResponse response = (FtpWebResponse) request.GetResponse()) {
+            using (FtpWebResponse response = (FtpWebResponse)request.GetResponse()) {
                 using (StreamReader reader = new StreamReader(response.GetResponseStream())) {
                     while (!reader.EndOfStream) result.Add(reader.ReadLine());
                 }

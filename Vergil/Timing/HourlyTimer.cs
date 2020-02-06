@@ -12,7 +12,7 @@ namespace Vergil.Timing {
         /// <param name="action">The action to perform.</param>
         /// <param name="checkMinute">The minute of the hour to perform the action.</param>
         /// <param name="debug">Whether or not to run in debug mode.</param>
-        public HourlyTimer(Action action, int checkMinute, bool debug = false) : base(new ActionRegistry() { new TimeLoopAction(action, checkMinute) },debug) { }
+        public HourlyTimer(Action action, int checkMinute, bool debug = false) : base(new ActionRegistry() { new TimeLoopAction(action, checkMinute) }, debug) { }
         /// <summary>
         /// Creates a new loop that will run the specified actions.
         /// </summary>
@@ -25,7 +25,7 @@ namespace Vergil.Timing {
         /// Begin execution of the loop
         /// </summary>
         public override void Start() {
-            if (this.ActionRegistry.Count == 0) return;
+            if (ActionRegistry.Count == 0) return;
             if (Debug) DoThingDebug();
             else if (ActionRegistry.Count > 1) DoThingMultiThread();
             else DoThing();
@@ -33,7 +33,7 @@ namespace Vergil.Timing {
 
         private void DoThing() {
             while (true) {
-                TimeLoopAction action = (TimeLoopAction)this.ActionRegistry[0];
+                TimeLoopAction action = (TimeLoopAction)ActionRegistry[0];
                 if (Debug || (Math.Abs(DateTime.Now.Minute - action.Time) < 1)) action.Action();
                 if (Debug) break;
                 else Thread.Sleep(60000);
@@ -41,15 +41,15 @@ namespace Vergil.Timing {
         }
 
         private void DoThingMultiThread() {
-            while(true) {
-                foreach (TimeLoopAction action in this.ActionRegistry) if (Debug || (Math.Abs(DateTime.Now.Minute - action.Time) < 1)) action.Start();
+            while (true) {
+                foreach (TimeLoopAction action in ActionRegistry) if (Debug || (Math.Abs(DateTime.Now.Minute - action.Time) < 1)) action.Start();
                 if (Debug) break;
                 else Thread.Sleep(60000);
             }
         }
 
         private void DoThingDebug() {
-            foreach (TimeLoopAction action in this.ActionRegistry) action.Action();
+            foreach (TimeLoopAction action in ActionRegistry) action.Action();
         }
     }
 }

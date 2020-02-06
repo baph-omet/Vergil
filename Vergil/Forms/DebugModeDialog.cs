@@ -26,7 +26,7 @@ namespace Vergil.Forms {
     }
 
     public partial class DebugModeDialog : Form {
-        private string[] resultMapping = new[] {
+        private readonly string[] resultMapping = new[] {
             "Continue in Debug mode.",
             "Disable Debug mode, then continue.",
             "Continue in Debug mode, then disable Debug mode and continue."
@@ -64,7 +64,7 @@ namespace Vergil.Forms {
         }
 
         private void ConfirmButton_Click(object sender, EventArgs e) {
-            Result = (DebugModeDialogResult)(ActionComboBox.SelectedIndex+1);
+            Result = (DebugModeDialogResult)(ActionComboBox.SelectedIndex + 1);
             ignoreClosing = true;
             Close();
         }

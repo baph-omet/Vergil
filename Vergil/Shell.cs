@@ -28,7 +28,7 @@ namespace Vergil {
         /// </summary>
         /// <param name="batchFile">The full path to the desired batch file.</param>
         public static void Execute(string batchFile) {
-            if (File.Exists(batchFile) && batchFile.Split('.')[1].ToLower().Equals("bat")) System.Diagnostics.Process.Start(batchFile);
+            if (File.Exists(batchFile) && batchFile.Split('.')[1].ToLower().Equals("bat")) Process.Start(batchFile);
             else throw new ArgumentException(batchFile + " is not a valid batch file.");
         }
     }

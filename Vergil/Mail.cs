@@ -12,6 +12,10 @@ namespace Vergil {
     /// </summary>
     public static class Mail {
         /// <summary>
+        /// Address of local SMTP server. Must be set before emails can be sent.
+        /// </summary>
+        public static string SMTPAddress;
+        /// <summary>
         /// Send an email to a specified email group.
         /// </summary>
         /// <param name="from">The email address from which the email is sent.</param>
@@ -22,7 +26,7 @@ namespace Vergil {
         /// <param name="useOpeners">If true, the email body will be preceded by comedic openers.</param>
         /// <param name="attachmentFilepaths">An array containing the filepaths of the attachments.</param>
         /// <param name="isHtml">If true, the email will be sent as HTML, else plain text.</param>
-        public static void SendEmail(string from, string groupName, string subject, string message, Log log=null, bool useOpeners = false, IEnumerable<string> attachmentFilepaths = null, bool isHtml = false) {
+        public static void SendEmail(string from, string groupName, string subject, string message, Log log = null, bool useOpeners = false, IEnumerable<string> attachmentFilepaths = null, bool isHtml = false) {
             SendEmail(from, RecipientList.Get(groupName), subject, message, log, useOpeners, attachmentFilepaths, isHtml);
         }
         /// <summary>
@@ -39,8 +43,8 @@ namespace Vergil {
         /// <exception cref="ArgumentException">A passed recipient could not be converted into a valid email address.</exception>
         /// <exception cref="SmtpException">Could not send email.</exception>
         public static void SendEmail(string from, IEnumerable<string> recipients, string subject, string message, Log log = null, bool useOpeners = false, IEnumerable<string> attachmentFilepaths = null, bool isHtml = false) {
+            if (string.IsNullOrEmpty(SMTPAddress)) throw new ArgumentException("SMTPAddress must be set.");
             if (useOpeners) {
-                Random rand = new Random();
                 message = GetOpenerMessage() + "\n----------------\n" + message;
             }
             if (log != null) {
@@ -51,8 +55,7 @@ namespace Vergil {
                 attachmentFilepaths = fps.ToArray();
             }
 
-            //TODO: Add support for adding SMTP address
-            SmtpClient SMTP = new SmtpClient("...");
+            SmtpClient SMTP = new SmtpClient(SMTPAddress);
             recipients = GetEmailAddresses(recipients);
             foreach (string rec in recipients) {
                 if (!IsValidAddress(rec)) throw new ArgumentException("Recipient \"" + rec + "\" is not a valid email address.");
@@ -97,7 +100,7 @@ namespace Vergil {
                     else {
                         try {
                             addresses.Add(ConvertNameToAddress(name));
-                        } catch(FormatException) { }
+                        } catch (FormatException) { }
                     }
                 }
             }
@@ -124,7 +127,8 @@ namespace Vergil {
             if (name.Length > 1 && name.Contains(' ')) {
                 string address = String.Join(".", name.ToLower().Split(' ')) + "@santeecooper.com";
                 if (IsValidAddress(address)) return address;
-            } throw new FormatException("Name must be in firstname lastname format.");
+            }
+            throw new FormatException("Name must be in firstname lastname format.");
         }
 
         private static string[] GetOpeners() {

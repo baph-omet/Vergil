@@ -8,7 +8,7 @@ namespace Vergil.Timing {
     /// Wrapper class for a List of TimingAction objects.
     /// </summary>
     public class ActionRegistry : List<TimingAction> { }
-    
+
     /// <summary>
     /// Abstract class that represents any action that is executed on a time loop.
     /// </summary>
@@ -38,7 +38,8 @@ namespace Vergil.Timing {
                         throw new TimerException("Action " + Action.GetType().Name + " timed out.");
                     }
                 }));
-            } t.Start();
+            }
+            t.Start();
             if (monitor != null) monitor.Start();
         }
     }

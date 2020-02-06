@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Vergil
-{
+namespace Vergil {
     /// <summary>
     /// Wrapper for List of type Problem.
     /// </summary>
     public class ProblemList : List<Problem> {
-        private Log Log;
+        private readonly Log Log;
 
         /// <summary>
         /// Initialize a new ProblemList
@@ -41,7 +40,7 @@ namespace Vergil
         /// </summary>
         /// <param name="separator">The delimiter to place in between each member of this list.</param>
         /// <returns>String.Join(separator, this)</returns>
-        public string Join(string separator="\n") {
+        public string Join(string separator = "\n") {
             return String.Join(separator, this);
         }
 
@@ -53,11 +52,11 @@ namespace Vergil
         /// <param name="attachmentFilepaths">Any additional files to attach.</param>
         /// <param name="isHtml">If true, the body of the email will be formatted in HTML, plain text if false.</param>
         /// <param name="useOpeners">If true, the body of the email will be preceded by comedic openers.</param>
-        public void Send(IEnumerable<string> recipients, Log log=null, bool useOpeners = true, IEnumerable<string> attachmentFilepaths = null, bool isHtml = false) {
-            if (Count < 1) return; 
+        public void Send(IEnumerable<string> recipients, Log log = null, bool useOpeners = true, IEnumerable<string> attachmentFilepaths = null, bool isHtml = false) {
+            if (Count < 1) return;
             try {
                 Mail.SendEmail(
-                    "operationsplanning@santeecooper.com", 
+                    "operationsplanning@santeecooper.com",
                     recipients,
                     Assembly.GetEntryAssembly().GetName().Name + " Issue" + (Count > 1 ? "s" : ""), Join("\n"),
                     log ?? Log,

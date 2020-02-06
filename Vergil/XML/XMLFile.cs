@@ -23,7 +23,7 @@ namespace Vergil.XML {
         /// Initializes a new XMLFile object with no inherent file.
         /// </summary>
         public XMLFile() {
-            this.Children = new List<XMLNode>();
+            Children = new List<XMLNode>();
         }
         /// <summary>
         /// Create a new XMLFile object with the specified XML file. If the file does not already exist, it will be created.
@@ -32,8 +32,8 @@ namespace Vergil.XML {
         public XMLFile(string location) {
             if (!location.Split('.')[1].Equals(".xml")) location = location.Split('.')[0] + ".xml";
             if (!File.Exists(location)) File.Create(location);
-            this.Location = location;
-            this.Children = new List<XMLNode>();
+            Location = location;
+            Children = new List<XMLNode>();
             Load(XmlReader.Create(location));
         }
 
@@ -79,8 +79,9 @@ namespace Vergil.XML {
         public List<XMLSection> GetSections() {
             List<XMLSection> sections = new List<XMLSection>();
             foreach (XMLNode child in Children) {
-                if (child is XMLSection) sections.Add((XMLSection) child);
-            } return sections;
+                if (child is XMLSection) sections.Add((XMLSection)child);
+            }
+            return sections;
         }
 
         /// <summary>
@@ -91,8 +92,9 @@ namespace Vergil.XML {
         public List<XMLSection> GetSections(string key) {
             List<XMLSection> sections = new List<XMLSection>();
             foreach (XMLNode child in Children) {
-                if (child is XMLSection && child.Key.ToUpper().Equals(key.ToUpper())) sections.Add((XMLSection) child);
-            } return sections;
+                if (child is XMLSection && child.Key.ToUpper().Equals(key.ToUpper())) sections.Add((XMLSection)child);
+            }
+            return sections;
         }
 
         /// <summary>
@@ -104,8 +106,9 @@ namespace Vergil.XML {
         public List<XMLSection> GetSections(string nodeKey, string value) {
             List<XMLSection> sections = new List<XMLSection>();
             foreach (XMLNode child in Children) {
-                if (child is XMLSection && ((XMLSection) child).Get(nodeKey).ToUpper().Equals(value.ToUpper())) sections.Add((XMLSection) child);
-            } return sections;
+                if (child is XMLSection && ((XMLSection)child).Get(nodeKey).ToUpper().Equals(value.ToUpper())) sections.Add((XMLSection)child);
+            }
+            return sections;
         }
 
         /// <summary>
@@ -118,7 +121,8 @@ namespace Vergil.XML {
             foreach (XMLSection section in GetSections()) {
                 XMLSection found = section.FindSection(key);
                 if (found != null) return found;
-            } return null;
+            }
+            return null;
         }
 
         /// <summary>
@@ -131,7 +135,7 @@ namespace Vergil.XML {
                 if (node.Key.ToLower().Equals(key.ToLower())) return node;
                 else {
                     if (node is XMLSection) {
-                        XMLNode found = ((XMLSection) node).FindNode(key);
+                        XMLNode found = ((XMLSection)node).FindNode(key);
                         if (found != null) return found;
                     }
                 }
@@ -174,17 +178,6 @@ namespace Vergil.XML {
             Children.Add(new XMLSection(key));
         }
 
-        /*/// <summary>
-        /// Gets the value of the first node with the specified key
-        /// </summary>
-        /// <param name="key">The name of the node whose value will be checked</param>
-        /// <returns>The value of the specified node, if found, else null</returns>
-        public string GetValue(string key) {
-            XMLSection section = FindSection(key);
-            if (section != null) return section.GetValue();
-            else return null;
-        }*/
-
         /// <summary>
         /// Saves this XMLFile back to its location
         /// </summary>
@@ -194,7 +187,7 @@ namespace Vergil.XML {
         /// </summary>
         /// <param name="path">The location to which this file should be written</param>
         public void Save(string path) {
-            File.WriteAllText(path,ToString());
+            File.WriteAllText(path, ToString());
         }
 
         /// <summary>
@@ -211,7 +204,7 @@ namespace Vergil.XML {
         /// <returns>The text in this document.</returns>
         public string ToString(bool whitespace) {
             StringBuilder lines = new StringBuilder("<?xml version=\"1.0\" encoding=\"utf-8\" ?>");
-            foreach (XMLNode child in Children) lines.Append(WriteNode(child, 0,whitespace));
+            foreach (XMLNode child in Children) lines.Append(WriteNode(child, 0, whitespace));
             return lines.ToString();
         }
 
@@ -224,12 +217,13 @@ namespace Vergil.XML {
             text.Append("<" + node.Key);
             foreach (string attribute in node.GetAttributes().Keys) text.Append(" " + attribute + "=\"" + node.GetAttributes()[attribute] + "\"");
             text.Append(">");
-            if (node.HasValue()) text.Append(node.Get().Replace("&","&amp;"));
-            else if (node is XMLSection) foreach (XMLNode n in ((XMLSection) node).Children) text.Append(WriteNode(n, indent + 1,whitespace));
+            if (node.HasValue()) text.Append(node.Get().Replace("&", "&amp;"));
+            else if (node is XMLSection) foreach (XMLNode n in ((XMLSection)node).Children) text.Append(WriteNode(n, indent + 1, whitespace));
             if (whitespace && node is XMLSection) {
                 text.Append(Environment.NewLine);
                 for (int i = 0; i < indent; i++) text.Append("\t");
-            } text.Append("</" + node.Key + ">");
+            }
+            text.Append("</" + node.Key + ">");
             return text.ToString();
         }
 
@@ -260,12 +254,13 @@ namespace Vergil.XML {
         }
 
         private Dictionary<string, string> ReadAttributes(XmlReader reader) {
-            Dictionary<string, string> attributes = new Dictionary<string,string>();
+            Dictionary<string, string> attributes = new Dictionary<string, string>();
             if (reader.HasAttributes) {
                 while (reader.MoveToNextAttribute()) {
-                    attributes.Add(reader.Name.ToLower(),reader.Value);
+                    attributes.Add(reader.Name.ToLower(), reader.Value);
                 }
-            } return attributes;
+            }
+            return attributes;
         }
     }
 }

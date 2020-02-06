@@ -26,7 +26,7 @@ namespace Vergil.Timing {
             Registry = new ActionRegistry();
             BasicProgram.Initialize();
         }
-        
+
         /// <summary>
         /// Run this program.
         /// </summary>

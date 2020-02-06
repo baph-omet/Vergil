@@ -10,7 +10,7 @@ namespace Vergil.Data.DB {
     /// <summary>
     /// Wrapper class for a Dictionary of strings and strings.
     /// </summary>
-    public class DBDataRow : Dictionary<string,string> { }
+    public class DBDataRow : Dictionary<string, string> { }
 
     /// <summary>
     /// Class for containing recordset data from DBConnections.
@@ -44,9 +44,9 @@ namespace Vergil.Data.DB {
                         try {
                             value = Convert.ToDateTime(value);
                         } catch (FormatException) { } catch (InvalidCastException) { }
-                        row.Add(Headers[i],value is DateTime ? ((DateTime)value).ToString("MM/dd/yyyy") : value.ToString().ToString());
+                        row.Add(Headers[i], value is DateTime ? ((DateTime)value).ToString("MM/dd/yyyy") : value.ToString().ToString());
                     } catch (DbException) {
-                        row.Add(Headers[i],"#####");
+                        row.Add(Headers[i], "#####");
                     }
                 }
                 d.Add(row);

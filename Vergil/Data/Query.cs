@@ -125,7 +125,7 @@ namespace Vergil.Data {
         /// <param name="openers">Whether or not to use comedic openers in the email. Default: false</param>
         /// <param name="attachmentFilepath">A file to attach to this email. Default: ""</param>
         public QueryOutputEmail(string from, IEnumerable<string> to, string subject, string body = "", bool openers = false, string attachmentFilepath = "") {
-            From = Mail.GetEmailAddresses(new[]{from}).First();
+            From = Mail.GetEmailAddresses(new[] { from }).First();
             To = to;
             Subject = subject;
             Body = body;
@@ -156,7 +156,7 @@ namespace Vergil.Data {
             XMLSection section = new XMLSection("output");
             section.AddChild("type", "email");
             section.AddChild("from", From);
-            section.AddChild("to", String.Join(",",To));
+            section.AddChild("to", String.Join(",", To));
             section.AddChild("subject", Subject);
             section.AddChild("body", Body);
             if (AttachmentInfo != null) section.AddChild("attachmentFilepath", AttachmentInfo.OutputLocation);
@@ -295,7 +295,7 @@ namespace Vergil.Data {
         /// <summary>
         /// Creates a blank query object
         /// </summary>
-        public Query() : this(null,QueryInterval.Daily,"","") { }
+        public Query() : this(null, QueryInterval.Daily, "", "") { }
 
         /// <summary>
         /// Create a new query object.
@@ -309,7 +309,7 @@ namespace Vergil.Data {
         /// <param name="time">The time in the Interval to write this query. For Hourly, Time represents the minute. For Daily, Time represents the hour. Default: -1</param>
         /// <param name="delimiter">The character(s) used to delimit values in this Query. Default: ","</param>
         /// <param name="printHeaders">Whether or not the headers of this query should be printed at the top of the file.</param>
-        public Query(QueryOutput output, QueryInterval interval, string name, string database, string viewName = "",bool transpose = false, int time = -1, string delimiter = ",",bool printHeaders = false) {
+        public Query(QueryOutput output, QueryInterval interval, string name, string database, string viewName = "", bool transpose = false, int time = -1, string delimiter = ",", bool printHeaders = false) {
             Output = output;
             Interval = interval;
             Name = name;
@@ -334,13 +334,13 @@ namespace Vergil.Data {
             XMLFile qFile = new XMLFile(path);
             foreach (XMLSection section in qFile.GetSections()[0].GetSections()) {
                 string interval = section.Get("interval").ToLower();
-                
+
                 if (!section.HasSections("output")) continue;
                 XMLSection outputSection = section.GetSections("output")[0];
                 QueryOutput output = null;
                 switch (outputSection.Get("type").ToLower()) {
                     case "file":
-                        string outputLocation = outputSection.Get("location").Replace('/','\\');
+                        string outputLocation = outputSection.Get("location").Replace('/', '\\');
                         outputLocation = Path.GetFullPath(outputLocation);
                         if (outputSection.HasValue("dateformat")) {
                             DateTime date = DateTime.Now;
@@ -371,14 +371,14 @@ namespace Vergil.Data {
                             outputSection.Get("to").Split(','),
                             outputSection.Get("subject"),
                             outputSection.Get("body"),
-                            outputSection.Get("openers",false),
+                            outputSection.Get("openers", false),
                             outputSection.Get("attachmentFilepath")
                         );
                         break;
                     case "ftp":
                         string filename = outputSection.Get("filename");
                         if (outputSection.HasValue("dateformat")) {
-                            DateTime date = DateTime.Now.AddDays(outputSection.Get("dateOffset",0));
+                            DateTime date = DateTime.Now.AddDays(outputSection.Get("dateOffset", 0));
                             //if (interval == "daily") date = date.AddDays(-1);
 
                             string[] dateformat = outputSection.Get("dateformat").ToLower().Split(',');
@@ -408,12 +408,12 @@ namespace Vergil.Data {
                 }
 
                 if (output == null) continue;
-                Query q = new Query(output, section.GetEnum<QueryInterval>("interval"), section.Get("name"), section.Get("database"), section.Get("dataview",""),section.Get("transpose", false), section.Get("time", -1), section.Get("delimiter", ",").ConvertWhitespaceCharacters(), section.Get("printHeaders", false));
+                Query q = new Query(output, section.GetEnum<QueryInterval>("interval"), section.Get("name"), section.Get("database"), section.Get("dataview", ""), section.Get("transpose", false), section.Get("time", -1), section.Get("delimiter", ",").ConvertWhitespaceCharacters(), section.Get("printHeaders", false));
                 if (section.HasValue("queryStatement") && section.Get("queryStatement").Length > 0) q.QueryStatement = section.Get("queryStatement");
                 if (section.HasValue("paused")) q.Paused = section.Get("paused", true);
                 queries.Add(q);
             }
-            return queries;        
+            return queries;
         }
 
         /// <summary>
@@ -467,7 +467,7 @@ namespace Vergil.Data {
             } catch (ThreadAbortException) {
                 throw;
             } catch (Exception e) {
-                throw new QueryException(this,"Exception encountered when attempting to parse data from query " + Name + " in " + Database + ": " + e.Message, e);
+                throw new QueryException(this, "Exception encountered when attempting to parse data from query " + Name + " in " + Database + ": " + e.Message, e);
             }
 
             try {
@@ -519,7 +519,7 @@ namespace Vergil.Data {
         /// </summary>
         /// <param name="path">A file path where this list can be saved.</param>
         public QueryList(string path) : base() {
-            this.FilePath = path;
+            FilePath = path;
         }
 
         /// <summary>
@@ -627,7 +627,7 @@ namespace Vergil.Data {
                 }
 
                 if (output == null) continue;
-                Query q = new Query(output, section.GetEnum<QueryInterval>("interval"), section.Get("name"), section.Get("database"), section.Get("dataview",""), section.Get("transpose", false), section.Get("time", -1), section.Get("delimiter", ","), section.Get("printHeaders", false));
+                Query q = new Query(output, section.GetEnum<QueryInterval>("interval"), section.Get("name"), section.Get("database"), section.Get("dataview", ""), section.Get("transpose", false), section.Get("time", -1), section.Get("delimiter", ","), section.Get("printHeaders", false));
                 if (section.HasValue("queryStatement") && section.Get("queryStatement").Length > 0) q.QueryStatement = section.Get("queryStatement");
                 if (section.HasValue("paused")) q.Paused = section.Get("paused", true);
                 queries.Add(q);
@@ -642,7 +642,7 @@ namespace Vergil.Data {
         /// <param name="path">Optional, path to query file.</param>
         /// <returns>The specified query if found, else null.</returns>
         public static Query GetQuery(string name, string path = "Queries.xml") {
-            foreach (Query q in QueryList.FromXML(path)) if (q.Name.ToLower() == name.ToLower()) return q;
+            foreach (Query q in FromXML(path)) if (q.Name.ToLower() == name.ToLower()) return q;
             return null;
         }
     }
@@ -677,7 +677,7 @@ namespace Vergil.Data {
         /// <param name="q">The Query object that threw this exception.</param>
         /// <param name="message">A message to include.</param>
         /// <param name="innerException">The underlying exception.</param>
-        public QueryException(Query q, string message, Exception innerException) : base(message,innerException) {
+        public QueryException(Query q, string message, Exception innerException) : base(message, innerException) {
             Query = q;
         }
     }

@@ -306,7 +306,8 @@ namespace Vergil.Data.DB {
                 if (disposing) {
                     Close();
                     connectionObject.Dispose();
-                } disposedValue = true;
+                }
+                disposedValue = true;
             }
         }
         // This code added to correctly implement the disposable pattern.

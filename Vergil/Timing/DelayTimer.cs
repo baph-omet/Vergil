@@ -15,7 +15,7 @@ namespace Vergil.Timing {
         /// <param name="method">Void method to run at fixed interval.</param>
         /// <param name="delay">The number of milliseconds to wait between runs.</param>
         /// <param name="debug">Whether or not to run in Debug mode.</param>
-        public DelayTimer(Action method, int delay, bool debug = false) : base(new ActionRegistry() { new TimerAction(method,delay) }, debug) { }
+        public DelayTimer(Action method, int delay, bool debug = false) : base(new ActionRegistry() { new TimerAction(method, delay) }, debug) { }
         /// <summary>
         /// Create a new timer with a registry of actions.
         /// </summary>
@@ -46,7 +46,8 @@ namespace Vergil.Timing {
                         a.TimeStamp();
                         a.Start();
                     }
-                } if (Debug) Stop();
+                }
+                if (Debug) Stop();
             }
         }
     }
@@ -69,7 +70,7 @@ namespace Vergil.Timing {
         /// </summary>
         /// <param name="registry">A list of actions to perform at specific intervals.</param>
         /// <param name="debug">Whether or not to run in debug mode.</param>
-        public DelayTimerNew(ActionRegistry registry, bool debug = false) : base(registry,debug) { }
+        public DelayTimerNew(ActionRegistry registry, bool debug = false) : base(registry, debug) { }
 
         /// <summary>
         /// Begins running the timer.

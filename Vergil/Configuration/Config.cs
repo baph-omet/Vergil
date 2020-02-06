@@ -70,7 +70,7 @@ namespace Vergil.Configuration {
             if (defaultValue != null) return defaultValue;
             throw new ArgumentException("Property " + property + " not found.");
         }
-        
+
         /// <summary>
         /// Overwrites the config to include a new value for the specified key. If the specified key is not found, it will be appended to the config.
         /// </summary>

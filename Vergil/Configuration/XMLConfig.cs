@@ -15,7 +15,7 @@ namespace Vergil.Configuration {
         /// </summary>
         /// <param name="path">The path to this XML file</param>
         /// <param name="parentNode">The name of the node in which this config's properties are located. Defaults to the root node.</param>
-        public XMLConfig(string path="Config.xml",string parentNode = "") {
+        public XMLConfig(string path = "Config.xml", string parentNode = "") {
             this.path = path;
             file = new XMLFile(path);
             if (parentNode.Length == 0) this.parentNode = file.Children[0].Key;
@@ -61,7 +61,7 @@ namespace Vergil.Configuration {
             XMLSection section = file.FindSection(parentNode);
             if (section == null) throw new InvalidConfigException("Parent node \"" + parentNode + "\" not found.");
             XMLNode node = section.FindNode(property);
-            if (node == null) section.AddChild(property,value.ToString());
+            if (node == null) section.AddChild(property, value.ToString());
             else node.Value = value.ToString();
         }
 

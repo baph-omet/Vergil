@@ -30,10 +30,10 @@ namespace Vergil.XML {
         /// <param name="key">The name of this node's element</param>
         /// <param name="attributes">A dictionary of all of this node's attributes</param>
         /// <param name="children">A List of XMLNodes that represent this section's children</param>
-        public XMLSection(string key, Dictionary<string,string> attributes, List<XMLNode> children) : base(key, "", attributes) {
-            this.Key = key;
-            this.Attributes = attributes;
-            this.Children = children;
+        public XMLSection(string key, Dictionary<string, string> attributes, List<XMLNode> children) : base(key, "", attributes) {
+            Key = key;
+            Attributes = attributes;
+            Children = children;
         }
 
         /// <summary>
@@ -108,7 +108,8 @@ namespace Vergil.XML {
             List<XMLNode> chld = new List<XMLNode>();
             foreach (XMLNode child in Children) {
                 if (child.Key.ToUpper().Equals(key.ToUpper())) chld.Add(child);
-            } return chld;
+            }
+            return chld;
         }
 
         /// <summary>
@@ -158,8 +159,9 @@ namespace Vergil.XML {
         public List<XMLSection> GetSections() {
             List<XMLSection> sections = new List<XMLSection>();
             foreach (XMLNode child in Children) {
-                if (child is XMLSection) sections.Add((XMLSection) child);
-            } return sections;
+                if (child is XMLSection) sections.Add((XMLSection)child);
+            }
+            return sections;
         }
 
         /// <summary>
@@ -170,8 +172,9 @@ namespace Vergil.XML {
         public List<XMLSection> GetSections(string key) {
             List<XMLSection> sections = new List<XMLSection>();
             foreach (XMLNode child in Children) {
-                if (child is XMLSection && child.Key.ToUpper().Equals(key.ToUpper())) sections.Add((XMLSection) child);
-            } return sections;
+                if (child is XMLSection && child.Key.ToUpper().Equals(key.ToUpper())) sections.Add((XMLSection)child);
+            }
+            return sections;
         }
 
         /// <summary>
@@ -183,8 +186,9 @@ namespace Vergil.XML {
         public List<XMLSection> GetSections(string nodeKey, string value) {
             List<XMLSection> sections = new List<XMLSection>();
             foreach (XMLNode child in Children) {
-                if (child is XMLSection && ((XMLSection) child).Get(nodeKey).ToUpper().Equals(value.ToUpper())) sections.Add((XMLSection) child);
-            } return sections;
+                if (child is XMLSection && ((XMLSection)child).Get(nodeKey).ToUpper().Equals(value.ToUpper())) sections.Add((XMLSection)child);
+            }
+            return sections;
         }
 
         /// <summary>
@@ -197,7 +201,7 @@ namespace Vergil.XML {
                 if (node.Key.ToLower().Equals(key.ToLower())) return node;
                 else {
                     if (node is XMLSection) {
-                        XMLNode found = ((XMLSection) node).FindNode(key);
+                        XMLNode found = ((XMLSection)node).FindNode(key);
                         if (found != null) return found;
                     }
                 }
@@ -215,7 +219,8 @@ namespace Vergil.XML {
             foreach (XMLSection section in GetSections()) {
                 XMLSection found = section.FindSection(key);
                 if (found != null) return found;
-            } return null;
+            }
+            return null;
         }
 
         /// <summary>
