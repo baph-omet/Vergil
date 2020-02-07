@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Vergil.Utilities;
 
 namespace Vergil {
     /// <summary>
@@ -9,6 +10,10 @@ namespace Vergil {
     public class ProblemList : List<Problem> {
         private readonly Log Log;
 
+        /// <summary>
+        /// The email address from which problem emails are sent.
+        /// </summary>
+        public string EmailAddress;
         /// <summary>
         /// Initialize a new ProblemList
         /// </summary>
@@ -36,15 +41,6 @@ namespace Vergil {
         }
 
         /// <summary>
-        /// Shortcut for String.Join() on this list
-        /// </summary>
-        /// <param name="separator">The delimiter to place in between each member of this list.</param>
-        /// <returns>String.Join(separator, this)</returns>
-        public string Join(string separator = "\n") {
-            return string.Join(separator, this);
-        }
-
-        /// <summary>
         /// Send an email to recipients containing details of the issues in this list.
         /// </summary>
         /// <param name="recipients">Group of recipient names and/or emails to receive this message.</param>
@@ -56,9 +52,9 @@ namespace Vergil {
             if (Count < 1) return;
             try {
                 Mail.SendEmail(
-                    "operationsplanning@santeecooper.com",
+                    EmailAddress,
                     recipients,
-                    Assembly.GetEntryAssembly().GetName().Name + " Issue" + (Count > 1 ? "s" : ""), Join("\n"),
+                    Assembly.GetEntryAssembly().GetName().Name + " Issue" + (Count > 1 ? "s" : ""), this.Join("\n"),
                     log ?? Log,
                     useOpeners,
                     attachmentFilepaths,
@@ -87,7 +83,7 @@ namespace Vergil {
         /// </summary>
         /// <returns>This list joined over a newline</returns>
         public override string ToString() {
-            return Join("\n");
+            return this.Join("\n");
         }
     }
 

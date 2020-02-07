@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data.Odbc;
 using System.Data.Common;
+using Vergil.Utilities;
 
 namespace Vergil.Data.DB {
     /// <summary>
@@ -75,7 +76,7 @@ namespace Vergil.Data.DB {
                     insertQuery.Append(",");
                 }
             }
-            insertQuery.Append(") VALUES (" + string.Join(",", values) + ");");
+            insertQuery.Append(") VALUES (" + values.Join() + ");");
             return new OdbcCommand(insertQuery.ToString(), (OdbcConnection)connectionObject);
         }
 

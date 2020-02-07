@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Vergil.Utilities;
 
 namespace Vergil.Forms {
     /// <summary>
@@ -45,7 +46,7 @@ namespace Vergil.Forms {
             }
 
             if (invalid.Count > 0) {
-                MessageBox.Show("Invalid address(es) found:\n" + string.Join("\n", invalid) + "\nPlease correct invalid address(es).");
+                MessageBox.Show("Invalid address(es) found:\n" + invalid.Join(Environment.NewLine) + "\nPlease correct invalid address(es).");
                 return;
             }
             if (!AcceptMultipleAddresses) Addresses.Add(Mail.GetEmailAddresses(new[] { TextBoxPrompt.Text.Split(',')[0] }).ElementAt(0));

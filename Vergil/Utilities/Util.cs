@@ -33,7 +33,7 @@ namespace Vergil.Utilities {
         /// <param name="en">Enumerable to join</param>
         /// <param name="delimiter">Character to insert between items</param>
         /// <returns>Joined string</returns>
-        public static string Join<T>(this T en, char delimiter) where T : IEnumerable {
+        public static string Join<T>(this T en, char delimiter = ',') where T : IEnumerable {
             return string.Join(delimiter.ToString(), en);
         }
 

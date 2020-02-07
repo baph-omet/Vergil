@@ -46,7 +46,7 @@
             this.RichTextBoxDescription.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
             this.RichTextBoxDescription.Size = new System.Drawing.Size(422, 35);
             this.RichTextBoxDescription.TabIndex = 1;
-            this.RichTextBoxDescription.Text = "Type an email address or Santee Cooper recipient name in the form \"firstname last" +
+            this.RichTextBoxDescription.Text = "Type an email address or domain recipient name in the form \"firstname last" +
     "name\". To specify multiple recipients, separate each with a comma.";
             // 
             // ButtonOK

@@ -156,7 +156,7 @@ namespace Vergil.Data {
             XMLSection section = new XMLSection("output");
             section.AddChild("type", "email");
             section.AddChild("from", From);
-            section.AddChild("to", string.Join(",", To));
+            section.AddChild("to", To.Join());
             section.AddChild("subject", Subject);
             section.AddChild("body", Body);
             if (AttachmentInfo != null) section.AddChild("attachmentFilepath", AttachmentInfo.OutputLocation);
@@ -367,7 +367,7 @@ namespace Vergil.Data {
                         break;
                     case "email":
                         output = new QueryOutputEmail(
-                            outputSection.Get("from", "OperationsPlanning@santeecooper.com"),
+                            outputSection.Get("from"),
                             outputSection.Get("to").Split(','),
                             outputSection.Get("subject"),
                             outputSection.Get("body"),
@@ -454,7 +454,7 @@ namespace Vergil.Data {
                         lines.Add(line.ToString());
                     }
                 } else {
-                    if (PrintHeaders) lines.Add(string.Join(",", data.Headers));
+                    if (PrintHeaders) lines.Add(data.Headers.Join());
                     for (int i = 0; i < data.Data.Count; i++) {
                         StringBuilder line = new StringBuilder();
                         for (int j = 0; j < data.Headers.Length; j++) {
@@ -471,7 +471,7 @@ namespace Vergil.Data {
             }
 
             try {
-                Output.Output(string.Join(Environment.NewLine, lines));
+                Output.Output(lines.Join(Environment.NewLine));
             } catch (ThreadAbortException) {
                 throw;
             } catch (Exception e) {
@@ -552,8 +552,6 @@ namespace Vergil.Data {
 
             XMLFile qFile = new XMLFile(path);
             foreach (XMLSection section in qFile.GetSections()[0].GetSections()) {
-                string interval = section.Get("interval").ToLower();
-
                 if (!section.HasSections("output")) continue;
                 XMLSection outputSection = section.GetSections("output")[0];
                 QueryOutput output = null;
@@ -586,7 +584,7 @@ namespace Vergil.Data {
                         break;
                     case "email":
                         output = new QueryOutputEmail(
-                            outputSection.Get("from", "OperationsPlanning@santeecooper.com"),
+                            outputSection.Get("from"),
                             outputSection.Get("to").Split(','),
                             outputSection.Get("subject"),
                             outputSection.Get("body"),

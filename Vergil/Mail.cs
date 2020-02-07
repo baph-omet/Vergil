@@ -15,6 +15,12 @@ namespace Vergil {
         /// Address of local SMTP server. Must be set before emails can be sent.
         /// </summary>
         public static string SMTPAddress;
+
+        /// <summary>
+        /// Domain used for converting names to email addresses.
+        /// </summary>
+        public static string EmailDomain;
+
         /// <summary>
         /// Send an email to a specified email group.
         /// </summary>
@@ -86,11 +92,11 @@ namespace Vergil {
         //======================================================================================================
 
         /// <summary>
-        /// Converts an array of names in the form "John Doe" into valid email addresses in the form "JOHN.DOE@santeecooper.com".
+        /// Converts an array of names in the form "John Doe" into valid email addresses in the form "JOHN.DOE@domain.com".
         /// Assumes that only the recipient's first and last names are used, and that no numbers are present in the address.
         /// </summary>
         /// <param name="names">An array of names in the form "John Doe"</param>
-        /// <returns>An array of email addresses in the form "JOHN.DOE@santeecooper.com"</returns>
+        /// <returns>An array of email addresses in the form "JOHN.DOE@domain.com"</returns>
         public static IEnumerable<string> GetEmailAddresses(IEnumerable<string> names) {
             List<string> addresses = new List<string>();
             for (int i = 0; i < names.Count(); i++) {
@@ -118,14 +124,15 @@ namespace Vergil {
         }
 
         /// <summary>
-        /// Attempts to convert the given name into a Santee Cooper email address based on firstname.lastname@santeecooper.com pattern.
+        /// Attempts to convert the given name into a domain email address based on firstname.lastname@domain.com pattern.
         /// </summary>
         /// <param name="name">The name of a recipient. Must be in "firstname lastname" format.</param>
-        /// <returns>An email address in format firstname.lastname@santeecooper.com</returns>
+        /// <returns>An email address in format firstname.lastname@domain.com</returns>
         /// <exception cref="FormatException">Name must be in firstname lastname format.</exception>
         public static string ConvertNameToAddress(string name) {
+            if (string.IsNullOrEmpty(EmailDomain)) throw new ArgumentException("EmailDomain must be set before converting names to email addresses.");
             if (name.Length > 1 && name.Contains(' ')) {
-                string address = string.Join(".", name.ToLower().Split(' ')) + "@santeecooper.com";
+                string address = name.ToLower().Split(' ').Join('.') + EmailDomain;
                 if (IsValidAddress(address)) return address;
             }
             throw new FormatException("Name must be in firstname lastname format.");
