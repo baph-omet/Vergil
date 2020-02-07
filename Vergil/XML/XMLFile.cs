@@ -49,11 +49,7 @@ namespace Vergil.XML {
             } catch (XmlException) {
                 throw new ArgumentException("Invalid XML passed.");
             }
-            /*string tempPath = Util.GetFirstFreePath(Directory.GetCurrentDirectory() + "\\tempXML.xml");
-            File.WriteAllText(tempPath,xmlText);
-            XMLFile f = new XMLFile(tempPath);
-            File.Delete(tempPath);
-            return f;*/
+
             XMLFile f = new XMLFile();
             f.Load(XmlReader.Create(new StringReader(xmlText)));
             return f;

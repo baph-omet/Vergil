@@ -69,7 +69,7 @@ namespace Vergil.Data.DB {
             StringBuilder insertQuery = new StringBuilder("INSERT INTO " + dataView + " (");
             for (int i = 0; i < f.Length; i++) {
                 if ((f[i][0] != '[' && f[i][f[i].Length - 1] != ']') || f[i].ToUpper().Equals("DATE")) f[i] = "[" + f[i] + "]";
-                if (Char.IsLetter(v[i][0])) v[i] = "'" + v[i] + "'";
+                if (char.IsLetter(v[i][0])) v[i] = "'" + v[i] + "'";
                 insertQuery.Append(f[i]);
                 if (i < f.Length - 1) {
                     insertQuery.Append(",");

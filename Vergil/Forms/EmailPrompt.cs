@@ -45,7 +45,7 @@ namespace Vergil.Forms {
             }
 
             if (invalid.Count > 0) {
-                MessageBox.Show("Invalid address(es) found:\n" + String.Join("\n", invalid) + "\nPlease correct invalid address(es).");
+                MessageBox.Show("Invalid address(es) found:\n" + string.Join("\n", invalid) + "\nPlease correct invalid address(es).");
                 return;
             }
             if (!AcceptMultipleAddresses) Addresses.Add(Mail.GetEmailAddresses(new[] { TextBoxPrompt.Text.Split(',')[0] }).ElementAt(0));

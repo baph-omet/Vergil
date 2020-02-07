@@ -37,8 +37,8 @@ namespace Vergil {
         public static void Initialize() {
             Log = new Log();
             Problems = new ProblemList(Log);
-            if (File.Exists(Directory.GetCurrentDirectory() + "\\Config.xml")) Config = new XMLConfig();
-            else if (File.Exists(Directory.GetCurrentDirectory() + "\\Config.txt")) Config = new TextConfig();
+            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory() + "Config.xml"))) Config = new XMLConfig();
+            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory() + "Config.txt"))) Config = new TextConfig();
             else Config = new SettingsConfig();
             Initialized = true;
         }

@@ -41,7 +41,7 @@ namespace Vergil {
         /// <param name="separator">The delimiter to place in between each member of this list.</param>
         /// <returns>String.Join(separator, this)</returns>
         public string Join(string separator = "\n") {
-            return String.Join(separator, this);
+            return string.Join(separator, this);
         }
 
         /// <summary>

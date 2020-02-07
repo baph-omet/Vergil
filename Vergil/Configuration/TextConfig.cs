@@ -18,7 +18,7 @@ namespace Vergil.Configuration {
         /// <summary>
         /// Initializes a new config file called "config.txt" in the current directory. File will be created if it does not exist.
         /// </summary>
-        public TextConfig() : this(Directory.GetCurrentDirectory() + "\\Config.txt", '=') { }
+        public TextConfig() : this(System.IO.Path.Combine(Directory.GetCurrentDirectory(),"Config.txt"), '=') { }
         /// <summary>
         /// Initializes a new config file. If the file does not exist on disk, it will be created.
         /// </summary>

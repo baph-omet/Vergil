@@ -40,24 +40,23 @@ namespace Vergil {
         /// <summary>
         /// Creates a log file with the name "log.txt" in the current directory.
         /// </summary>
-        public Log() : this(Directory.GetCurrentDirectory() + "\\Log.txt") { }
+        public Log() : this(Path.Combine(Directory.GetCurrentDirectory(), "Log.txt")) { }
         /// <summary>
         /// Creates a log file with the name "log.txt" at the specified location. If the file does not exist, it will be created.
         /// </summary>
         /// <param name="pathToFile">The path of the folder containing the log file</param>
         public Log(string pathToFile) {
-            if (pathToFile.Contains('.')) {
-                string[] dirTree = string.Join("\\", pathToFile.Split('/')).Split('\\');
-                logName = dirTree[dirTree.Length - 1];
-                filepath = pathToFile.Remove(pathToFile.Length - logName.Length);
+            if (Path.HasExtension(pathToFile)) {
+                logName = Path.GetFileName(pathToFile);
+                filepath = Path.GetDirectoryName(pathToFile);
             } else {
                 logName = "Log.txt";
                 filepath = pathToFile;
             }
             fullpath = filepath + logName;
             if (File.Exists(fullpath)) {
-                if (!Directory.Exists(Directory.GetCurrentDirectory() + "\\Logs")) Directory.CreateDirectory(Directory.GetCurrentDirectory() + "\\Logs");
-                string archivepath = FileSystemUtil.GetFirstFreePath(Directory.GetCurrentDirectory() + "\\Logs\\" + File.GetLastWriteTime(fullpath).ToString("yyyy-MM-dd") + ".txt");
+                if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Logs"))) Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "Logs"));
+                string archivepath = FileSystemUtil.GetFirstFreePath(Path.Combine(Directory.GetCurrentDirectory(), "Logs", File.GetLastWriteTime(fullpath).ToString("yyyy-MM-dd") + ".txt"));
                 File.WriteAllLines(archivepath, File.ReadAllLines(fullpath));
             } else File.Create(fullpath);
             writer = new StreamWriter(fullpath);
@@ -99,7 +98,7 @@ namespace Vergil {
         /// Writes an INFO-level line to the log containing the string representation of an arbitrary object
         /// </summary>
         /// <param name="obj">Arbitrary object</param>
-        public void Write(Object obj) {
+        public void Write(object obj) {
             writer.WriteLine(DateTime.Now.ToString("(yyyy-MM-dd HH:mm:ss)") + " [INFO] " + obj.ToString());
         }
         /// <summary>
@@ -107,7 +106,7 @@ namespace Vergil {
         /// </summary>
         /// <param name="level">Severity level</param>
         /// <param name="obj">Arbitrary object</param>
-        public void Write(Severity level, Object obj) {
+        public void Write(Severity level, object obj) {
             writer.WriteLine(DateTime.Now.ToString("(yyyy-MM-dd HH:mm:ss)") + " [" + level.ToString() + "] " + obj.ToString());
         }
         /// <summary>
@@ -115,7 +114,7 @@ namespace Vergil {
         /// </summary>
         /// <param name="debug">If true, the message will be written</param>
         /// <param name="obj">Arbitrary object</param>
-        public void Write(bool debug, Object obj) {
+        public void Write(bool debug, object obj) {
             if (debug) writer.WriteLine(DateTime.Now.ToString("(yyyy-MM-dd HH:mm:ss)") + " [DEBUG] " + obj.ToString());
         }
         /// <summary>
@@ -148,7 +147,7 @@ namespace Vergil {
         /// <summary>
         /// Saves a copy of this Log to \Logs\YYYY-MM-DD.txt.
         /// </summary>
-        public void Archive() { Archive(Directory.GetCurrentDirectory() + "\\Logs"); }
+        public void Archive() { Archive(Path.Combine(Directory.GetCurrentDirectory(), "Logs")); }
         /// <summary>
         /// Saves a copy of this Log as YYYY-MM-DD.txt in the specified directory.
         /// </summary>

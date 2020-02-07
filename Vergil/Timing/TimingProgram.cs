@@ -87,7 +87,7 @@ namespace Vergil.Timing {
         }
 
         private static IEnumerable<string> GetRecipients() {
-            if (File.Exists(Directory.GetCurrentDirectory() + "\\Recipients.xml")) return RecipientList.Get("errors");
+            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Recipients.xml"))) return RecipientList.Get("errors");
             else return Config.Get("recipients").Split(',');
         }
     }

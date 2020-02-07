@@ -125,7 +125,7 @@ namespace Vergil {
         /// <exception cref="FormatException">Name must be in firstname lastname format.</exception>
         public static string ConvertNameToAddress(string name) {
             if (name.Length > 1 && name.Contains(' ')) {
-                string address = String.Join(".", name.ToLower().Split(' ')) + "@santeecooper.com";
+                string address = string.Join(".", name.ToLower().Split(' ')) + "@santeecooper.com";
                 if (IsValidAddress(address)) return address;
             }
             throw new FormatException("Name must be in firstname lastname format.");
@@ -166,7 +166,7 @@ namespace Vergil {
         /// <returns>A List of RecipientLists that represent all groups defined in the specified file.</returns>
         public static List<RecipientList> GetAllGroups(string filepath = null) {
             List<RecipientList> groups = new List<RecipientList>();
-            XMLFile file = new XMLFile(filepath ?? Directory.GetCurrentDirectory() + "\\Recipients.xml");
+            XMLFile file = new XMLFile(filepath ?? Path.Combine(Directory.GetCurrentDirectory(), "Recipients.xml"));
             foreach (XMLSection section in file.FindSection("groups").GetSections()) {
                 RecipientList recipients = new RecipientList(section.Get("name"));
                 foreach (XMLNode node in section.FindSection("recipients").Children) recipients.Add(node.Get());

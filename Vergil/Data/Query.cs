@@ -156,7 +156,7 @@ namespace Vergil.Data {
             XMLSection section = new XMLSection("output");
             section.AddChild("type", "email");
             section.AddChild("from", From);
-            section.AddChild("to", String.Join(",", To));
+            section.AddChild("to", string.Join(",", To));
             section.AddChild("subject", Subject);
             section.AddChild("body", Body);
             if (AttachmentInfo != null) section.AddChild("attachmentFilepath", AttachmentInfo.OutputLocation);
@@ -211,13 +211,13 @@ namespace Vergil.Data {
         /// <param name="data">The data to write to the file.</param>
         /// <returns>A problem that occurred, else null.</returns>
         public void Output(string data) {
-            string localPath = Directory.GetCurrentDirectory() + "\\" + FileName;
+            string localPath = Path.Combine(Directory.GetCurrentDirectory(), FileName);
             File.WriteAllText(localPath, data);
             FTP ftp = new FTP(Address, Username, Password);
             int attempts = 0;
             while (attempts < 10) {
                 try {
-                    ftp.Upload(localPath, RemotePath + "\\" + FileName);
+                    ftp.Upload(localPath, Path.Combine(RemotePath, FileName));
                     break;
                 } catch (WebException e) {
                     if (attempts >= 10) throw e;
@@ -454,7 +454,7 @@ namespace Vergil.Data {
                         lines.Add(line.ToString());
                     }
                 } else {
-                    if (PrintHeaders) lines.Add(String.Join(",", data.Headers));
+                    if (PrintHeaders) lines.Add(string.Join(",", data.Headers));
                     for (int i = 0; i < data.Data.Count; i++) {
                         StringBuilder line = new StringBuilder();
                         for (int j = 0; j < data.Headers.Length; j++) {
@@ -471,7 +471,7 @@ namespace Vergil.Data {
             }
 
             try {
-                Output.Output(String.Join(Environment.NewLine, lines));
+                Output.Output(string.Join(Environment.NewLine, lines));
             } catch (ThreadAbortException) {
                 throw;
             } catch (Exception e) {

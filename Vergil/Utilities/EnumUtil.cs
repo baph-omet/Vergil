@@ -25,5 +25,15 @@ namespace Vergil.Utilities {
         public static string EnumName<T>(this T value) where T : Enum {
             return Enum.GetName(typeof(T), value);
         }
+
+        /// <summary>
+        /// Converts enum to string implicitly
+        /// </summary>
+        /// <typeparam name="T">Enum type. Can be inferred from calling object.</typeparam>
+        /// <param name="value">The calling enum value.</param>
+        /// <returns>Name of calling enum value.</returns>
+        public static string ToString<T>(this T value) where T : Enum {
+            return EnumName(value);
+        }
     }
 }
