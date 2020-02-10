@@ -105,7 +105,7 @@ namespace Vergil.Data.DB {
             if (viewNames.ContainsKey(name)) {
                 if (overrideExisting) {
                     using (DbCommand dt = connectionObject.CreateCommand()) {
-                        dt.CommandText = new[] { "DROP", viewNames[name].EnumName().ToUpper(), name }.Join(' ');
+                        dt.CommandText = new[] { "DROP", viewNames[name].GetName().ToUpper(), name }.Join(' ');
                         dt.ExecuteNonQuery();
                     }
                 } else return;

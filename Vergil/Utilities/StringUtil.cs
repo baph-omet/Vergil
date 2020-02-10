@@ -54,6 +54,7 @@ namespace Vergil.Utilities {
             }
             return total;
         }
+
         /// <summary>
         /// Checks a string for inclusion of any of the target characters.
         /// </summary>
@@ -83,6 +84,7 @@ namespace Vergil.Utilities {
         public static bool ContainsWildcards(this string source) {
             return ContainsAny(source, FilenameWildcards);
         }
+
         /// <summary>
         /// Checks to see if a line of a Configuration or samesuch text file contains meaningful data.
         /// </summary>
@@ -226,7 +228,5 @@ namespace Vergil.Utilities {
         public static bool EqualsIgnoreCase(this string str, string target) {
             return str.ToLower().Equals(target.ToLower());
         }
-
-
     }
 }

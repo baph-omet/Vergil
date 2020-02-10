@@ -22,7 +22,7 @@ namespace Vergil.Utilities {
         /// <typeparam name="T">The enum type. Can be inferred from value.</typeparam>
         /// <param name="value">The enum value to convert to string.</param>
         /// <returns></returns>
-        public static string EnumName<T>(this T value) where T : Enum {
+        public static string GetName<T>(this T value) where T : Enum {
             return Enum.GetName(typeof(T), value);
         }
 
@@ -33,7 +33,7 @@ namespace Vergil.Utilities {
         /// <param name="value">The calling enum value.</param>
         /// <returns>Name of calling enum value.</returns>
         public static string ToString<T>(this T value) where T : Enum {
-            return EnumName(value);
+            return GetName(value);
         }
     }
 }
