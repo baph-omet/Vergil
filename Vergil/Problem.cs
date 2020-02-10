@@ -90,7 +90,7 @@ namespace Vergil {
     /// <summary>
     /// A class for encapsulating details of runtime issues.
     /// </summary>
-    public struct Problem {
+    public class Problem {
         /// <summary>
         /// The severity level of this problem.
         /// </summary>

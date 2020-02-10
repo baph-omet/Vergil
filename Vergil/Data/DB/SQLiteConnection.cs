@@ -85,15 +85,7 @@ namespace Vergil.Data.DB {
         protected override DbCommand GenerateSelectQuery(string table, IEnumerable<string> fields, string selectCondition, bool distinct) {
             StringBuilder selectQuery = new StringBuilder("SELECT ");
             if (distinct) selectQuery.Append("DISTINCT ");
-            for (int i = 0; i < fields.Count(); i++) {
-                string field = fields.ElementAt(i);
-                if (i > 0) selectQuery.Append(',');
-                if (!field.IsNumber()) {
-                    if (field[0] != '\'') selectQuery.Append('\'');
-                    selectQuery.Append(field);
-                    if (field.Last() != '\'') selectQuery.Append('\'');
-                } else selectQuery.Append(field);
-            }
+            selectQuery.Append(fields.Join());
             selectQuery.Append(" FROM " + table);
             if (!string.IsNullOrEmpty(selectCondition)) selectQuery.Append(" WHERE " + selectCondition);
             selectQuery.Append(";");
