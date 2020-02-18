@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using Vergil.Utilities;
 
 namespace Vergil.Data.DB {
     /// <summary>
@@ -10,7 +11,28 @@ namespace Vergil.Data.DB {
     /// <summary>
     /// Wrapper class for a Dictionary of strings and strings.
     /// </summary>
-    public class DBDataRow : Dictionary<string, string> { }
+    public class DBDataRow : Dictionary<string, string> { 
+        /// <summary>
+        /// Get value from row
+        /// </summary>
+        /// <typeparam name="T">Type of value to return</typeparam>
+        /// <param name="name">Name of field</param>
+        /// <returns>Value converted to type if it exists, else null</returns>
+        public T Get<T>(string name) {
+            if (!ContainsKey(name)) return default(T);
+            return Util.Convert<T>(this[name]);
+        }
+
+        /// <summary>
+        /// Get value as string
+        /// </summary>
+        /// <param name="name">Name of field</param>
+        /// <returns>Value in field as string if exists, else null</returns>
+        public string Get(string name) {
+            if (!ContainsKey(name)) return null;
+            return this[name];
+        }
+    }
 
     /// <summary>
     /// Class for containing recordset data from DBConnections.
