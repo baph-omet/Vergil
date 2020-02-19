@@ -22,7 +22,7 @@ namespace Vergil.Utilities {
         /// <summary>
         /// Wildcard characters for file names.
         /// </summary>
-        public static char[] FilenameWildcards {
+        private static char[] FilenameWildcards {
             get {
                 return new[] { '*', '?' };
             }
@@ -100,25 +100,28 @@ namespace Vergil.Utilities {
         /// <param name="pattern">The wildcard pattern.</param>
         /// <param name="target">The string to check.</param>
         /// <returns>True if target matches pattern.</returns>
-        public static bool MatchesWildcardPattern(this string pattern, string target) {
+        public static bool MatchesWildcardPattern(this string target, string pattern) {
             return new Regex(pattern.Replace('?', '.').Replace("*", ".*")).IsMatch(target);
         }
 
         /// <summary>
-        /// Returns a string where the first letter of each word is capitalized.
+        /// Quick check against Regex pattern
         /// </summary>
-        /// <param name="str">The string to capitalize.</param>
-        /// <returns>A string where each word of str is capitalized.</returns>
-        public static string Capitalize(this string str) {
-            return Capitalize(str, new string[] { });
+        /// <param name="target">The string to check</param>
+        /// <param name="pattern">The regex pattern to check against</param>
+        /// <returns>True if target matches regex pattern</returns>
+        public static bool MatchesPattern(this string target, string pattern) {
+            return new Regex(pattern).IsMatch(target);
         }
+
         /// <summary>
         /// Returns a string where the first letter of each word is capitalized. Excludes specified words.
         /// </summary>
         /// <param name="str">The string to capitalize.</param>
         /// <param name="excluded">Any words in this list will be excluded from capitalization. (case-insensitive).</param>
         /// <returns>A string where each word of str is capitalized.</returns>
-        public static string Capitalize(this string str, string[] excluded) {
+        public static string Capitalize(this string str, string[] excluded = null) {
+            if (excluded == null) excluded = new string[] { };
             for (int i = 0; i < excluded.Length; i++) excluded[i] = excluded[i].ToLower();
             StringBuilder builder = new StringBuilder();
             string[] words = str.Split(' ');
@@ -142,20 +145,15 @@ namespace Vergil.Utilities {
         /// <param name="str">A string to check</param>
         /// <returns>True if the string is at least one character long, does not contain a dash other than at the beginning, and contains only digits and up to one period.</returns>
         public static bool IsNumber(this string str) {
-            if (str == null) return false;
+            if (string.IsNullOrEmpty(str)) return false;
             str = str.Trim();
+            if (string.IsNullOrEmpty(str)) return false;
             try {
                 Convert.ToDouble(str);
                 return true;
-            } catch (Exception) { }
-            if (str == null) return false;
-            if (str.Length == 0) return false;
-            if (str.Split('.').Length > 2) return false;
-            for (int i = 0; i < str.Length; i++) {
-                char c = str[i];
-                if (!char.IsDigit(c) && c != '.' || (c == '-' && i > 0)) return false;
+            } catch (Exception) {
+                return false;
             }
-            return true;
         }
 
         /// <summary>
@@ -188,12 +186,9 @@ namespace Vergil.Utilities {
         /// <param name="str">String to parse.</param>
         /// <returns>Copy of str with whitespace characters removed.</returns>
         public static string RemoveWhitespace(this string str) {
-            char[] targets = new[] { '\a', '\b', '\f', '\n', '\r', '\t', '\v', ' ' };
+            string targets = "\a\b\f\n\r\t\v ";
             StringBuilder builder = new StringBuilder();
-            foreach (char c in str) {
-                if (targets.Contains(c)) continue;
-                builder.Append(c);
-            }
+            foreach (char c in str) if (!targets.Contains(c)) builder.Append(c);
             return builder.ToString();
         }
 
@@ -211,9 +206,7 @@ namespace Vergil.Utilities {
                     splits.Add(buffer.ToString());
                     buffer.Clear();
                     i += delimiter.Length - 1;
-                    continue;
-                }
-                buffer.Append(str[i]);
+                } else buffer.Append(str[i]);
             }
             splits.Add(buffer.ToString());
             return splits.ToArray();
@@ -226,7 +219,7 @@ namespace Vergil.Utilities {
         /// <param name="target">String to check against</param>
         /// <returns>True if strings are the same, barring case</returns>
         public static bool EqualsIgnoreCase(this string str, string target) {
-            return str.ToLower().Equals(target.ToLower());
+            return str.Equals(target, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }

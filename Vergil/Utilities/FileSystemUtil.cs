@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Principal;
 
@@ -17,10 +16,9 @@ namespace Vergil.Utilities {
         public static string GetFirstFreePath(string path) {
             if (!File.Exists(path)) return path;
             path = path.Replace("/", Environment.NewLine);
-            string filename = Path.GetFileName(path);
+            string filename = Path.GetFileNameWithoutExtension(path);
             string mainPath = Path.GetDirectoryName(path);
             string extension = Path.GetExtension(path);
-            filename = filename.Replace("." + extension, "");
 
             int discriminator = 0;
             while (File.Exists(Path.Combine(mainPath, filename + (discriminator > 0 ? "(" + discriminator + ")" : "") + "." + extension))) discriminator++;
