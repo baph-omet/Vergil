@@ -49,5 +49,15 @@ namespace Vergil.Utilities {
             if (inclusive) return number.CompareTo(min) >= 0 && number.CompareTo(max) <= 0;
             return number.CompareTo(min) > 0 && number.CompareTo(max) < 0;
         }
+
+        /// <summary>
+        /// Inverts a boolean value. Shortcut for bool = !bool.
+        /// </summary>
+        /// <param name="b">Boolean value</param>
+        /// <returns>Inverse of input value</returns>
+        public static bool Invert(ref this bool b) {
+            b = !b;
+            return b;
+        }
     }
 }
