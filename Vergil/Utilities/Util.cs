@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Vergil.Utilities {
     /// <summary>
@@ -34,6 +35,17 @@ namespace Vergil.Utilities {
         /// <returns>Joined string</returns>
         public static string Join(this IEnumerable<object> en, char delimiter = ',') {
             return string.Join(delimiter.ToString(), en);
+        }
+
+        /// <summary>
+        /// Checks to see if a collection of strings contains a target string, regardless of case.
+        /// </summary>
+        /// <param name="en">Source collection</param>
+        /// <param name="target">Target string</param>
+        /// <returns>True if source collection contains any instance of target string</returns>
+        public static bool ContainsIgnoreCase(this IEnumerable<string> en, string target) {
+            foreach (string str in en) if (str.EqualsIgnoreCase(target)) return true;
+            return false;
         }
 
         /// <summary>
