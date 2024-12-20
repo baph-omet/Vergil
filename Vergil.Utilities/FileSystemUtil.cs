@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Security.AccessControl;
 using System.Security.Principal;
@@ -14,10 +15,11 @@ namespace Vergil.Utilities {
         /// <param name="path">A filepath to check</param>
         /// <returns>A full filepath. If no file exists by the supplied path, it will just return the supplied path, otherwise it will return a path where the filename contains a numbered discriminator in the form "(X)" before the file extension.</returns>
         public static string GetFirstFreePath(string path) {
+            if (path is null) throw new ArgumentNullException(nameof(path));
             if (!File.Exists(path)) return path;
             path = path.Replace("/", Environment.NewLine);
-            string filename = Path.GetFileNameWithoutExtension(path);
-            string mainPath = Path.GetDirectoryName(path);
+            string filename = Path.GetFileNameWithoutExtension(path) ?? throw new ArgumentException("Not found.", nameof(path));
+            string mainPath = Path.GetDirectoryName(path) ?? throw new ArgumentException("Directory not found.", nameof(path));
             string extension = Path.GetExtension(path);
 
             int discriminator = 0;
@@ -32,7 +34,7 @@ namespace Vergil.Utilities {
         /// <returns>True if any directories were created, otherwise false.</returns>
         public static bool CreateDirectories(string path) {
             path = path.Replace("/", Environment.NewLine);
-            string dirpath = Path.GetDirectoryName(path);
+            string dirpath = Path.GetDirectoryName(path) ?? throw new ArgumentException("Directory not found.", nameof(path));
             if (Directory.Exists(dirpath)) return false;
             Directory.CreateDirectory(dirpath);
             return true;
@@ -51,40 +53,6 @@ namespace Vergil.Utilities {
                 if (overwriteFile || !File.Exists(filePath)) File.Copy(f, filePath, overwriteFile);
             }
             foreach (string d in Directory.GetDirectories(SourceDirectory)) RecursiveCopy(d, Path.Combine(DestinationDirectory, Path.GetFileName(d)), overwriteFile);
-        }
-
-        /// <summary>
-        /// Checks to see if the user has write access to the specified folder.
-        /// </summary>
-        /// <param name="path">The directory path to check.</param>
-        /// <returns>True if the user has write permission to the directory, else false.</returns>
-        public static bool HasWriteAccess(string path) {
-            return CheckFolderPermissions(path, FileSystemRights.Write);
-        }
-
-        /// <summary>
-        /// Checks to see if the user has read access to the specified folder.
-        /// </summary>
-        /// <param name="path">The directory path to check.</param>
-        /// <returns>True if the user has read permission to the directory, else false.</returns>
-        public static bool HasReadAccess(string path) {
-            return CheckFolderPermissions(path, FileSystemRights.Read);
-        }
-
-        /// <summary>
-        /// Checks to see that the current user has specified permissions to the specified directory location.
-        /// </summary>
-        /// <param name="path">The path to the directory.</param>
-        /// <param name="accessType">The access type to check for.</param>
-        /// <returns>True if </returns>
-        public static bool CheckFolderPermissions(string path, FileSystemRights accessType) {
-            try {
-                AuthorizationRuleCollection collection = Directory.GetAccessControl(Path.GetDirectoryName(path)).GetAccessRules(true, true, typeof(NTAccount));
-                foreach (FileSystemAccessRule rule in collection) if ((rule.FileSystemRights & accessType) > 0) return true;
-                return true;
-            } catch (Exception) {
-                return false;
-            }
         }
     }
 }

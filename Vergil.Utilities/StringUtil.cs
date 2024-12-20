@@ -120,18 +120,18 @@ namespace Vergil.Utilities {
         /// <param name="str">The string to capitalize.</param>
         /// <param name="excluded">Any words in this list will be excluded from capitalization. (case-insensitive).</param>
         /// <returns>A string where each word of str is capitalized.</returns>
-        public static string Capitalize(this string str, string[] excluded = null) {
-            if (excluded == null) excluded = new string[] { };
+        public static string Capitalize(this string str, params string[] excluded) {
+            if (excluded == null) excluded = Array.Empty<string>();
             for (int i = 0; i < excluded.Length; i++) excluded[i] = excluded[i].ToLower();
-            StringBuilder builder = new StringBuilder();
+            StringBuilder builder = new();
             string[] words = str.Split(' ');
             for (int i = 0; i < words.Length; i++) {
                 string s = words[i];
                 if (s.Length > 0) {
                     if (excluded.Contains(s.ToLower())) builder.Append(s.ToLower());
                     else {
-                        builder.Append(s.Substring(0, 1).ToUpper());
-                        if (s.Length > 1) builder.Append(s.Substring(1).ToLower());
+                        builder.Append(s[..1].ToUpper());
+                        if (s.Length > 1) builder.Append(s[1..].ToLower());
                     }
                     if (i < words.Length - 1) builder.Append(' ');
                 }
@@ -187,7 +187,7 @@ namespace Vergil.Utilities {
         /// <returns>Copy of str with whitespace characters removed.</returns>
         public static string RemoveWhitespace(this string str) {
             string targets = "\a\b\f\n\r\t\v ";
-            StringBuilder builder = new StringBuilder();
+            StringBuilder builder = new();
             foreach (char c in str) if (!targets.Contains(c)) builder.Append(c);
             return builder.ToString();
         }
@@ -199,8 +199,8 @@ namespace Vergil.Utilities {
         /// <param name="delimiter">The delimiter on which to split</param>
         /// <returns>Array of strings containing source string split on delimiter</returns>
         public static string[] Split(this string str, string delimiter) {
-            List<string> splits = new List<string>();
-            StringBuilder buffer = new StringBuilder();
+            List<string> splits = new();
+            StringBuilder buffer = new();
             for (int i = 0; i < str.Length; i++) {
                 if (i < str.Length - delimiter.Length && str.Substring(i, delimiter.Length) == delimiter) {
                     splits.Add(buffer.ToString());

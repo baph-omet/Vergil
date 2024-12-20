@@ -11,9 +11,14 @@ namespace Vergil.Utilities {
         /// <typeparam name="T">The Enum type that will be parsed against.</typeparam>
         /// <param name="value">The value to parse.</param>
         /// <param name="ignoreCase">Whether or not to ignore case in the value. Default: false</param>
+        /// <param name="defaultValue">The default value to return. If not specified, this method will throw whatever exceptions it generates.</param>
         /// <returns>An Enum value of type T corresponding to its string representation.</returns>
-        public static T ParseEnum<T>(string value, bool ignoreCase = false) where T : Enum {
-            return (T)Enum.Parse(typeof(T), value, ignoreCase);
+        public static T ParseEnum<T>(string value, bool ignoreCase = false, T? defaultValue = default(T?)) where T : Enum {
+            try {
+                return (T)Enum.Parse(typeof(T), value, ignoreCase);
+            } catch (Exception e) {
+                return defaultValue ?? throw e;
+            }
         }
 
         /// <summary>
@@ -23,7 +28,7 @@ namespace Vergil.Utilities {
         /// <param name="value">The enum value to convert to string.</param>
         /// <returns></returns>
         public static string GetName<T>(this T value) where T : Enum {
-            return Enum.GetName(typeof(T), value);
+            return Enum.GetName(typeof(T), value) ?? string.Empty;
         }
 
         /// <summary>

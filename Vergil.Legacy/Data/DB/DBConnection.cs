@@ -4,7 +4,6 @@ using System.Data.Common;
 using System.Data;
 using System.Collections.Generic;
 using System.Text;
-using Vergil.Utilities;
 
 namespace Vergil.Data.DB {
     /// <summary>

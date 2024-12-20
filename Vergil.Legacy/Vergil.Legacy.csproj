@@ -11,7 +11,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Vergil</RootNamespace>
     <AssemblyName>Vergil</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
@@ -41,7 +41,8 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>VergilKeyFile.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -62,16 +63,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicProgram.cs" />
+    <Compile Include="Configuration\Config.cs" />
     <Compile Include="Configuration\SettingsConfig.cs" />
     <Compile Include="Configuration\TextConfig.cs" />
-    <Compile Include="Configuration\Config.cs" />
     <Compile Include="Configuration\XMLConfig.cs" />
     <Compile Include="Data\DB\DBConnection.cs" />
-    <Compile Include="Data\DB\DBFieldDefinition.cs" />
-    <Compile Include="Data\DB\SQLiteConnection.cs" />
-    <Compile Include="Data\DB\MSAccessConnection.cs" />
     <Compile Include="Data\DB\DBData.cs" />
-    <Compile Include="Utilities\EnumUtil.cs" />
+    <Compile Include="Data\DB\DBFieldDefinition.cs" />
+    <Compile Include="Data\DB\MSAccessConnection.cs" />
+    <Compile Include="Data\DB\SQLiteConnection.cs" />
+    <Compile Include="Data\Query.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Forms\DebugModeDialog.cs">
       <SubType>Form</SubType>
@@ -95,21 +96,17 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Utilities\FileSystemUtil.cs" />
-    <Compile Include="Utilities\StringUtil.cs" />
     <Compile Include="Timing\Timeable.cs" />
     <Compile Include="Timing\TimingProgram.cs" />
     <Compile Include="Web\FTP.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Problem.cs" />
-    <Compile Include="Data\Query.cs" />
     <Compile Include="Shell.cs" />
     <Compile Include="Mail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Timing\DelayTimer.cs" />
     <Compile Include="Timing\HourlyTimer.cs" />
     <Compile Include="Timing\TimerActions.cs" />
-    <Compile Include="Utilities\Util.cs" />
     <Compile Include="Web\HTTPAgent.cs" />
     <Compile Include="XML\XMLFile.cs" />
     <Compile Include="XML\XMLNode.cs" />
@@ -126,7 +123,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="VergilKeyFile.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\Openers.txt" />
@@ -142,6 +138,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Vergil.Utilities\Vergil.Utilities.csproj">
+      <Project>{39901e42-7c6f-4162-8bc4-68c8ccb1e423}</Project>
+      <Name>Vergil.Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
