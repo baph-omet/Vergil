@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Vergil.Utilities {
+﻿namespace Vergil.Utilities {
     public static class EnumerableUtil {
 
         /// <summary>
@@ -27,38 +21,6 @@ namespace Vergil.Utilities {
         }
 
         /// <summary>
-        /// Inverse of Any().
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="en"></param>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
-        public static bool None<T>(this IEnumerable<T> en, Func<T, bool> predicate) {
-            return !en.Any(predicate);
-        }
-
-        /// <summary>
-        /// Inverse of Any().
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="en"></param>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
-        public static bool None<T>(this IQueryable<T> en, Func<T, bool> predicate) {
-            return !en.Any(predicate);
-        }
-
-        /// <summary>
-        /// Inverse of Any().
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="en"></param>
-        /// <returns></returns>
-        public static bool None<T>(this IQueryable<T> en) {
-            return !en.Any();
-        }
-
-        /// <summary>
         /// Checks to see if a collection of strings contains a target string, regardless of case.
         /// </summary>
         /// <param name="en">Source collection</param>
@@ -68,11 +30,41 @@ namespace Vergil.Utilities {
             return en.FirstOrDefault(x => x.EqualsIgnoreCase(target)) is not null;
         }
 
+        /// <summary>
+        /// Returns a random element from the enumerable.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="en"></param>
+        /// <param name="rng">Optional parameter to supply custom random number generator.</param>
+        /// <returns>An element of the enumerable at a random index.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the enumerable is empty.</exception>
         public static T RandomElement<T>(this IEnumerable<T> en, Random? rng = null) {
-            if (en.Count() == 0) throw new ArgumentOutOfRangeException(nameof(en));
+            IEnumerable<T> enumerable = en.ToList();
+            if (!enumerable.Any()) throw new ArgumentOutOfRangeException(nameof(en));
             rng ??= new Random();
 
-            return en.ElementAt(rng.Next(en.Count()));
+            return enumerable.ElementAt(rng.Next(enumerable.Count()));
+        }
+
+        /// <summary>
+        /// Checks an enumerable to see if a specified index is contained in the enumerable.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="en"></param>
+        /// <param name="index"></param>
+        /// <returns>True if <code>index</code> corresponds to a valid element in the enumerable, else false.</returns>
+        public static bool IsValidIndex<T>(this IEnumerable<T> en, int index) {
+            return en.ElementAtOrDefault(index) is not null;
+        }
+
+        /// <summary>
+        /// Removes all instances of target string, case-insensitive.
+        /// </summary>
+        /// <param name="en">Source list</param>
+        /// <param name="target">Target string to remove</param>
+        /// <returns>Whether any instances of target string are removed.</returns>
+        public static bool RemoveIgnoreCase(this List<string> en, string target) {
+            return en.RemoveAll(x=>x.Equals(target, StringComparison.InvariantCultureIgnoreCase)) > 0;
         }
     }
 }
