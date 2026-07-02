@@ -46,7 +46,7 @@ namespace Vergil.Utilities {
         /// </summary>
         /// <typeparam name="T">Enum type.</typeparam>
         /// <returns>Array of values of the provided enum.</returns>
-        public static  IEnumerable<T> GetValues<T>(this T value) where T : Enum {
+        public static  IEnumerable<T> GetValues<T>() where T : Enum {
             return Enum.GetValues(typeof(T)).Cast<T>();
         }
     }
