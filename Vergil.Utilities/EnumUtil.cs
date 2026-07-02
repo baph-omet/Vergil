@@ -38,7 +38,16 @@ namespace Vergil.Utilities {
         /// <param name="value">The calling enum value.</param>
         /// <returns>Name of calling enum value.</returns>
         public static string ToString<T>(this T value) where T : Enum {
-            return GetName(value);
+            return value.GetName();
+        }
+        
+        /// <summary>
+        /// Gets enum values as enumerable.
+        /// </summary>
+        /// <typeparam name="T">Enum type.</typeparam>
+        /// <returns>Array of values of the provided enum.</returns>
+        public static  IEnumerable<T> GetValues<T>(this T value) where T : Enum {
+            return Enum.GetValues(typeof(T)).Cast<T>();
         }
     }
 }
