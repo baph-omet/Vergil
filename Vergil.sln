@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vergil.Legacy", "Vergil\Vergil.Legacy.csproj", "{162BC59F-2853-4320-965F-9244DF5305AF}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vergil.Utilities", "Vergil.Utilities\Vergil.Utilities.csproj", "{39901E42-7C6F-4162-8BC4-68C8CCB1E423}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vergil.CLI", "Vergil.CLI\Vergil.CLI.csproj", "{66542E28-83E1-4548-9D4E-F13ED5226159}"
@@ -17,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{162BC59F-2853-4320-965F-9244DF5305AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{162BC59F-2853-4320-965F-9244DF5305AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{162BC59F-2853-4320-965F-9244DF5305AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{162BC59F-2853-4320-965F-9244DF5305AF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{39901E42-7C6F-4162-8BC4-68C8CCB1E423}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{39901E42-7C6F-4162-8BC4-68C8CCB1E423}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39901E42-7C6F-4162-8BC4-68C8CCB1E423}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Vergil.Utilities {
+﻿namespace Vergil.Utilities {
     /// <summary>
     /// Class for Enum extension methods
     /// </summary>

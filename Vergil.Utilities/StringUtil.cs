@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Vergil.Utilities {
@@ -9,23 +6,11 @@ namespace Vergil.Utilities {
     /// Class containing string extension methods
     /// </summary>
     public static class StringUtil {
-        private static char[] CommentCharacters {
-            get {
-                return new[]{
-                    ' ',
-                    '#',
-                    '\t',
-                    '\n'
-                };
-            }
-        }
         /// <summary>
         /// Wildcard characters for file names.
         /// </summary>
         private static char[] FilenameWildcards {
-            get {
-                return new[] { '*', '?' };
-            }
+            get { return new[] { '*', '?' }; }
         }
 
         /// <summary>
@@ -36,9 +21,12 @@ namespace Vergil.Utilities {
         /// <returns>The number of times target is found in source. Returns 0 if not found.</returns>
         public static int CountOf(this string source, char target) {
             int total = 0;
-            foreach (char c in source) if (c == target) total++;
+            foreach (char c in source)
+                if (c == target)
+                    total++;
             return total;
         }
+
         /// <summary>
         /// Gets the number of times target appears in source.
         /// </summary>
@@ -52,27 +40,30 @@ namespace Vergil.Utilities {
                 if (source.Substring(i, target.Length).Equals(target)) total++;
                 i++;
             }
+
             return total;
         }
 
         /// <summary>
-        /// Checks a string for inclusion of any of the target characters.
+        /// Checks a string for inclusion of the target characters.
         /// </summary>
         /// <param name="source">String to check.</param>
         /// <param name="targets">Characters to find.</param>
         /// <returns>True if the source contains any of the targets.</returns>
         public static bool ContainsAny(this string source, char[] targets) {
-            foreach (char target in targets) if (source.Contains(target)) return true;
-            return false;
+            return targets.Any(source.Contains);
         }
+
         /// <summary>
-        /// Checks a string for inclusion of any of the target characters.
+        /// Checks a string for inclusion of the target characters.
         /// </summary>
         /// <param name="source">String to check.</param>
         /// <param name="targets">Characters to find.</param>
         /// <returns>True, if the source contains any of the targets.</returns>
         public static bool ContainsAny(this string source, string[] targets) {
-            foreach (string target in targets) if (source.Contains(target)) return true;
+            foreach (string target in targets)
+                if (source.Contains(target))
+                    return true;
             return false;
         }
 
@@ -82,16 +73,16 @@ namespace Vergil.Utilities {
         /// <param name="source">String to check.</param>
         /// <returns>True if the source contains any filename wildcards.</returns>
         public static bool ContainsWildcards(this string source) {
-            return ContainsAny(source, FilenameWildcards);
+            return source.ContainsAny(FilenameWildcards);
         }
 
         /// <summary>
-        /// Checks to see if a line of a Configuration or samesuch text file contains meaningful data.
+        /// Checks to see if a string contains meaningful data.
         /// </summary>
         /// <param name="line">The string to check</param>
         /// <returns>False if the line is empty, or starts with a whitespace character or comment character. Else true.</returns>
-        public static bool IsSignificant(this string line) {
-            return !string.IsNullOrEmpty(line) && !CommentCharacters.Contains(line[0]);
+        public static bool IsSignificant(this string? line) {
+            return !string.IsNullOrWhiteSpace(line);
         }
 
         /// <summary>
@@ -120,8 +111,8 @@ namespace Vergil.Utilities {
         /// <param name="str">The string to capitalize.</param>
         /// <param name="excluded">Any words in this list will be excluded from capitalization. (case-insensitive).</param>
         /// <returns>A string where each word of str is capitalized.</returns>
-        public static string Capitalize(this string str, params string[] excluded) {
-            if (excluded == null) excluded = Array.Empty<string>();
+        public static string Capitalize(this string str, params string[]? excluded) {
+            excluded ??= Array.Empty<string>();
             for (int i = 0; i < excluded.Length; i++) excluded[i] = excluded[i].ToLower();
             StringBuilder builder = new();
             string[] words = str.Split(' ');
@@ -133,9 +124,11 @@ namespace Vergil.Utilities {
                         builder.Append(s[..1].ToUpper());
                         if (s.Length > 1) builder.Append(s[1..].ToLower());
                     }
+
                     if (i < words.Length - 1) builder.Append(' ');
                 }
             }
+
             return builder.ToString();
         }
 
@@ -149,9 +142,10 @@ namespace Vergil.Utilities {
             str = str.Trim();
             if (string.IsNullOrEmpty(str)) return false;
             try {
-                Convert.ToDouble(str);
+                _ = Convert.ToDouble(str);
                 return true;
-            } catch (Exception) {
+            }
+            catch (Exception) {
                 return false;
             }
         }
@@ -188,7 +182,9 @@ namespace Vergil.Utilities {
         public static string RemoveWhitespace(this string str) {
             string targets = "\a\b\f\n\r\t\v ";
             StringBuilder builder = new();
-            foreach (char c in str) if (!targets.Contains(c)) builder.Append(c);
+            foreach (char c in str)
+                if (!targets.Contains(c))
+                    builder.Append(c);
             return builder.ToString();
         }
 
@@ -206,8 +202,10 @@ namespace Vergil.Utilities {
                     splits.Add(buffer.ToString());
                     buffer.Clear();
                     i += delimiter.Length - 1;
-                } else buffer.Append(str[i]);
+                }
+                else buffer.Append(str[i]);
             }
+
             splits.Add(buffer.ToString());
             return splits.ToArray();
         }

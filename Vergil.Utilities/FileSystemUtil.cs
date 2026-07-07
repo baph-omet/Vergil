@@ -1,10 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Security.AccessControl;
-using System.Security.Principal;
-
-namespace Vergil.Utilities {
+﻿namespace Vergil.Utilities {
     /// <summary>
     /// Utilities for file system checks and actions.
     /// </summary>

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Vergil.Utilities {
+﻿namespace Vergil.Utilities {
     /// <summary>
     /// Contains static helper methods.
     /// </summary>
